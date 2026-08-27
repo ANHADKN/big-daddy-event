@@ -11,6 +11,9 @@
     
     <link rel="stylesheet" href="style.css">
     
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         .booking-page {
             background-color: var(--color-bg);
@@ -241,7 +244,8 @@
         </div>
         
         <div class="actions">
-            <button class="btn-primary" onclick="window.print()">DOWNLOAD RECEIPT</button>
+            <button class="btn-primary" onclick="window.print()" style="background: transparent; color: var(--color-primary); border-color: var(--color-primary);">PRINT RECEIPT</button>
+            <button class="btn-primary" onclick="downloadPDF()">DOWNLOAD PDF</button>
             <a href="index.html" class="btn-primary" style="background: transparent; color: var(--color-primary); border-color: var(--color-primary);">RETURN HOME</a>
         </div>
     </div>
@@ -284,6 +288,26 @@
                 window.location.href = 'index.html';
             }
         });
+
+        function downloadPDF() {
+            const element = document.getElementById('conf-box');
+            // Hide action buttons during PDF generation
+            const actions = element.querySelector('.actions');
+            actions.style.display = 'none';
+
+            const opt = {
+                margin:       10,
+                filename:     `BigDaddyEvents_Receipt_${document.getElementById('c-bid').textContent.split(': ')[1]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Restore buttons
+                actions.style.display = 'flex';
+            });
+        }
     </script>
 </body>
 </html>
