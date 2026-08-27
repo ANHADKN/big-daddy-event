@@ -654,6 +654,103 @@ app.get('/api/admin/events', authenticateToken, (req, res) => {
     });
 });
 
+app.get('/api/admin/reports', authenticateToken, async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        let dateFilter = "";
+        let params = [];
+        
+        if (startDate && endDate) {
+            dateFilter = "WHERE date(created_at) >= ? AND date(created_at) <= ?";
+            params = [startDate, endDate];
+        } else if (startDate) {
+            dateFilter = "WHERE date(created_at) >= ?";
+            params = [startDate];
+        } else if (endDate) {
+            dateFilter = "WHERE date(created_at) <= ?";
+            params = [endDate];
+        }
+
+        const queryAsync = (sql, p = []) => new Promise((resolve, reject) => {
+            db.all(sql, p, (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            });
+        });
+
+        const [
+            summary,
+            enquiries,
+            byType,
+            byPackage,
+            byDistrict,
+            byStatus,
+            byPaymentStatus,
+            tableData
+        ] = await Promise.all([
+            // summary
+            queryAsync(`
+                SELECT 
+                    COUNT(*) as totalBookings,
+                    SUM(CASE WHEN status = 'CONFIRMED' THEN 1 ELSE 0 END) as confirmedBookings,
+                    SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) as pendingBookings,
+                    SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) as cancelledBookings,
+                    SUM(package_amount) as totalRevenue,
+                    SUM(amount_paid) as amountPaid,
+                    SUM(balance_amount) as balanceAmount
+                FROM bookings ${dateFilter}
+            `, params),
+            
+            // enquiries
+            queryAsync(`SELECT COUNT(*) as total FROM enquiries ${dateFilter}`, params),
+            
+            // byType
+            queryAsync(`SELECT event_type, COUNT(*) as count FROM bookings ${dateFilter} GROUP BY event_type ORDER BY count DESC`, params),
+            
+            // byPackage
+            queryAsync(`SELECT package_name, COUNT(*) as count FROM bookings ${dateFilter} GROUP BY package_name ORDER BY count DESC`, params),
+            
+            // byDistrict
+            queryAsync(`SELECT district, COUNT(*) as count FROM bookings ${dateFilter} GROUP BY district ORDER BY count DESC`, params),
+            
+            // byStatus
+            queryAsync(`SELECT status, COUNT(*) as count FROM bookings ${dateFilter} GROUP BY status ORDER BY count DESC`, params),
+            
+            // byPaymentStatus
+            queryAsync(`SELECT payment_status, COUNT(*) as count FROM bookings ${dateFilter} GROUP BY payment_status ORDER BY count DESC`, params),
+            
+            // tableData
+            queryAsync(`
+                SELECT booking_id, customer_name, event_date, event_type, package_name, package_amount, amount_paid, balance_amount, payment_status, status 
+                FROM bookings ${dateFilter} ORDER BY created_at DESC
+            `, params)
+        ]);
+
+        res.json({
+            summary: {
+                totalBookings: summary[0].totalBookings || 0,
+                confirmedBookings: summary[0].confirmedBookings || 0,
+                pendingBookings: summary[0].pendingBookings || 0,
+                cancelledBookings: summary[0].cancelledBookings || 0,
+                totalRevenue: summary[0].totalRevenue || 0,
+                amountPaid: summary[0].amountPaid || 0,
+                balanceAmount: summary[0].balanceAmount || 0,
+                totalEnquiries: enquiries[0].total || 0
+            },
+            byType,
+            byPackage,
+            byDistrict,
+            byStatus,
+            byPaymentStatus,
+            tableData
+        });
+
+    } catch (err) {
+        console.error("Reports API error:", err);
+        res.status(500).json({ error: 'Failed to generate report' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

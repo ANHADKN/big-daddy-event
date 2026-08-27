@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .reports-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .reports-filters select, .reports-filters input, .reports-filters button {
+            padding: 0.5rem;
+            border: 1px solid var(--color-border, #ddd);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .reports-filters button {
+            background-color: var(--color-primary);
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .stat-card h4 {
+            color: var(--color-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .chart-container {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .chart-container h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--color-primary);
+        }
+        .table-container {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border, #eee);
+        }
+        th {
+            background-color: #f8f9fa;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .reports-filters { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="bookings.html" class="nav-item">Bookings</a>
+            <a href="enquiries.html" class="nav-item">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item">Upcoming Events</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="reports.html" class="nav-item active">Reports</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Reports & Analytics</h1>
+            <div class="header-actions">
+                <span id="adminProfile">Admin</span>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <!-- Filters -->
+            <div class="reports-filters">
+                <label>Date Filter:</label>
+                <select id="quickFilter" onchange="handleQuickFilter()">
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="custom">Custom Date Range</option>
+                </select>
+                <div id="customDateRange" style="display: none; gap: 0.5rem; align-items: center;">
+                    <input type="date" id="startDate">
+                    <span>to</span>
+                    <input type="date" id="endDate">
+                </div>
+                <button onclick="fetchReports()">Apply Filter</button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="reports-grid">
+                <div class="stat-card"><h4>Total Bookings</h4><div class="value" id="r-total-bookings">0</div></div>
+                <div class="stat-card"><h4>Confirmed</h4><div class="value" id="r-confirmed">0</div></div>
+                <div class="stat-card"><h4>Pending</h4><div class="value" id="r-pending">0</div></div>
+                <div class="stat-card"><h4>Cancelled</h4><div class="value" id="r-cancelled">0</div></div>
+                <div class="stat-card"><h4>Total Enquiries</h4><div class="value" id="r-enquiries">0</div></div>
+                <div class="stat-card"><h4>Total Revenue</h4><div class="value" id="r-revenue">₹0</div></div>
+                <div class="stat-card"><h4>Amount Paid</h4><div class="value" id="r-paid">₹0</div></div>
+                <div class="stat-card"><h4>Amount Pending</h4><div class="value" id="r-balance">₹0</div></div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>By Event Type</h3>
+                    <canvas id="typeChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>By Package</h3>
+                    <canvas id="packageChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>By District</h3>
+                    <canvas id="districtChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Booking Status</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Payment Status</h3>
+                    <canvas id="paymentStatusChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container">
+                <h3>Bookings Report</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer</th>
+                            <th>Event Date</th>
+                            <th>Event Type</th>
+                            <th>Package</th>
+                            <th>Amount</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody">
+                        <tr><td colspan="10" style="text-align: center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+    <script>
+        let charts = {};
+
+        function handleQuickFilter() {
+            const val = document.getElementById('quickFilter').value;
+            const customDiv = document.getElementById('customDateRange');
+            const startInput = document.getElementById('startDate');
+            const endInput = document.getElementById('endDate');
+            
+            customDiv.style.display = val === 'custom' ? 'flex' : 'none';
+            
+            const today = new Date();
+            let start = new Date();
+            let end = new Date();
+
+            if (val === 'all') {
+                startInput.value = '';
+                endInput.value = '';
+            } else if (val === 'today') {
+                startInput.value = today.toISOString().split('T')[0];
+                endInput.value = today.toISOString().split('T')[0];
+            } else if (val === 'week') {
+                start.setDate(today.getDate() - today.getDay());
+                startInput.value = start.toISOString().split('T')[0];
+                endInput.value = today.toISOString().split('T')[0];
+            } else if (val === 'month') {
+                start.setDate(1);
+                startInput.value = start.toISOString().split('T')[0];
+                endInput.value = today.toISOString().split('T')[0];
+            }
+        }
+
+        async function fetchReports() {
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            
+            let query = '';
+            if (start && end) query = `?startDate=${start}&endDate=${end}`;
+            else if (start) query = `?startDate=${start}`;
+            else if (end) query = `?endDate=${end}`;
+
+            try {
+                const res = await fetchWithAuth(`/api/admin/reports${query}`);
+                if (!res) return;
+                const data = await res.json();
+                
+                updateSummary(data.summary);
+                updateCharts(data);
+                updateTable(data.tableData);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function updateSummary(summary) {
+            document.getElementById('r-total-bookings').textContent = summary.totalBookings;
+            document.getElementById('r-confirmed').textContent = summary.confirmedBookings;
+            document.getElementById('r-pending').textContent = summary.pendingBookings;
+            document.getElementById('r-cancelled').textContent = summary.cancelledBookings;
+            document.getElementById('r-enquiries').textContent = summary.totalEnquiries;
+            document.getElementById('r-revenue').textContent = formatCurrency(summary.totalRevenue);
+            document.getElementById('r-paid').textContent = formatCurrency(summary.amountPaid);
+            document.getElementById('r-balance').textContent = formatCurrency(summary.balanceAmount);
+        }
+
+        function createOrUpdateChart(id, type, dataArray, labelKey, dataKey, colors) {
+            const ctx = document.getElementById(id).getContext('2d');
+            const labels = dataArray.map(d => d[labelKey] || 'Unknown');
+            const data = dataArray.map(d => d[dataKey] || 0);
+
+            if (charts[id]) {
+                charts[id].data.labels = labels;
+                charts[id].data.datasets[0].data = data;
+                charts[id].update();
+            } else {
+                charts[id] = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: type === 'pie' || type === 'doughnut' ? 'bottom' : 'none' }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateCharts(data) {
+            const pColors = ['#1a3c34', '#c5b79f', '#2C3E2D', '#D4AF37', '#8B9A8B'];
+            createOrUpdateChart('typeChart', 'pie', data.byType, 'event_type', 'count', pColors);
+            createOrUpdateChart('packageChart', 'doughnut', data.byPackage, 'package_name', 'count', pColors);
+            createOrUpdateChart('districtChart', 'bar', data.byDistrict, 'district', 'count', pColors);
+            createOrUpdateChart('statusChart', 'pie', data.byStatus, 'status', 'count', ['#f39c12', '#2ecc71', '#e74c3c']);
+            createOrUpdateChart('paymentStatusChart', 'doughnut', data.byPaymentStatus, 'payment_status', 'count', ['#f39c12', '#2ecc71', '#e74c3c']);
+        }
+
+        function updateTable(rows) {
+            const tbody = document.getElementById('reportTableBody');
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No bookings found for this period.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = rows.map(r => `
+                <tr>
+                    <td>${r.booking_id}</td>
+                    <td>${r.customer_name}</td>
+                    <td>${r.event_date || '-'}</td>
+                    <td>${r.event_type}</td>
+                    <td>${r.package_name}</td>
+                    <td>${formatCurrency(r.package_amount)}</td>
+                    <td>${formatCurrency(r.amount_paid)}</td>
+                    <td>${formatCurrency(r.balance_amount)}</td>
+                    <td><span class="badge badge-${(r.payment_status||'').toLowerCase()}">${r.payment_status||'PENDING'}</span></td>
+                    <td><span class="badge badge-${(r.status||'').toLowerCase()}">${r.status||'PENDING'}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            handleQuickFilter();
+            fetchReports();
+        });
+    </script>
+</body>
+</html>
