@@ -15,7 +15,10 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-dev-only-change-in-prod';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error("WARNING: JWT_SECRET environment variable is missing.");
+}
 
 // Multer config for image upload
 const storage = multer.diskStorage({
