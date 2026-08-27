@@ -60,10 +60,15 @@ app.get('/health', (req, res) => {
 console.log("Razorpay Key ID configured:", !!process.env.RAZORPAY_KEY_ID);
 console.log("Razorpay Secret configured:", !!process.env.RAZORPAY_KEY_SECRET);
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+} else {
+    console.log("Razorpay credentials are not configured");
+}
 
 const db = require('./db.js');
 
@@ -292,6 +297,9 @@ app.post('/api/create-order', async (req, res) => {
 
             let order;
             try {
+                if (!razorpay) {
+                    return res.status(503).json({ error: 'Payment service is temporarily unavailable' });
+                }
                 order = await razorpay.orders.create(options);
             } catch (rzpErr) {
                 return res.status(500).json({ error: 'Failed to create payment order with Razorpay.' });
@@ -329,6 +337,10 @@ app.post('/api/verify-payment', (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature, booking_id } = req.body;
         const secret = process.env.RAZORPAY_KEY_SECRET;
+        
+        if (!secret) {
+            return res.status(503).json({ error: 'Payment service is temporarily unavailable' });
+        }
         
         const hmac = crypto.createHmac('sha256', secret);
         hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
