@@ -39,7 +39,11 @@ function createDbConnection() {
                         if (callback) callback.call({ changes: res.rowCount }, null);
                     })
                     .catch(err => {
-                        if (callback) callback(err);
+                        if (callback) {
+                            callback(err);
+                        } else {
+                            console.error("Database run error:", err.message, "SQL:", pgSql);
+                        }
                     });
                 return this;
             },

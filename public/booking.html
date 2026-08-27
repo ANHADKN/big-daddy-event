@@ -331,6 +331,29 @@
                     },
                     theme: {
                         color: "#2C3E2D" // Deep forest green
+                    },
+                    config: {
+                        display: {
+                            blocks: {
+                                upi: {
+                                    name: "Pay via UPI",
+                                    instruments: [
+                                        { method: "upi" }
+                                    ]
+                                },
+                                other: {
+                                    name: "Other Payment Modes",
+                                    instruments: [
+                                        { method: "card" },
+                                        { method: "netbanking" }
+                                    ]
+                                }
+                            },
+                            sequence: ['block.upi', 'block.other'],
+                            preferences: {
+                                show_default_blocks: false
+                            }
+                        }
                     }
                 };
 
