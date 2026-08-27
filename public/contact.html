@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Big Daddy Events</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-hero {
+            position: relative; padding: 12rem 4vw 6rem;
+            text-align: center; background-color: var(--color-bg);
+        }
+        .page-hero h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); margin-bottom: 1.5rem; line-height: 1; }
+        .page-hero p { font-size: 1.25rem; color: var(--color-secondary); max-width: 600px; margin: 0 auto; }
+        
+        .contact-grid {
+            max-width: 1200px; margin: 0 auto; padding: 4rem 4vw 12rem;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+        }
+        .contact-info h3 { font-size: 2.5rem; margin-bottom: 2rem; }
+        .info-block { margin-bottom: 2rem; }
+        .info-block span { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 0.5rem; }
+        .info-block p, .info-block a { font-size: 1.25rem; color: var(--color-text); }
+        
+        .contact-form { background: #fff; padding: 4rem 3.5rem; border: 1px solid rgba(197, 183, 159, 0.3); position: relative; }
+        .form-group { margin-bottom: 2rem; position: relative; }
+        .form-group label { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; color: var(--color-primary); }
+        .form-group input, .form-group textarea { width: 100%; padding: 1.25rem 1rem; border: 1px solid rgba(49, 63, 51, 0.2); background: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; transition: all 0.4s var(--ease-slow); }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--color-accent); background: #FDFBF7; }
+        .form-group textarea { height: 160px; resize: none; }
+        .form-success-msg {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 3rem; z-index: 10; opacity: 0; transition: opacity 0.6s ease;
+        }
+        .form-success-msg h4 { font-size: 2rem; margin-bottom: 1rem; color: var(--color-primary); }
+        .form-success-msg p { font-size: 1.1rem; color: var(--color-secondary); line-height: 1.6; }
+        .form-success-msg.show { display: flex; opacity: 1; }
+        
+        .info-block a { transition: color 0.3s ease; position: relative; display: inline-block; }
+        .info-block a::after { content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0; background: var(--color-accent); transition: width 0.4s ease; }
+        .info-block a:hover { color: var(--color-accent); }
+        .info-block a:hover::after { width: 100%; }
+
+        @media(max-width: 992px) {
+            .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .contact-form { padding: 3rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="site-nav">
+        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html" class="active">CONTACT</a>
+        </div>
+        <div class="nav-right">
+            <a href="contact.html" class="nav-cta">PLAN YOUR WEDDING</a>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu">
+        <div class="mobile-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+    </div>
+
+    <header class="page-hero">
+        <span class="eyebrow gsap-reveal">INQUIRIES</span>
+        <h1 class="gsap-reveal">LET'S CONNECT</h1>
+        <p class="gsap-reveal">Reach out to begin planning your bespoke celebration.</p>
+    </header>
+
+    <section class="contact-grid">
+        <div class="contact-info gsap-reveal">
+            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light" style="max-width: 160px; margin-bottom: 1.5rem;">
+            <h3>WE WOULD LOVE TO<br>HEAR FROM YOU.</h3>
+            
+            <div class="info-block">
+                <span>Direct Line</span>
+                <a href="tel:+917034252988">+91 70342 52988</a>
+            </div>
+            
+            <div class="info-block">
+                <span>WhatsApp</span>
+                <a href="https://wa.me/917034252988" target="_blank" rel="noopener noreferrer">+91 70342 52988</a>
+            </div>
+            
+            <div class="info-block">
+                <span>Email</span>
+                <a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a>
+            </div>
+            
+            <div class="info-block">
+                <span>Studio</span>
+                <p>Munnar, Kerala, India</p>
+            </div>
+        </div>
+        
+        <div class="contact-form gsap-reveal" style="transition-delay: 0.2s;">
+            <div class="form-success-msg" id="successMsg">
+                <h4>THANK YOU</h4>
+                <p>Your inquiry has been received. Our team will reach out to you shortly to begin planning your experience.</p>
+            </div>
+            <form id="inquiryForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fname" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="femail" placeholder="hello@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="fphone" placeholder="+91" required pattern="[\+0-9\s\-\(\)]+">
+                </div>
+                <div class="form-group">
+                    <label>Event Details / Message</label>
+                    <textarea id="fmsg" placeholder="Tell us about your celebration..." required minlength="10"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">SEND INQUIRY</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
+                    <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>EXPLORE</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="packages.html">Packages</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>CONTACT</h4>
+                    <ul>
+                        <li><p>Munnar, Kerala, India</p></li>
+                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="tel:+917034252988">+91 70342 52988</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Big Daddy Events. All Rights Reserved.</span>
+                <span>Designed for Luxury.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('inquiryForm');
+            if (form.checkValidity()) {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = "SENDING...";
+
+                try {
+                    const payload = {
+                        name: document.getElementById('fname').value,
+                        email: document.getElementById('femail').value,
+                        phone: document.getElementById('fphone').value,
+                        message: document.getElementById('fmsg').value
+                    };
+
+                    const response = await fetch('/api/enquiries', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        document.getElementById('successMsg').classList.add('show');
+                        form.reset();
+                    } else {
+                        alert("Failed to submit inquiry. Please try again.");
+                    }
+                } catch (error) {
+                    console.error("Error submitting inquiry:", error);
+                    alert("An error occurred. Please try again later.");
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

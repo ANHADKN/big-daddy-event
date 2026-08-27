@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login - Big Daddy Events</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+    <div class="login-card">
+        <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+        <h2>ADMIN PORTAL</h2>
+        <div id="loginError" class="error-msg">Invalid username or password.</div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn-primary" id="loginBtn">LOGIN</button>
+        </form>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+            btn.textContent = 'LOGGING IN...';
+            errorDiv.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('adminToken', data.token);
+                    window.location.href = 'index.html';
+                } else {
+                    errorDiv.textContent = data.error || 'Login failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'An error occurred.';
+                errorDiv.style.display = 'block';
+            } finally {
+                btn.textContent = 'LOGIN';
+            }
+        });
+    </script>
+</body>
+</html>

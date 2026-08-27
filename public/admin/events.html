@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Events - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="bookings.html" class="nav-item">Bookings</a>
+            <a href="enquiries.html" class="nav-item">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item active">Upcoming Events</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Upcoming Events Schedule</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div class="table-header-actions">
+                    <h3 style="font-family: var(--font-display); color: var(--color-primary);">Confirmed Events</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event Date</th>
+                            <th>Customer</th>
+                            <th>Event Type</th>
+                            <th>Venue</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+    <script>
+        async function loadEvents() {
+            try {
+                const res = await fetchWithAuth('/api/admin/events');
+                const events = await res.json();
+                
+                const tbody = document.getElementById('eventsTableBody');
+                tbody.innerHTML = '';
+
+                events.forEach(e => {
+                    const eventDate = new Date(e.event_date);
+                    const isUpcoming = eventDate >= new Date();
+                    const tr = document.createElement('tr');
+                    if (isUpcoming && (eventDate - new Date()) < 7*24*60*60*1000) {
+                        tr.style.backgroundColor = 'rgba(200, 164, 93, 0.1)'; // Highlight upcoming
+                    }
+                    
+                    tr.innerHTML = `
+                        <td><strong>${formatDate(e.event_date)}</strong></td>
+                        <td>${e.customer_name}<br><small style="color:var(--color-secondary); font-family:monospace;">${e.booking_id}</small></td>
+                        <td>${e.event_type}</td>
+                        <td>${e.venue_name}</td>
+                        <td>${e.guest_count}</td>
+                        <td><span class="badge confirmed">CONFIRMED</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+</html>

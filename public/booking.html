@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Package - Big Daddy Events</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="booking.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class="booking-page">
+    <!-- NAVBAR (Mockup for booking context) -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" style="height: 40px; mix-blend-mode: multiply;">
+            <div class="nav-links">
+                <a href="packages.html" style="color: var(--color-primary);">BACK TO PACKAGES</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="booking-main">
+        <div class="booking-container">
+            <div class="booking-header">
+                <span class="eyebrow">RESERVATION</span>
+                <h1>Event Booking</h1>
+                <p>Complete your event details to secure your dates.</p>
+            </div>
+
+            <div class="booking-grid">
+                <!-- FORM SECTION -->
+                <div class="booking-form-section">
+                    <form id="booking-form">
+                        
+                        <!-- STEP 01: YOUR DETAILS -->
+                        <section class="form-section">
+                            <h2>STEP 01: YOUR DETAILS</h2>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="customer_name">Full Name *</label>
+                                    <input type="text" id="customer_name" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="phone">Mobile Number *</label>
+                                    <input type="tel" id="phone" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="whatsapp">WhatsApp Number</label>
+                                    <input type="tel" id="whatsapp">
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- STEP 02: EVENT DETAILS -->
+                        <section class="form-section">
+                            <h2>STEP 02: EVENT DETAILS</h2>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="event_type">Event Type *</label>
+                                    <select id="event_type" required>
+                                        <option value="">Select Event Type</option>
+                                        <option value="Wedding">Wedding</option>
+                                        <option value="Engagement">Engagement</option>
+                                        <option value="Reception">Reception</option>
+                                        <option value="Birthday">Birthday</option>
+                                        <option value="Corporate Event">Corporate Event</option>
+                                        <option value="Private Event">Private Event</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="guest_count">Number of Guests *</label>
+                                    <input type="number" id="guest_count" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="event_date">Event Date *</label>
+                                    <input type="date" id="event_date" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="start_time">Start Time</label>
+                                    <input type="time" id="start_time">
+                                </div>
+                                <div class="input-group">
+                                    <label for="end_time">End Time</label>
+                                    <input type="time" id="end_time">
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- STEP 03: VENUE DETAILS -->
+                        <section class="form-section">
+                            <h2>STEP 03: VENUE DETAILS</h2>
+                            <div class="form-row">
+                                <div class="input-group full-width">
+                                    <label for="venue_name">Venue Name *</label>
+                                    <input type="text" id="venue_name" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group full-width">
+                                    <label for="venue_address">Full Address *</label>
+                                    <input type="text" id="venue_address" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="location">Location / Place *</label>
+                                    <input type="text" id="location" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="district">District</label>
+                                    <input type="text" id="district">
+                                </div>
+                                <div class="input-group">
+                                    <label for="state">State</label>
+                                    <input type="text" id="state" value="Kerala">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group full-width">
+                                    <label for="notes">Special Requirements</label>
+                                    <textarea id="notes" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </section>
+
+                        </section>
+                        
+                    </form>
+                </div>
+
+                <!-- STEP 04: SUMMARY SECTION -->
+                <div class="booking-summary-section">
+                    <div class="summary-card">
+                        <div class="sc-header">
+                            <h3>STEP 04: BOOKING SUMMARY</h3>
+                        </div>
+                        
+                        <div class="sc-package-info">
+                            <h4 id="summary-pkg-name">PACKAGE</h4>
+                            <div class="sc-price" id="summary-pkg-price">₹0</div>
+                            <p id="summary-pkg-services" style="font-size: 0.85rem; color: var(--color-secondary); margin-top: 1rem;"></p>
+                        </div>
+
+                        <hr class="sc-divider">
+                        
+                        <div class="sc-totals">
+                            <div class="sc-row">
+                                <span>Package Amount</span>
+                                <span id="summary-total">₹0</span>
+                            </div>
+                            <div class="sc-row" style="color: var(--color-secondary);">
+                                <span>Additional Services</span>
+                                <span>₹0</span>
+                            </div>
+                            <hr class="sc-divider">
+                            <div class="sc-row sc-advance">
+                                <span>Booking Advance (25%)</span>
+                                <span id="summary-advance" class="highlight-price">₹0</span>
+                            </div>
+                            <div class="sc-row sc-balance">
+                                <span>Balance Amount</span>
+                                <span id="summary-balance">₹0</span>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-section">
+                            <h4>PAYMENT METHOD</h4>
+                            <label class="pm-radio active">
+                                <input type="radio" checked>
+                                <span>Razorpay</span>
+                                <small>Secure online payment powered by Razorpay. UPI, Cards, Netbanking.</small>
+                            </label>
+                        </div>
+
+                        <button type="button" class="btn-primary w-100" id="btn-proceed-payment">PROCEED TO PAYMENT</button>
+                        <div id="payment-error-msg" style="display: none; background: #fff3cd; border-left: 4px solid #856404; padding: 1rem; margin-top: 1.5rem; border-radius: 4px;">
+                            <h5 style="color: #856404; margin-bottom: 0.5rem; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;">PAYMENT COULD NOT BE INITIALIZED</h5>
+                            <p id="payment-error-text" style="color: #664d03; font-size: 0.9rem; margin-bottom: 0.5rem;">We couldn't connect to the payment gateway. Please try again in a moment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JS LOGIC -->
+    <script>
+        let packagePricing = {};
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPkgId = urlParams.get('package');
+        let currentPkg = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/public/packages');
+                if (res.ok) {
+                    const pkgs = await res.json();
+                    pkgs.forEach(p => { packagePricing[p.id] = p; });
+                }
+            } catch (err) {
+                console.error("Failed to fetch packages", err);
+            }
+
+            if (!selectedPkgId || !packagePricing[selectedPkgId]) {
+                alert("No valid package selected. Redirecting to packages.");
+                window.location.href = 'packages.html';
+                return;
+            }
+
+            currentPkg = packagePricing[selectedPkgId];
+            
+            // Format Currency
+            const formatINR = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+            
+            // Populate Summary
+            document.getElementById('summary-pkg-name').textContent = currentPkg.name;
+            document.getElementById('summary-pkg-price').textContent = currentPkg.price;
+            document.getElementById('summary-pkg-services').textContent = currentPkg.desc;
+            
+            document.getElementById('summary-total').textContent = formatINR(currentPkg.basePrice);
+            
+            const advance = currentPkg.basePrice * 0.25;
+            const balance = currentPkg.basePrice - advance;
+            
+            document.getElementById('summary-advance').textContent = formatINR(advance);
+            document.getElementById('summary-balance').textContent = formatINR(balance);
+
+            // Date limits
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('event_date').setAttribute('min', today);
+        });
+
+        document.getElementById('btn-proceed-payment').addEventListener('click', async () => {
+            const form = document.getElementById('booking-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const btn = document.getElementById('btn-proceed-payment');
+            const errorMsg = document.getElementById('payment-error-msg');
+            const errorText = document.getElementById('payment-error-text');
+            btn.disabled = true;
+            btn.textContent = 'PROCESSING...';
+            errorMsg.style.display = 'none';
+
+            // Gather Data
+            const payload = {
+                package_id: selectedPkgId,
+                customer_name: document.getElementById('customer_name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                event_type: document.getElementById('event_type').value,
+                guest_count: document.getElementById('guest_count').value,
+                event_date: document.getElementById('event_date').value,
+                start_time: document.getElementById('start_time').value,
+                end_time: document.getElementById('end_time').value,
+                venue_name: document.getElementById('venue_name').value,
+                venue_address: document.getElementById('venue_address').value,
+                location: document.getElementById('location').value,
+                district: document.getElementById('district').value,
+                state: document.getElementById('state').value,
+                additional_requirements: document.getElementById('notes').value
+            };
+
+            try {
+                // 1. Create Order Backend
+                const response = await fetch('/api/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const orderData = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(orderData.details || orderData.error || 'Failed to create order');
+                }
+
+                // 2. Open Razorpay Checkout
+                const options = {
+                    key: orderData.key_id,
+                    amount: orderData.amount,
+                    currency: "INR",
+                    name: "BIG DADDY EVENTS",
+                    description: `Advance for ${currentPkg.name}`,
+                    image: "/assets/images/big_daddy_events_logo_1200x628.png",
+                    order_id: orderData.order_id,
+                    handler: async function (response) {
+                        // 3. Verify Payment Signature Backend
+                        const verifyRes = await fetch('/api/verify-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                booking_id: orderData.booking_id
+                            })
+                        });
+                        
+                        const verifyData = await verifyRes.json();
+                        
+                        if (verifyData.success) {
+                            window.location.href = `booking_confirmation.html?id=${orderData.booking_id}`;
+                        } else {
+                            alert('Payment verification failed.');
+                            btn.disabled = false;
+                            btn.textContent = 'PROCEED TO PAYMENT';
+                        }
+                    },
+                    prefill: {
+                        name: orderData.customer.name,
+                        email: orderData.customer.email,
+                        contact: orderData.customer.contact
+                    },
+                    theme: {
+                        color: "#2C3E2D" // Deep forest green
+                    }
+                };
+
+                const rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response){
+                    errorText.textContent = 'PAYMENT NOT COMPLETED. Your booking details are saved temporarily. You can try the payment again.';
+                    errorMsg.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = 'TRY PAYMENT AGAIN';
+                });
+                rzp1.open();
+
+            } catch (err) {
+                console.error(err);
+                errorText.textContent = err.message || "We couldn't connect to the payment gateway. Please try again in a moment.";
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'TRY AGAIN';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item active">Dashboard</a>
+            <a href="bookings.html" class="nav-item">Bookings</a>
+            <a href="enquiries.html" class="nav-item">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item">Upcoming Events</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="header-actions">
+                <span id="adminProfile">Admin</span>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h4>Total Bookings</h4>
+                    <div class="value" id="stat-total-bookings">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Pending Bookings</h4>
+                    <div class="value" id="stat-pending-bookings">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Enquiries</h4>
+                    <div class="value highlight" id="stat-enquiries">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Booking Value</h4>
+                    <div class="value" id="stat-total-value">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Advance Received</h4>
+                    <div class="value highlight" id="stat-advance">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Balance Due</h4>
+                    <div class="value" id="stat-balance">...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+    <script>
+        async function loadDashboard() {
+            try {
+                const res = await fetchWithAuth('/api/admin/dashboard');
+                const stats = await res.json();
+                
+                document.getElementById('stat-total-bookings').textContent = stats.totalBookings || 0;
+                document.getElementById('stat-pending-bookings').textContent = stats.pendingBookings || 0;
+                document.getElementById('stat-enquiries').textContent = stats.totalEnquiries || 0;
+                
+                document.getElementById('stat-total-value').textContent = formatCurrency(stats.totalValue);
+                document.getElementById('stat-advance').textContent = formatCurrency(stats.totalAdvance);
+                document.getElementById('stat-balance').textContent = formatCurrency(stats.balanceDue);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

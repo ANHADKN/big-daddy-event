@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enquiries - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="bookings.html" class="nav-item">Bookings</a>
+            <a href="enquiries.html" class="nav-item active">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item">Upcoming Events</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Enquiries</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div class="table-header-actions">
+                    <h3 style="font-family: var(--font-display); color: var(--color-primary);">Recent Enquiries</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date Received</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enquiriesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- ENQUIRY DETAIL MODAL -->
+    <div class="modal-overlay" id="enquiryModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('enquiryModal')">&times;</button>
+            <div class="modal-header">
+                <h2>Enquiry Details</h2>
+            </div>
+            
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h4>CONTACT INFO</h4>
+                    <div class="detail-row"><span>Name:</span> <span id="md-name"></span></div>
+                    <div class="detail-row"><span>Email:</span> <span id="md-email"></span></div>
+                    <div class="detail-row"><span>Phone:</span> <span id="md-phone"></span></div>
+                    <div class="detail-row"><span>Date:</span> <span id="md-date"></span></div>
+                </div>
+                <div class="detail-section">
+                    <h4>STATUS & ACTION</h4>
+                    <div class="detail-row"><span>Status:</span> 
+                        <select id="updateStatusSel">
+                            <option value="NEW">NEW</option>
+                            <option value="CONTACTED">CONTACTED</option>
+                            <option value="FOLLOW-UP">FOLLOW-UP</option>
+                            <option value="CONVERTED">CONVERTED</option>
+                            <option value="CLOSED">CLOSED</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" style="padding: 0.5rem; margin-top: 1rem; width: 100%;" onclick="updateEnquiry()">UPDATE STATUS</button>
+                </div>
+            </div>
+            
+            <div class="detail-section" style="margin-top: 2rem;">
+                <h4>MESSAGE</h4>
+                <div style="background: rgba(6, 45, 36, 0.05); padding: 1.5rem; border-radius: 4px; font-style: italic; color: var(--color-secondary);" id="md-msg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        let allEnquiries = [];
+        let currentEnqId = null;
+
+        async function loadEnquiries() {
+            try {
+                const res = await fetchWithAuth('/api/admin/enquiries');
+                allEnquiries = await res.json();
+                renderTable();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('enquiriesTableBody');
+            tbody.innerHTML = '';
+
+            allEnquiries.forEach(e => {
+                const tr = document.createElement('tr');
+                let badgeClass = 'pending';
+                if (e.status === 'CONVERTED') badgeClass = 'confirmed';
+                if (e.status === 'CLOSED') badgeClass = 'cancelled';
+                
+                tr.innerHTML = `
+                    <td>${formatDate(e.created_at)}</td>
+                    <td>${e.name}</td>
+                    <td>${e.email}</td>
+                    <td>${e.phone}</td>
+                    <td><span class="badge ${badgeClass}">${e.status}</span></td>
+                    <td><button class="action-btn" onclick="viewEnquiry(${e.id})">VIEW</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function viewEnquiry(id) {
+            currentEnqId = id;
+            const e = allEnquiries.find(x => x.id === id);
+            if (!e) return;
+
+            document.getElementById('md-name').textContent = e.name;
+            document.getElementById('md-email').textContent = e.email;
+            document.getElementById('md-phone').textContent = e.phone;
+            document.getElementById('md-date').textContent = formatDate(e.created_at);
+            document.getElementById('md-msg').textContent = `"${e.message}"`;
+            
+            document.getElementById('updateStatusSel').value = e.status;
+
+            openModal('enquiryModal');
+        }
+
+        async function updateEnquiry() {
+            const status = document.getElementById('updateStatusSel').value;
+            try {
+                const res = await fetchWithAuth(`/api/admin/enquiries/${currentEnqId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status })
+                });
+                if (res.ok) {
+                    alert('Enquiry updated successfully.');
+                    loadEnquiries();
+                    closeModal('enquiryModal');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadEnquiries);
+    </script>
+</body>
+</html>

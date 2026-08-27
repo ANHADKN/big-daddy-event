@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookings - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid rgba(6, 45, 36, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="bookings.html" class="nav-item active">Bookings</a>
+            <a href="enquiries.html" class="nav-item">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item">Upcoming Events</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Bookings Management</h1>
+        </header>
+
+        <div class="content-body">
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by Booking ID, Customer Name, Email, or Phone...">
+                <button class="btn-primary" style="width: auto; padding: 0.8rem 2rem;" onclick="loadBookings()">SEARCH</button>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header-actions">
+                    <h3 style="font-family: var(--font-display); color: var(--color-primary);">All Bookings</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Event Type</th>
+                            <th>Event Date</th>
+                            <th>Package Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- BOOKING DETAIL MODAL -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('bookingModal')">&times;</button>
+            <div class="modal-header">
+                <h2>Booking Details</h2>
+                <p id="modalBookingId" style="color: var(--color-secondary); letter-spacing: 0.1em;"></p>
+            </div>
+            
+            <div class="detail-grid">
+                <div class="detail-section">
+                    <h4>CUSTOMER DETAILS</h4>
+                    <div class="detail-row"><span>Name:</span> <span id="md-name"></span></div>
+                    <div class="detail-row"><span>Email:</span> <span id="md-email"></span></div>
+                    <div class="detail-row"><span>Phone:</span> <span id="md-phone"></span></div>
+                    <div class="detail-row"><span>WhatsApp:</span> <span id="md-whatsapp"></span></div>
+                </div>
+                <div class="detail-section">
+                    <h4>EVENT DETAILS</h4>
+                    <div class="detail-row"><span>Type:</span> <span id="md-type"></span></div>
+                    <div class="detail-row"><span>Date:</span> <span id="md-date"></span></div>
+                    <div class="detail-row"><span>Guests:</span> <span id="md-guests"></span></div>
+                    <div class="detail-row"><span>Venue:</span> <span id="md-venue"></span></div>
+                </div>
+                <div class="detail-section">
+                    <h4>PACKAGE & PAYMENT</h4>
+                    <div class="detail-row"><span>Package:</span> <span id="md-pkg"></span></div>
+                    <div class="detail-row"><span>Total:</span> <span id="md-total"></span></div>
+                    <div class="detail-row"><span>Advance Paid:</span> <span id="md-advance"></span></div>
+                    <div class="detail-row"><span>Balance:</span> <span id="md-balance"></span></div>
+                </div>
+                <div class="detail-section">
+                    <h4>STATUS & ADMIN</h4>
+                    <div class="detail-row"><span>Booking Status:</span> 
+                        <select id="updateStatusSel">
+                            <option value="PENDING PAYMENT">PENDING PAYMENT</option>
+                            <option value="CONFIRMED">CONFIRMED</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                        </select>
+                    </div>
+                    <div class="detail-row"><span>Payment Status:</span> 
+                        <select id="updatePaymentSel">
+                            <option value="UNPAID">UNPAID</option>
+                            <option value="PAID">PAID</option>
+                            <option value="FAILED">FAILED</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" style="padding: 0.5rem; margin-top: 1rem; width: 100%;" onclick="updateBooking()">UPDATE STATUS</button>
+                    <button class="btn-primary" style="padding: 0.5rem; margin-top: 0.5rem; width: 100%; background: transparent; color: var(--color-primary);" onclick="printReceipt()">PRINT RECEIPT</button>
+                </div>
+            </div>
+            
+            <div class="detail-section" style="margin-top: 2rem;">
+                <h4>INTERNAL NOTES</h4>
+                <div class="detail-row" style="flex-direction: column;">
+                    <textarea id="adminNote" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(6, 45, 36, 0.2); font-family: var(--font-body); outline: none;"></textarea>
+                    <button class="btn-primary" style="padding: 0.5rem; width: 150px; margin-top: 0.5rem;" onclick="addNote()">ADD NOTE</button>
+                </div>
+                <div id="notesContainer" style="margin-top: 1rem; max-height: 200px; overflow-y: auto;">
+                    <!-- Notes loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        let allBookings = [];
+        let currentBookingId = null;
+
+        async function loadBookings() {
+            try {
+                const res = await fetchWithAuth('/api/admin/bookings');
+                allBookings = await res.json();
+                renderTable();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('bookingsTableBody');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            tbody.innerHTML = '';
+            
+            const filtered = allBookings.filter(b => 
+                (b.booking_id && b.booking_id.toLowerCase().includes(search)) ||
+                (b.customer_name && b.customer_name.toLowerCase().includes(search)) ||
+                (b.email && b.email.toLowerCase().includes(search)) ||
+                (b.phone && b.phone.includes(search))
+            );
+
+            filtered.forEach(b => {
+                const tr = document.createElement('tr');
+                let badgeClass = 'pending';
+                if (b.status === 'CONFIRMED') badgeClass = 'confirmed';
+                if (b.status === 'CANCELLED') badgeClass = 'cancelled';
+                
+                tr.innerHTML = `
+                    <td><strong>${b.booking_id}</strong></td>
+                    <td>${b.customer_name}</td>
+                    <td>${b.event_type}</td>
+                    <td>${formatDate(b.event_date)}</td>
+                    <td>${formatCurrency(b.package_amount)}</td>
+                    <td><span class="badge ${badgeClass}">${b.status}</span></td>
+                    <td><button class="action-btn" onclick="viewBooking('${b.booking_id}')">VIEW</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function viewBooking(id) {
+            currentBookingId = id;
+            const b = allBookings.find(x => x.booking_id === id);
+            if (!b) return;
+
+            document.getElementById('modalBookingId').textContent = b.booking_id;
+            document.getElementById('md-name').textContent = b.customer_name;
+            document.getElementById('md-email').textContent = b.email;
+            document.getElementById('md-phone').textContent = b.phone;
+            document.getElementById('md-whatsapp').textContent = b.whatsapp || 'N/A';
+            
+            document.getElementById('md-type').textContent = b.event_type;
+            document.getElementById('md-date').textContent = formatDate(b.event_date);
+            document.getElementById('md-guests').textContent = b.guest_count;
+            document.getElementById('md-venue').textContent = b.venue_name;
+            
+            document.getElementById('md-pkg').textContent = b.package_name;
+            document.getElementById('md-total').textContent = formatCurrency(b.package_amount);
+            document.getElementById('md-advance').textContent = formatCurrency(b.amount_paid);
+            document.getElementById('md-balance').textContent = formatCurrency(b.balance_amount);
+
+            document.getElementById('updateStatusSel').value = b.status;
+            document.getElementById('updatePaymentSel').value = b.payment_status;
+
+            loadNotes();
+            openModal('bookingModal');
+        }
+
+        async function updateBooking() {
+            const status = document.getElementById('updateStatusSel').value;
+            const pStatus = document.getElementById('updatePaymentSel').value;
+            try {
+                const res = await fetchWithAuth(`/api/admin/bookings/${currentBookingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status, payment_status: pStatus })
+                });
+                if (res.ok) {
+                    alert('Booking updated successfully.');
+                    loadBookings();
+                } else {
+                    alert('Failed to update booking.');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadNotes() {
+            const container = document.getElementById('notesContainer');
+            container.innerHTML = 'Loading notes...';
+            try {
+                const res = await fetchWithAuth(`/api/admin/notes/booking/${currentBookingId}`);
+                const notes = await res.json();
+                container.innerHTML = '';
+                notes.forEach(n => {
+                    const div = document.createElement('div');
+                    div.style.padding = '0.8rem';
+                    div.style.marginBottom = '0.5rem';
+                    div.style.background = 'rgba(200, 164, 93, 0.1)';
+                    div.style.borderLeft = '3px solid var(--color-accent)';
+                    div.innerHTML = `<p style="font-size:0.9rem">${n.note}</p><small style="color:var(--color-secondary);font-size:0.75rem;">${formatDate(n.created_at)}</small>`;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = 'Error loading notes.';
+            }
+        }
+
+        async function addNote() {
+            const txt = document.getElementById('adminNote').value;
+            if (!txt.trim()) return;
+            try {
+                const res = await fetchWithAuth(`/api/admin/notes`, {
+                    method: 'POST',
+                    body: JSON.stringify({ entity_type: 'booking', entity_id: currentBookingId, note: txt })
+                });
+                if (res.ok) {
+                    document.getElementById('adminNote').value = '';
+                    loadNotes();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function printReceipt() {
+            const b = allBookings.find(x => x.booking_id === currentBookingId);
+            const content = `
+                <div style="font-family: 'Cormorant Garamond', serif; padding: 40px; color: #062D24; background: #F5F0E7; min-height: 100vh;">
+                    <div style="text-align:center; border-bottom: 2px solid #C8A45D; padding-bottom: 20px; margin-bottom: 30px;">
+                        <h1 style="margin:0; font-size:32px;">BIG DADDY EVENTS</h1>
+                        <p style="margin:5px 0 0 0; font-family: 'Manrope', sans-serif;">Your Celebration. Our Craft.</p>
+                        <p style="margin:10px 0 0 0; font-family: 'Manrope', sans-serif; font-weight: 600;">BOOKING RECEIPT</p>
+                    </div>
+                    <div style="font-family: 'Manrope', sans-serif; line-height: 1.6;">
+                        <p><strong>Booking ID:</strong> ${b.booking_id}</p>
+                        <p><strong>Customer Name:</strong> ${b.customer_name}</p>
+                        <p><strong>Event:</strong> ${b.event_type} - ${formatDate(b.event_date)}</p>
+                        <p><strong>Venue:</strong> ${b.venue_name}</p>
+                        <hr style="border:0; border-top: 1px solid #C8A45D; margin:20px 0;">
+                        <p><strong>Package:</strong> ${b.package_name}</p>
+                        <p><strong>Total Amount:</strong> ${formatCurrency(b.package_amount)}</p>
+                        <p><strong>Amount Paid:</strong> ${formatCurrency(b.amount_paid)} (${b.payment_status})</p>
+                        <p><strong>Balance Due:</strong> ${formatCurrency(b.balance_amount)}</p>
+                    </div>
+                </div>
+            `;
+            const win = window.open('', '_blank');
+            win.document.write(content);
+            win.document.close();
+            win.focus();
+            setTimeout(() => { win.print(); win.close(); }, 500);
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') renderTable();
+        });
+
+        document.addEventListener('DOMContentLoaded', loadBookings);
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Big Daddy Events</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <style id="about-styles">
+        /* ABOUT PAGE SPECIFIC STYLES */
+        .page-hero {
+            position: relative; padding: 12rem 4vw 4rem;
+            text-align: center; background-color: var(--color-bg);
+        }
+        .page-hero h1 { font-size: clamp(3rem, 6vw, 5rem); margin-bottom: 1.5rem; line-height: 1.1; max-width: 1000px; margin-left: auto; margin-right: auto; }
+        .page-hero p { font-size: 1.25rem; color: var(--color-secondary); max-width: 800px; margin: 0 auto; line-height: 1.6; }
+
+        .hero-cinematic {
+            width: 100%; height: 70vh; margin-top: 4rem; overflow: hidden;
+        }
+        .hero-cinematic img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* WHAT WE DO */
+        .about-services {
+            padding: 8rem 4vw; background: #FDFBF7;
+        }
+        .section-header { text-align: center; margin-bottom: 5rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--color-secondary); font-size: 1.1rem; }
+
+        .service-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .service-block {
+            border-top: 1px solid rgba(197, 183, 159, 0.4); padding-top: 2rem;
+        }
+        .service-block .num { font-family: var(--font-body); font-size: 0.8rem; color: var(--color-accent); letter-spacing: 0.1em; margin-bottom: 1rem; display: block; }
+        .service-block h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .service-block p { font-size: 0.95rem; color: var(--color-secondary); line-height: 1.6; }
+
+        /* OUR APPROACH (Timeline) */
+        .about-approach {
+            padding: 8rem 4vw; background: var(--color-bg);
+        }
+        .approach-timeline {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 5rem;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .timeline-stage {
+            position: relative;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-accent);
+        }
+        .timeline-stage::before {
+            content: ''; position: absolute; top: -4px; left: 0; width: 7px; height: 7px; background: var(--color-accent); border-radius: 50%;
+        }
+        .timeline-stage h4 { font-size: 1.25rem; margin-bottom: 1rem; font-family: var(--font-body); letter-spacing: 0.05em; display: flex; align-items: baseline;}
+        .timeline-stage .stage-num { font-family: var(--font-display); color: var(--color-accent); font-size: 1.5rem; margin-right: 0.5rem; font-style: italic;}
+        .timeline-stage p { font-size: 0.95rem; color: var(--color-secondary); }
+
+        /* CINEMATIC EXPERIENCE */
+        .about-cinematic {
+            position: relative; height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
+        }
+        .cinematic-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+        .cinematic-bg img { width: 100%; height: 100%; object-fit: cover; }
+        .cinematic-bg::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 27, 22, 0.65);
+        }
+        .about-cinematic .content { color: var(--color-bg); position: relative; z-index: 1; max-width: 800px; padding: 0 4vw; }
+        .about-cinematic h2 { font-size: clamp(3rem, 6vw, 5rem); color: var(--color-bg); margin-bottom: 1.5rem; }
+        .about-cinematic .eyebrow { color: var(--color-accent-soft); }
+        .about-cinematic p { color: rgba(245, 240, 231, 0.85); font-size: 1.1rem; }
+
+        /* WHY BIG DADDY EVENTS */
+        .about-why {
+            padding: 8rem 4vw; background: #FDFBF7;
+        }
+        .why-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .why-item { border-left: 1px solid rgba(197, 183, 159, 0.4); padding-left: 1.5rem; }
+        .why-item:nth-child(4) { grid-column: 1 / span 2; }
+        .why-item h4 { font-family: var(--font-body); font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: baseline; gap: 0.5rem; }
+        .why-item h4 span { color: var(--color-accent); font-family: var(--font-display); font-size: 1.25rem; font-style: italic; }
+        .why-item p { font-size: 1rem; color: var(--color-secondary); }
+
+        /* ECOSYSTEM / WHAT WE BRING */
+        .about-ecosystem {
+            padding: 10rem 4vw; background: var(--color-primary); color: var(--color-bg); text-align: center; overflow: hidden;
+        }
+        .about-ecosystem .section-header h2 { color: var(--color-bg); }
+        .about-ecosystem .section-header p { color: rgba(245, 240, 231, 0.7); }
+        .ecosystem-graphic {
+            position: relative; max-width: 900px; height: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center;
+        }
+        .ecosystem-center {
+            width: 350px; height: 450px; border-radius: 200px; overflow: hidden; position: relative; z-index: 2; border: 1px solid var(--color-accent);
+        }
+        .ecosystem-center img { width: 100%; height: 100%; object-fit: cover; }
+        .eco-label {
+            position: absolute; font-family: var(--font-display); font-size: 1.25rem; letter-spacing: 0.1em; color: var(--color-accent); white-space: nowrap;
+            opacity: 0.8; transition: opacity 0.4s; z-index: 1;
+        }
+        .eco-label:hover { opacity: 1; color: #fff; }
+        
+        .eco-1 { top: 10%; left: 10%; } 
+        .eco-2 { top: 5%; right: 15%; }
+        .eco-3 { top: 30%; left: -5%; } 
+        .eco-4 { top: 25%; right: -5%; }
+        .eco-5 { top: 50%; left: -15%; } 
+        .eco-6 { top: 45%; right: -15%; }
+        .eco-7 { top: 70%; left: -5%; } 
+        .eco-8 { top: 65%; right: -10%; }
+        .eco-9 { bottom: 10%; left: 15%; } 
+        .eco-10 { bottom: 5%; right: 10%; }
+        .eco-11 { bottom: -5%; left: 40%; }
+        .eco-12 { top: -5%; left: 45%; }
+
+        /* OUR EXPERIENCE */
+        .about-experience {
+            padding: 8rem 4vw; background: var(--color-bg);
+        }
+        .experience-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto;
+        }
+        .experience-content h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 2rem; }
+        .experience-content p { font-size: 1.2rem; color: var(--color-secondary); line-height: 1.8; font-style: italic; font-family: var(--font-display); }
+        .experience-image { width: 100%; aspect-ratio: 4/5; overflow: hidden; }
+        .experience-image img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* CTA */
+        .about-cta {
+            padding: 10rem 4vw; text-align: center; background: #FDFBF7; border-top: 1px solid rgba(197, 183, 159, 0.2);
+        }
+        .about-cta h2 { font-size: clamp(3rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
+        .about-cta p { font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 3rem; }
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .service-grid { grid-template-columns: repeat(2, 1fr); }
+            .approach-timeline { grid-template-columns: repeat(2, 1fr); gap: 3rem 2rem; }
+            .why-grid { grid-template-columns: repeat(2, 1fr); }
+            .why-item:nth-child(4) { grid-column: auto; }
+            .ecosystem-graphic { height: auto; flex-direction: column; gap: 2rem; }
+            .ecosystem-center { width: 100%; max-width: 350px; height: 400px; border-radius: 0; }
+            .eco-label { position: static; display: inline-block; margin: 0.5rem; font-size: 1rem; border: 1px solid rgba(200, 164, 93, 0.3); padding: 0.5rem 1rem; border-radius: 2rem; }
+            .experience-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .service-grid { grid-template-columns: 1fr; }
+            .approach-timeline { grid-template-columns: 1fr; gap: 2rem; }
+            .timeline-stage { padding-top: 0; padding-left: 2rem; border-top: none; border-left: 1px solid var(--color-accent); }
+            .timeline-stage::before { top: 0; left: -4px; }
+            .why-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="site-nav">
+        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html" class="active">ABOUT</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+        <div class="nav-right">
+            <a href="contact.html" class="nav-cta">PLAN YOUR WEDDING</a>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu">
+        <div class="mobile-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+    </div>
+
+    <!-- SECTION 01: HERO / OUR STORY -->
+    <header class="page-hero">
+        <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light gsap-reveal" style="max-width: 150px; margin-bottom: 2rem;">
+        <br>
+        <span class="eyebrow gsap-reveal">OUR STORY</span>
+        <h1 class="gsap-reveal">WE DON'T JUST PLAN EVENTS.<br>WE CREATE EXPERIENCES.</h1>
+        <p class="gsap-reveal">From intimate celebrations to grand destination weddings, Big Daddy Events brings together design, production, entertainment and hospitality under one vision &mdash; creating celebrations that feel truly unforgettable.</p>
+        
+        <div class="hero-cinematic gsap-reveal image-slot">
+            <img src="assets/images/event-corporate-gala.jpg" alt="Cinematic Event Experience" class="img-scale">
+        </div>
+    </header>
+
+    <!-- SECTION 02: WHAT WE DO -->
+    <section class="about-services" style="position: relative; overflow: hidden;">
+        <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="" class="brand-watermark brand-logo--light">
+        <div class="section-header gsap-reveal" style="position: relative; z-index: 1;">
+            <h2>WHAT WE DO</h2>
+            <p>From the first concept to the final moment, every part of your celebration is brought together under one vision.</p>
+        </div>
+        <div class="service-grid">
+            <div class="service-block gsap-reveal" style="transition-delay: 100ms;">
+                <span class="num">01</span>
+                <h3>WEDDINGS</h3>
+                <p>Destination weddings, traditional ceremonies, receptions and intimate celebrations designed around your story.</p>
+            </div>
+            <div class="service-block gsap-reveal" style="transition-delay: 200ms;">
+                <span class="num">02</span>
+                <h3>DESTINATION EVENTS</h3>
+                <p>Luxury outdoor celebrations, resort events and extraordinary destination experiences.</p>
+            </div>
+            <div class="service-block gsap-reveal" style="transition-delay: 300ms;">
+                <span class="num">03</span>
+                <h3>CORPORATE EVENTS</h3>
+                <p>Conferences, launches, annual celebrations and premium corporate experiences.</p>
+            </div>
+            <div class="service-block gsap-reveal" style="transition-delay: 400ms;">
+                <span class="num">04</span>
+                <h3>PRIVATE CELEBRATIONS</h3>
+                <p>Birthdays, engagements, anniversaries, parties and meaningful personal occasions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 03: OUR APPROACH -->
+    <section class="about-approach">
+        <div class="section-header gsap-reveal">
+            <h2>FROM THE FIRST IDEA<br>TO THE FINAL MOMENT.</h2>
+        </div>
+        <div class="approach-timeline">
+            <div class="timeline-stage gsap-reveal" style="transition-delay: 100ms;">
+                <h4><span class="stage-num">01</span> DISCOVER</h4>
+                <p>We understand your vision, venue, occasion, audience and expectations before designing the experience.</p>
+            </div>
+            <div class="timeline-stage gsap-reveal" style="transition-delay: 200ms;">
+                <h4><span class="stage-num">02</span> DESIGN</h4>
+                <p>We shape the concept through theme, d&eacute;cor, stage, lighting, atmosphere and visual storytelling.</p>
+            </div>
+            <div class="timeline-stage gsap-reveal" style="transition-delay: 300ms;">
+                <h4><span class="stage-num">03</span> PRODUCE</h4>
+                <p>Our team coordinates sound, lighting, entertainment, production, logistics and event infrastructure.</p>
+            </div>
+            <div class="timeline-stage gsap-reveal" style="transition-delay: 400ms;">
+                <h4><span class="stage-num">04</span> DELIVER</h4>
+                <p>On the event day, every detail comes together through professional execution and coordination.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 04: CINEMATIC EXPERIENCE -->
+    <section class="about-cinematic">
+        <div class="cinematic-bg">
+            <img src="assets/images/hindu-destination-wedding.jpg" alt="Premium Event Atmosphere" class="img-scale">
+        </div>
+        <div class="content gsap-reveal">
+            <span class="eyebrow">ONE TEAM. ONE EXPERIENCE.</span>
+            <h2>FROM CONCEPT TO CELEBRATION.</h2>
+            <p>"Concept. Design. Production. Entertainment. Hospitality. Everything coordinated under one roof."</p>
+        </div>
+    </section>
+
+    <!-- SECTION 05: WHY BIG DADDY EVENTS -->
+    <section class="about-why">
+        <div class="section-header gsap-reveal">
+            <h2>WHY BIG DADDY EVENTS</h2>
+        </div>
+        <div class="why-grid">
+            <div class="why-item gsap-reveal">
+                <h4><span>01</span> END-TO-END PRODUCTION</h4>
+                <p>One team managing the complete event experience from planning through execution.</p>
+            </div>
+            <div class="why-item gsap-reveal" style="transition-delay: 100ms;">
+                <h4><span>02</span> CUSTOM BUILT EXPERIENCES</h4>
+                <p>Every celebration is shaped around the client's vision, venue and occasion.</p>
+            </div>
+            <div class="why-item gsap-reveal" style="transition-delay: 200ms;">
+                <h4><span>03</span> INDOOR & OUTDOOR EXPERTISE</h4>
+                <p>From elegant indoor venues to large outdoor destination landscapes.</p>
+            </div>
+            <div class="why-item gsap-reveal">
+                <h4><span>04</span> PROFESSIONAL EXECUTION</h4>
+                <p>Planning, production and event-day coordination handled as one connected system.</p>
+            </div>
+            <div class="why-item gsap-reveal" style="transition-delay: 100ms;">
+                <h4><span>05</span> DETAIL-DRIVEN DESIGN</h4>
+                <p>Every visual, sound, lighting and atmosphere element is intentionally designed.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 06: WHAT WE BRING (ECOSYSTEM) -->
+    <section class="about-ecosystem">
+        <div class="section-header gsap-reveal">
+            <h2>MORE THAN DECORATION.</h2>
+            <p>A COMPLETE EVENT EXPERIENCE.</p>
+        </div>
+        <div class="ecosystem-graphic gsap-reveal">
+            <span class="eco-label eco-1">CONCEPT</span>
+            <span class="eco-label eco-2">DESIGN</span>
+            <span class="eco-label eco-3">STAGE</span>
+            <span class="eco-label eco-4">DECOR</span>
+            <span class="eco-label eco-5">LIGHTING</span>
+            <span class="eco-label eco-6">SOUND</span>
+            <span class="eco-label eco-7">ENTERTAINMENT</span>
+            <span class="eco-label eco-8">SPECIAL EFFECTS</span>
+            <span class="eco-label eco-9">HOSPITALITY</span>
+            <span class="eco-label eco-10">PRODUCTION</span>
+            <span class="eco-label eco-11">COORDINATION</span>
+            <span class="eco-label eco-12">DESTINATION EXPERIENCE</span>
+            
+            <div class="ecosystem-center image-slot dark-slot">
+                <img src="assets/images/event-destination-outdoor.jpg" alt="Event Ecosystem" class="img-scale">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 07: OUR EXPERIENCE -->
+    <section class="about-experience">
+        <div class="experience-grid">
+            <div class="experience-content gsap-reveal">
+                <h2>EVERY CELEBRATION DESERVES ITS OWN STORY.</h2>
+                <p>"No two celebrations should feel the same. We design experiences around the people, the place and the moment &mdash; creating an atmosphere that feels personal, intentional and unforgettable."</p>
+            </div>
+            <div class="experience-image image-slot gsap-reveal clip-reveal">
+                <img src="assets/images/munnar-intimate-wedding.jpg" alt="Intimate Wedding Design" class="img-scale">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 08: FINAL CTA -->
+    <section class="about-cta" style="position: relative; overflow: hidden;">
+        <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light gsap-reveal" style="max-width: 120px; margin-bottom: 2rem;">
+        <br>
+        <span class="eyebrow gsap-reveal">LET'S CREATE SOMETHING MEMORABLE</span>
+        <h2 class="gsap-reveal">YOUR CELEBRATION.<br>OUR CRAFT.</h2>
+        <p class="gsap-reveal">"Tell us what you're imagining. We'll turn it into an experience worth remembering."</p>
+        <div class="cta-buttons gsap-reveal">
+            <a href="packages.html" class="btn-primary">EXPLORE OUR PACKAGES &rarr;</a>
+            <a href="contact.html" class="btn-secondary">PLAN YOUR EVENT &rarr;</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
+                    <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>EXPLORE</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="packages.html">Packages</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>CONTACT</h4>
+                    <ul>
+                        <li><p>Munnar, Kerala, India</p></li>
+                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="tel:+917034252988">+91 70342 52988</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Big Daddy Events. All Rights Reserved.</span>
+                <span>Designed for Luxury.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

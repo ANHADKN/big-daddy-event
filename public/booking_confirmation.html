@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Big Daddy Events</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .booking-page {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            min-height: 100vh;
+            padding: 2rem 4vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cert-container {
+            background: #fff;
+            max-width: 700px;
+            width: 100%;
+            padding: 4rem;
+            border: 1px solid var(--color-accent);
+            position: relative;
+            box-shadow: 0 20px 40px rgba(26, 60, 52, 0.05);
+        }
+
+        /* INNER BORDER FOR PREMIUM LOOK */
+        .cert-container::before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
+            border: 1px solid rgba(197, 183, 159, 0.4);
+            pointer-events: none;
+        }
+
+        .cert-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cert-logo {
+            max-width: 250px;
+            height: auto;
+            margin: 0 auto 1.5rem;
+            mix-blend-mode: multiply;
+            display: block;
+        }
+
+        .cert-tagline {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .cert-success {
+            color: var(--color-accent);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cert-bid {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            border-top: 1px solid rgba(197, 183, 159, 0.4);
+            border-bottom: 1px solid rgba(197, 183, 159, 0.4);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cert-item label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-item span {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--color-primary);
+        }
+
+        .cert-summary {
+            background: rgba(245, 240, 231, 0.3);
+            padding: 2rem;
+            border: 1px solid rgba(197, 183, 159, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .cert-summary h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(197, 183, 159, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .sc-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .sc-row.highlight {
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .payment-status {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--color-secondary);
+            text-align: center;
+        }
+
+        .actions {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media print {
+            .actions { display: none; }
+            .booking-page { background: #fff; padding: 0; }
+            .cert-container { box-shadow: none; border: none; }
+        }
+        
+        @media (max-width: 600px) {
+            .cert-container { padding: 2rem; }
+            .cert-grid { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 0; }
+        }
+    </style>
+</head>
+<body class="booking-page">
+
+    <div class="cert-container" id="conf-box" style="display: none;">
+        <div class="cert-header">
+            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="cert-logo">
+            <div class="cert-tagline">"Your Celebration. Our Craft."</div>
+            <div class="cert-success">✓ BOOKING CONFIRMED</div>
+            <div class="cert-bid" id="c-bid"></div>
+        </div>
+        
+        <div class="cert-grid">
+            <div class="cert-item">
+                <label>Package</label>
+                <span id="c-pkg"></span>
+            </div>
+            <div class="cert-item">
+                <label>Event Type</label>
+                <span id="c-type"></span>
+            </div>
+            <div class="cert-item">
+                <label>Customer Name</label>
+                <span id="c-name"></span>
+            </div>
+            <div class="cert-item">
+                <label>Contact</label>
+                <span id="c-contact"></span>
+            </div>
+            <div class="cert-item">
+                <label>Event Date</label>
+                <span id="c-date"></span>
+            </div>
+            <div class="cert-item">
+                <label>Guests</label>
+                <span id="c-guests"></span>
+            </div>
+            <div class="cert-item">
+                <label>Venue</label>
+                <span id="c-venue"></span>
+            </div>
+            <div class="cert-item">
+                <label>Location / Address</label>
+                <span id="c-loc"></span>
+            </div>
+            <div class="cert-item">
+                <label>Booking Timestamp</label>
+                <span id="c-timestamp"></span>
+            </div>
+        </div>
+        
+        <div class="cert-summary">
+            <h3>PAYMENT SUMMARY</h3>
+            <div class="sc-row">
+                <span>TOTAL</span>
+                <span id="c-total"></span>
+            </div>
+            <div class="sc-row highlight">
+                <span>ADVANCE PAID</span>
+                <span id="c-paid"></span>
+            </div>
+            <div class="sc-row">
+                <span>BALANCE</span>
+                <span id="c-bal"></span>
+            </div>
+            <div class="payment-status">
+                PAYMENT STATUS: Razorpay — PAID ✓
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-primary" onclick="window.print()">DOWNLOAD RECEIPT</button>
+            <a href="index.html" class="btn-primary" style="background: transparent; color: var(--color-primary); border-color: var(--color-primary);">RETURN HOME</a>
+        </div>
+    </div>
+
+    <script>
+        const formatINR = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookingId = urlParams.get('id');
+            
+            if (!bookingId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/booking/${bookingId}`);
+                if (!res.ok) throw new Error('Booking not found');
+                const data = await res.json();
+
+                document.getElementById('c-bid').textContent = `Booking ID: ${data.booking_id}`;
+                document.getElementById('c-pkg').textContent = data.package_name;
+                document.getElementById('c-type').textContent = data.event_type;
+                document.getElementById('c-name').textContent = data.customer_name;
+                document.getElementById('c-contact').textContent = data.phone + (data.email ? ` / ${data.email}` : '');
+                document.getElementById('c-date').textContent = data.event_date;
+                document.getElementById('c-guests').textContent = data.guest_count;
+                document.getElementById('c-venue').textContent = data.venue_name;
+                document.getElementById('c-loc').textContent = data.location + (data.state ? ", " + data.state : "");
+                document.getElementById('c-timestamp').textContent = new Date(data.created_at).toLocaleString();
+                
+                document.getElementById('c-total').textContent = formatINR(data.package_amount);
+                document.getElementById('c-paid').textContent = formatINR(data.amount_paid);
+                document.getElementById('c-bal').textContent = formatINR(data.balance_amount);
+                
+                document.getElementById('conf-box').style.display = 'block';
+            } catch(e) {
+                alert("Could not load booking details.");
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

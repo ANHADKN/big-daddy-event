@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Packages Management - Big Daddy Events Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .packages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .pkg-card {
+            display: flex;
+            background: white;
+            border: 1px solid rgba(6, 45, 36, 0.1);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .pkg-card-img {
+            width: 250px;
+            background: #eee;
+            position: relative;
+        }
+        .pkg-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .pkg-card-details {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .pkg-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        .pkg-card-header h3 {
+            margin: 0;
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            font-size: 1.5rem;
+        }
+        .pkg-meta {
+            color: var(--color-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .pkg-meta span {
+            margin-right: 1rem;
+        }
+        .pkg-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(6, 45, 36, 0.1);
+        }
+        .pkg-actions button {
+            background: none;
+            border: none;
+            color: var(--color-accent);
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0;
+        }
+        .pkg-actions button:hover {
+            color: var(--color-primary);
+        }
+        .pkg-actions button.delete-btn {
+            color: #d9534f;
+        }
+        .badge.inactive {
+            background: rgba(0,0,0,0.1);
+            color: #555;
+        }
+        /* Modal Tabs */
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 1.5rem;
+        }
+        .modal-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+        }
+        .modal-tab.active {
+            border-bottom: 2px solid var(--color-accent);
+            color: var(--color-primary);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .image-preview-container {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ccc;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .image-preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .service-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .service-row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
+            <h3>ADMIN PORTAL</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="bookings.html" class="nav-item">Bookings</a>
+            <a href="enquiries.html" class="nav-item">Enquiries</a>
+            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="events.html" class="nav-item">Upcoming Events</a>
+            <a href="packages.html" class="nav-item active">Packages</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h1 class="page-title">Packages Management</h1>
+        </header>
+
+        <div class="content-body">
+            
+            <div class="packages-header">
+                <div class="search-bar" style="flex: 1; max-width: 400px; margin-right: 2rem;">
+                    <input type="text" id="searchInput" placeholder="Search packages..." style="width: 100%; padding: 0.8rem; border: 1px solid rgba(6,45,36,0.2); border-radius: 4px;">
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-primary" style="background: transparent; color: var(--color-primary); border: 1px solid var(--color-accent);" onclick="openCategoryModal()">MANAGE CATEGORIES</button>
+                    <button class="btn-primary" onclick="openPackageModal()">+ ADD PACKAGE</button>
+                </div>
+            </div>
+
+            <div id="packagesContainer">
+                <!-- Packages injected here -->
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- FULL PACKAGE MODAL -->
+    <div class="modal-overlay" id="packageModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <button class="modal-close" onclick="closeModal('packageModal')">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Package</h2>
+            </div>
+            
+            <div class="modal-tabs">
+                <div class="modal-tab active" onclick="switchTab('tab-details', this)">Details</div>
+                <div class="modal-tab" onclick="switchTab('tab-pricing', this)">Pricing</div>
+                <div class="modal-tab" onclick="switchTab('tab-image', this)">Image</div>
+                <div class="modal-tab" onclick="switchTab('tab-services', this)">Services</div>
+            </div>
+
+            <form id="packageForm">
+                <input type="hidden" id="pkgId">
+                <input type="hidden" id="pkgImageUrl">
+                
+                <!-- DETAILS TAB -->
+                <div id="tab-details" class="tab-content active">
+                    <div class="form-group">
+                        <label>Package Name *</label>
+                        <input type="text" id="pkgName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="pkgCategory" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Theme Class (Advanced)</label>
+                        <select id="pkgTheme">
+                            <option value="theme-bronze">Bronze Theme</option>
+                            <option value="theme-silver">Silver Theme</option>
+                            <option value="theme-gold">Gold Theme</option>
+                            <option value="theme-premium">Premium Theme</option>
+                            <option value="theme-plus">Premium Plus Theme</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Description (Card View)</label>
+                        <input type="text" id="pkgShortDesc">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Description</label>
+                        <textarea id="pkgDesc" rows="4"></textarea>
+                    </div>
+                    <div style="display:flex; gap:1rem;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Status</label>
+                            <select id="pkgStatus">
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="INACTIVE">INACTIVE</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Display Order</label>
+                            <input type="number" id="pkgOrder" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRICING TAB -->
+                <div id="tab-pricing" class="tab-content">
+                    <div class="form-group">
+                        <label>Price From (₹) * - Used as Base/Advance Calculation</label>
+                        <input type="number" id="pkgPriceFrom" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Price To (₹) * - Make same as Price From for Fixed Price</label>
+                        <input type="number" id="pkgPriceTo" required min="0">
+                    </div>
+                </div>
+
+                <!-- IMAGE TAB -->
+                <div id="tab-image" class="tab-content">
+                    <label>Package Cover Image</label>
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <span style="color:#888;">No image selected</span>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/jpeg, image/png, image/webp" style="margin-bottom: 1rem;">
+                    <div style="display:flex; gap:1rem;">
+                        <button type="button" class="btn-primary" style="background:var(--color-secondary); padding:0.5rem 1rem;" onclick="uploadImage()">UPLOAD IMAGE</button>
+                        <button type="button" class="btn-primary" style="background:#d9534f; border-color:#d9534f; padding:0.5rem 1rem;" onclick="removeImage()">REMOVE IMAGE</button>
+                    </div>
+                    <p id="uploadStatus" style="font-size:0.85rem; margin-top:0.5rem;"></p>
+                </div>
+
+                <!-- SERVICES TAB -->
+                <div id="tab-services" class="tab-content">
+                    <p style="font-size:0.9rem; color:var(--color-secondary); margin-bottom:1rem;">Services will be grouped by Category on the public page (e.g. DECORATION, PRODUCTION).</p>
+                    <div id="servicesContainer">
+                        <!-- Services loaded here -->
+                    </div>
+                    <div id="addServiceForm" style="margin-top:1rem; padding-top:1rem; border-top:1px solid #eee;">
+                        <h4>Add New Service</h4>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <input type="text" id="newSrvCat" placeholder="Group (e.g. DECORATION)" style="padding:0.5rem; border:1px solid #ccc; flex:1;">
+                            <input type="text" id="newSrvName" placeholder="Service Name" style="padding:0.5rem; border:1px solid #ccc; flex:2;">
+                            <button type="button" class="btn-primary" style="padding:0.5rem;" onclick="addService()">ADD</button>
+                        </div>
+                        <span id="srvError" style="color:var(--color-danger); font-size:0.85rem; display:block; margin-top:0.5rem;"></span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; display:flex; gap:1rem; align-items:center;">
+                    <button type="button" class="btn-primary" style="background:transparent; color:var(--color-primary); border:1px solid #ccc;" onclick="closeModal('packageModal')">CANCEL</button>
+                    <button type="submit" class="btn-primary" id="savePkgBtn">SAVE PACKAGE</button>
+                    <span id="pkgFormError" style="color:var(--color-danger); font-size:0.9rem; margin-left:1rem;"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CATEGORY MODAL -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('categoryModal')">&times;</button>
+            <div class="modal-header">
+                <h2>Manage Categories</h2>
+            </div>
+            
+            <ul id="categoryList" style="list-style:none; padding:0; margin-bottom:2rem; max-height:200px; overflow-y:auto;">
+                <!-- Categories loaded here -->
+            </ul>
+            
+            <form id="categoryForm" style="border-top:1px solid #eee; padding-top:1rem;">
+                <h4>Add New Category</h4>
+                <div class="form-group">
+                    <input type="text" id="catName" placeholder="Category Name" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">ADD CATEGORY</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script src="admin.js"></script>
+    <script>
+        let allPackages = [];
+        let allCategories = [];
+        let currentPackageId = null;
+
+        document.getElementById('searchInput').addEventListener('input', renderPackages);
+
+        async function init() {
+            await loadCategories();
+            await loadPackages();
+        }
+
+        async function loadCategories() {
+            try {
+                const res = await fetchWithAuth('/api/admin/categories');
+                allCategories = await res.json();
+                
+                // Populate category dropdown
+                const sel = document.getElementById('pkgCategory');
+                sel.innerHTML = '';
+                allCategories.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    sel.appendChild(opt);
+                });
+                
+                // Populate category list in modal
+                const ul = document.getElementById('categoryList');
+                ul.innerHTML = '';
+                allCategories.forEach(c => {
+                    const li = document.createElement('li');
+                    li.style.padding = "0.5rem 0";
+                    li.style.borderBottom = "1px solid #eee";
+                    li.textContent = `${c.name} (${c.status})`;
+                    ul.appendChild(li);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadPackages() {
+            try {
+                const res = await fetchWithAuth('/api/admin/packages');
+                allPackages = await res.json();
+                renderPackages();
+            } catch (err) { console.error(err); }
+        }
+
+        function renderPackages() {
+            const container = document.getElementById('packagesContainer');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = allPackages.filter(p => p.name.toLowerCase().includes(search));
+
+            filtered.forEach(p => {
+                const badgeClass = p.status === 'ACTIVE' ? 'confirmed' : 'inactive';
+                const imgSrc = p.image_url ? `../${p.image_url}` : '../assets/images/placeholder.jpg';
+                const priceStr = p.price_from === p.price_to ? formatCurrency(p.price_from) : `${formatCurrency(p.price_from)} - ${formatCurrency(p.price_to)}`;
+                
+                const card = document.createElement('div');
+                card.className = 'pkg-card';
+                card.innerHTML = `
+                    <div class="pkg-card-img">
+                        <img src="${imgSrc}" alt="${p.name}">
+                    </div>
+                    <div class="pkg-card-details">
+                        <div class="pkg-card-header">
+                            <div>
+                                <h3>${p.name}</h3>
+                                <div class="pkg-meta">
+                                    <span>${p.category_name || 'No Category'}</span>
+                                    <span>${priceStr}</span>
+                                </div>
+                            </div>
+                            <span class="badge ${badgeClass}">${p.status}</span>
+                        </div>
+                        <p style="font-size:0.95rem; color:#444; margin-bottom:1rem; flex:1;">${p.short_description || p.description || ''}</p>
+                        
+                        <div class="pkg-actions">
+                            <button onclick="editPackage('${p.id}')">EDIT</button>
+                            <button onclick="duplicatePackage('${p.id}')">DUPLICATE</button>
+                            <button onclick="toggleStatus('${p.id}', '${p.status}')">${p.status === 'ACTIVE' ? 'DISABLE' : 'ENABLE'}</button>
+                            <button class="delete-btn" onclick="deletePackage('${p.id}')">DELETE</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // TABS LOGIC
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            if (el) {
+                el.classList.add('active');
+            } else {
+                // Fallback for programmatic calls
+                const tab = document.querySelector(`.modal-tab[onclick*="${tabId}"]`);
+                if (tab) tab.classList.add('active');
+            }
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // PACKAGE CRUD
+        function openPackageModal() {
+            document.getElementById('modalTitle').textContent = 'Add Package';
+            document.getElementById('packageForm').reset();
+            document.getElementById('pkgId').value = '';
+            document.getElementById('pkgImageUrl').value = '';
+            document.getElementById('imagePreviewContainer').innerHTML = '<span style="color:#888;">No image selected</span>';
+            
+            document.getElementById('servicesContainer').innerHTML = '';
+            currentServices = [];
+            
+            currentPackageId = null;
+            switchTab('tab-details');
+            openModal('packageModal');
+        }
+
+        async function editPackage(id) {
+            document.getElementById('modalTitle').textContent = 'Edit Package';
+            const p = allPackages.find(x => x.id === id);
+            if (!p) return;
+            
+            currentPackageId = p.id;
+            document.getElementById('pkgId').value = p.id;
+            document.getElementById('pkgName').value = p.name;
+            document.getElementById('pkgCategory').value = p.category_id;
+            document.getElementById('pkgTheme').value = p.theme || 'theme-bronze';
+            document.getElementById('pkgShortDesc').value = p.short_description || '';
+            document.getElementById('pkgDesc').value = p.description || '';
+            document.getElementById('pkgStatus').value = p.status;
+            document.getElementById('pkgOrder').value = p.display_order;
+            
+            document.getElementById('pkgPriceFrom').value = p.price_from;
+            document.getElementById('pkgPriceTo').value = p.price_to;
+            
+            document.getElementById('pkgImageUrl').value = p.image_url || '';
+            if (p.image_url) {
+                document.getElementById('imagePreviewContainer').innerHTML = `<img src="../${p.image_url}">`;
+            } else {
+                document.getElementById('imagePreviewContainer').innerHTML = '<span style="color:#888;">No image selected</span>';
+            }
+
+            // Services
+            await loadServices(p.id);
+
+            switchTab('tab-details');
+            openModal('packageModal');
+        }
+
+        document.getElementById('packageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('savePkgBtn');
+            const errorMsg = document.getElementById('pkgFormError');
+            btn.textContent = 'SAVING...';
+            btn.disabled = true;
+            errorMsg.textContent = '';
+
+            const id = document.getElementById('pkgId').value;
+            const payload = {
+                id: id || undefined,
+                name: document.getElementById('pkgName').value,
+                category_id: document.getElementById('pkgCategory').value,
+                theme: document.getElementById('pkgTheme').value,
+                short_description: document.getElementById('pkgShortDesc').value,
+                description: document.getElementById('pkgDesc').value,
+                price_from: document.getElementById('pkgPriceFrom').value,
+                price_to: document.getElementById('pkgPriceTo').value,
+                status: document.getElementById('pkgStatus').value,
+                display_order: document.getElementById('pkgOrder').value,
+                image_url: document.getElementById('pkgImageUrl').value,
+                services: currentServices
+            };
+
+            try {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `/api/admin/packages/${id}` : `/api/admin/packages`;
+                
+                const res = await fetchWithAuth(url, {
+                    method: method,
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    await loadPackages();
+                    closeModal('packageModal');
+                } else {
+                    if (res.status === 401 || res.status === 403) {
+                        errorMsg.textContent = 'Admin session expired. Please log in again.';
+                    } else {
+                        errorMsg.textContent = 'Unable to update package. Please try again.';
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.textContent = 'Unable to update package. Please try again.';
+            } finally {
+                btn.textContent = 'SAVE PACKAGE';
+                btn.disabled = false;
+            }
+        });
+
+        async function duplicatePackage(id) {
+            if(!confirm('Duplicate this package?')) return;
+            try {
+                const res = await fetchWithAuth(`/api/admin/packages/${id}/duplicate`, { method: 'POST' });
+                if (res.ok) {
+                    await loadPackages();
+                } else {
+                    alert('Failed to duplicate');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function toggleStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+            const p = allPackages.find(x => x.id === id);
+            p.status = newStatus;
+            
+            try {
+                const res = await fetchWithAuth(`/api/admin/packages/${id}/status`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ status: newStatus })
+                });
+                if (res.ok) await loadPackages();
+            } catch (err) { console.error(err); }
+        }
+
+        async function deletePackage(id) {
+            if(!confirm('Delete this package? This action cannot be undone.')) return;
+            try {
+                const res = await fetchWithAuth(`/api/admin/packages/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    await loadPackages();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to delete'); // Warning about bookings is returned here
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // IMAGE UPLOAD
+        async function uploadImage() {
+            const input = document.getElementById('imageInput');
+            const status = document.getElementById('uploadStatus');
+            if (input.files.length === 0) {
+                status.textContent = "Please select a file first.";
+                status.style.color = "red";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            status.textContent = "Uploading...";
+            status.style.color = "var(--color-primary)";
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const res = await fetch('/api/admin/upload-image', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }, // No Content-Type for FormData
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('pkgImageUrl').value = data.imageUrl;
+                    document.getElementById('imagePreviewContainer').innerHTML = `<img src="../${data.imageUrl}">`;
+                    status.textContent = "Upload successful!";
+                    status.style.color = "green";
+                } else {
+                    status.textContent = data.error || "Upload failed.";
+                    status.style.color = "red";
+                }
+            } catch (err) {
+                status.textContent = "Upload error.";
+                status.style.color = "red";
+                console.error(err);
+            }
+        }
+
+        function removeImage() {
+            if(!confirm('Remove this image?')) return;
+            document.getElementById('pkgImageUrl').value = '';
+            document.getElementById('imagePreviewContainer').innerHTML = '<span style="color:#888;">No image selected</span>';
+            document.getElementById('imageInput').value = '';
+            const status = document.getElementById('uploadStatus');
+            status.textContent = "Image removed.";
+            status.style.color = "var(--color-primary)";
+        }
+
+        // SERVICES LOGIC
+        let currentServices = [];
+
+        async function loadServices(packageId) {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = 'Loading...';
+            currentServices = [];
+            try {
+                if (packageId) {
+                    const res = await fetchWithAuth(`/api/admin/packages/${packageId}/services`);
+                    currentServices = await res.json();
+                }
+                renderServicesForm();
+            } catch (err) { console.error(err); }
+        }
+
+        function renderServicesForm() {
+            const container = document.getElementById('servicesContainer');
+            container.innerHTML = '';
+            if(currentServices.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No services added yet.</p>';
+            } else {
+                const table = document.createElement('table');
+                table.innerHTML = `<tr><th>Group</th><th>Service</th><th>Order</th><th>Action</th></tr>`;
+                currentServices.forEach((s, index) => {
+                    table.innerHTML += `
+                        <tr>
+                            <td><input type="text" value="${s.category_group}" onchange="updateService(${index}, 'category_group', this.value)" style="width:100%; padding:0.4rem; border:1px solid #ccc;"></td>
+                            <td><input type="text" value="${s.service_name}" onchange="updateService(${index}, 'service_name', this.value)" style="width:100%; padding:0.4rem; border:1px solid #ccc;"></td>
+                            <td><input type="number" value="${s.display_order}" onchange="updateService(${index}, 'display_order', this.value)" style="width:60px; padding:0.4rem; border:1px solid #ccc;"></td>
+                            <td><button type="button" onclick="removeLocalService(${index})" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">X</button></td>
+                        </tr>
+                    `;
+                });
+                container.appendChild(table);
+            }
+        }
+
+        function updateService(index, field, value) {
+            currentServices[index][field] = field === 'display_order' ? parseInt(value) || 0 : value;
+        }
+
+        function removeLocalService(index) {
+            currentServices.splice(index, 1);
+            renderServicesForm();
+        }
+
+        function addService() {
+            const cat = document.getElementById('newSrvCat').value;
+            const name = document.getElementById('newSrvName').value;
+            const srvError = document.getElementById('srvError');
+            if(srvError) srvError.textContent = '';
+
+            if(!cat || !name) {
+                if(srvError) srvError.textContent = 'Fill both Group and Service Name fields';
+                return;
+            }
+            
+            currentServices.push({
+                category_group: cat,
+                service_name: name,
+                display_order: currentServices.length * 10
+            });
+            
+            document.getElementById('newSrvCat').value = '';
+            document.getElementById('newSrvName').value = '';
+            renderServicesForm();
+        }
+
+
+        // CATEGORY LOGIC
+        function openCategoryModal() {
+            document.getElementById('categoryForm').reset();
+            openModal('categoryModal');
+        }
+
+        document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('catName').value;
+            try {
+                const res = await fetchWithAuth('/api/admin/categories', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, display_order: allCategories.length + 1 })
+                });
+                if (res.ok) {
+                    await loadCategories();
+                    document.getElementById('categoryForm').reset();
+                }
+            } catch (err) { console.error(err); }
+        });
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
