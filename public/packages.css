@@ -84,21 +84,22 @@
 
 .pkg-card {
     position: relative;
-    background-color: #fff;
-    border: 1px solid transparent;
-    transition: all 0.6s var(--ease-slow);
+    background-color: var(--color-bg);
+    border: 1px solid rgba(184, 156, 109, 0.15); /* Subtle border */
+    transition: all 0.8s var(--ease-slow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-self: start;
     width: 100%;
     min-width: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); /* Subtle initial shadow */
 }
 
 .pkg-card:hover {
     transform: translateY(-10px);
-    border-color: var(--color-accent);
-    box-shadow: 0 20px 40px rgba(49, 63, 51, 0.05);
+    border-color: rgba(184, 156, 109, 0.4);
+    box-shadow: 0 24px 48px rgba(26, 38, 29, 0.08); /* Elevated premium shadow */
 }
 
 .pkg-img-wrapper {
@@ -167,39 +168,57 @@
 .pkg-actions {
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+    margin-top: auto;
+
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
     margin-top: auto;
 }
 
 .btn-details {
+    width: 100%;
+    padding: 1rem;
     background: transparent;
-    border: none;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
     font-family: var(--font-body);
     font-size: 0.75rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--color-secondary);
-    text-align: left;
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: var(--color-accent);
-    text-underline-offset: 4px;
+    transition: all 0.4s var(--ease-slow);
+    display: block;
+    text-align: center;
+}
+.btn-details:hover {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+}
+.btn-details:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
 }
 
 .btn-select {
-    display: inline-block;
     width: 100%;
     padding: 1rem;
-    text-align: center;
     background-color: var(--color-primary);
     color: var(--color-bg);
+    border: 1px solid var(--color-primary);
     font-family: var(--font-body);
     font-size: 0.75rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    border: 1px solid var(--color-primary);
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.4s var(--ease-slow);
+    display: block;
+    text-align: center;
+}
+.btn-select:hover {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
 }
 .btn-select:hover {
     background-color: transparent;
@@ -526,4 +545,19 @@
 /* Confirmation */
 .confirmation-icon {
     font-size: 4rem; color: var(--color-accent); margin-bottom: 2rem; text-align: center;
+}
+
+@media (max-width: 412px) {
+    .pkg-content {
+        padding: 1.5rem;
+    }
+    .pkg-card h3 {
+        font-size: 2rem;
+    }
+    .packages-grid {
+        padding: 2rem 4vw 8rem;
+    }
+    .btn-details, .btn-select {
+        min-height: 48px; /* Touch target size */
+    }
 }

@@ -2,13 +2,13 @@
 
 :root {
     /* Color System (Master Rework) */
-    --color-primary: #062D24; /* Deep Forest Green */
-    --color-secondary: #031B16; /* Dark Forest */
-    --color-bg: #F5F0E7; /* Warm Ivory */
-    --color-bg-alt: #E8E2D4; /* Slightly darker Ivory */
-    --color-accent: #C8A45D; /* Champagne Gold */
-    --color-accent-soft: #D8BE82; /* Soft Gold */
-    --color-text: #062D24; /* Deep Forest Green for text */
+    --color-primary: #1A261D; /* Deep Forest Green */
+    --color-secondary: #2C3E30; /* Dark Forest */
+    --color-bg: #FAF8F5; /* Warm Ivory */
+    --color-bg-alt: #F0EBE1; /* Slightly darker Ivory */
+    --color-accent: #B89C6D; /* Champagne Gold */
+    --color-accent-soft: #D4C3A3; /* Soft Gold */
+    --color-text: #1A261D; /* Deep Forest Green for text */
     --color-white: #FFFFFF;
     
     /* Typography */
@@ -16,7 +16,7 @@
     --font-body: 'Manrope', sans-serif;
 
     /* Easing */
-    --ease-slow: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-slow: cubic-bezier(0.25, 1, 0.5, 1); /* Cinematic */
 }
 
 /* =========================================
@@ -178,11 +178,11 @@ img {
 
 .site-nav.scrolled {
     padding: 1rem 4vw; 
-    background-color: rgba(6, 45, 36, 0.95); /* Deep Forest Green */
-    backdrop-filter: blur(10px); 
-    border-bottom: 1px solid rgba(201, 169, 106, 0.2); /* Subtle Gold border */
+    background-color: rgba(26, 38, 29, 0.95); /* Match new primary color with opacity */
+    backdrop-filter: blur(12px); 
+    border-bottom: 1px solid rgba(184, 156, 109, 0.2); /* Subtle Champagne Gold border */
     color: var(--color-bg); /* Ivory text */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.1em; z-index: 101; }
@@ -466,3 +466,31 @@ img {
 . b r a n d - l o g o  
    m i x - b l e n d - m o d e :   m u l t i p l y ;    
  
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .reveal-up {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .clip-reveal {
+        clip-path: none !important;
+    }
+}
+
+/* Refined Editorial Pacing */
+.destination-section, .what-we-do, .capabilities, .event-experience {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+}
+@media (max-width: 768px) {
+    .destination-section, .what-we-do, .capabilities, .event-experience {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+}
