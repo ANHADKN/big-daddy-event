@@ -3,97 +3,102 @@
 
 <head>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <meta name="description" content="Big Daddy Events provides premium event management services including weddings, corporate events, and celebrations in Kerala and Tamil Nadu.">
 <title>Gallery | Big Daddy Event Management</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css?v=20260912">
-
+<style>
+    /* HERO */
+    .page-hero {
+        position: relative; padding: 12rem 4vw 6rem;
+        background: var(--color-bg); overflow: hidden;
+        text-align: center;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .page-hero .hero-bg {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; opacity: 0.15; z-index: 0;
+    }
+    .page-hero-content {
+        position: relative; z-index: 1; max-width: 800px; margin: 0 auto;
+    }
+    .page-hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        color: var(--color-primary); margin-bottom: 1.5rem;
+    }
+    .page-hero p {
+        font-family: var(--font-body);
+        font-size: 1.1rem; opacity: 0.8; max-width: 600px; margin: 0 auto 3rem;
+    }
+    
+    @media (max-width: 768px) {
+        .page-hero { padding-top: 8rem; min-height: auto; }
+    }
+</style>
 </head>
 
 <body>
 
-<header class="header">
-
-    <nav class="navbar">
-
-        <ul class="nav-left">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="weddings.html">Weddings</a></li>
-            <li><a href="food-beverages.html">Food & Beverages</a></li>
-        </ul>
-
-        <div class="logo-center">
-            <a href="index.html" style="color: inherit;">
-                <div class="crown">👑</div>
-                <h1>BIG DADDY</h1>
-                <span>EVENT MANAGEMENT</span>
-            </a>
-        </div>
-
-        <ul class="nav-right">
-            <li><a href="entertainment.html">Entertainment</a></li>
-            <li><a href="corporate.html">Corporate</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="contact.html">Book Event</a></li>
-        </ul>
-
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-    </nav>
-
-</header>
-
-
-
-<!-- HERO -->
-
-<section class="gallery-hero">
-
-    <img src="assets/images/gallery-banner.jpg" alt="">
-
-    <div class="gallery-overlay"></div>
-
-    <div class="gallery-hero-content">
-
-        <span>Photography & Media Production</span>
-
-        <h1>
-            Every Moment.<br>
-            Beautifully Captured.
-        </h1>
-
-        <p>
-            Professional Photography, Cinematic Videography,
-            Drone Coverage and Live Streaming Solutions.
-        </p>
-
+    <!-- PRELOADER -->
+    <div class="preloader">
+        <div class="preloader-logo">BIG DADDY</div>
     </div>
 
-</section>
+    <!-- NAVIGATION -->
+    <nav class="site-nav">
+        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <div class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+        <div class="nav-right">
+            <a href="contact.html" class="nav-cta">PLAN YOUR WEDDING &rarr;</a>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
 
-<!-- INTRO -->
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu">
+        <div class="mobile-links">
+            <a href="index.html">HOME</a>
+            <a href="packages.html">PACKAGES</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html">CONTACT</a>
+        </div>
+    </div>
 
-<section class="gallery-intro">
-
-    <h2>Capturing Stories That Last Forever</h2>
-
-    <p>
-        Our media production team transforms moments into timeless
-        memories through premium photography, cinematic videography,
-        drone coverage and modern content creation.
-    </p>
-
-</section>
+    <!-- HERO -->
+    <section class="page-hero">
+        <img src="assets/images/gallery-banner.jpg" alt="" class="hero-bg" loading="lazy">
+        <div class="page-hero-content">
+            <span class="eyebrow reveal-up" style="color: var(--color-accent); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;">Photography & Media Production</span>
+            <h1 class="reveal-up" style="transition-delay: 0.1s;">Every Moment.<br>Beautifully Captured.</h1>
+            <p class="reveal-up" style="transition-delay: 0.2s;">
+                Professional Photography, Cinematic Videography,
+                Drone Coverage and Live Streaming Solutions.
+            </p>
+        </div>
+    </section>
 
 <!-- WEDDING EDITORIAL GALLERY -->
 <style id="gallery-masonry-styles">
