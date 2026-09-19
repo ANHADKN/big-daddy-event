@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Collections | Big Daddy Events</title>
+    <title>Event Packages | Big Daddy Events Munnar</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css?v=20260912">
-    <link rel="stylesheet" href="packages.css?v=20260912">
+    <link rel="stylesheet" href="packages.css?v=20260919_warm_editorial">
 </head>
 <body>
 
@@ -20,8 +20,8 @@
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html" class="active">PACKAGES</a>
-            <a href="about.html">ABOUT</a>
             <a href="gallery.html">GALLERY</a>
+            <a href="about.html">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
         <div class="nav-right">
@@ -36,61 +36,49 @@
     <div class="mobile-menu">
         <div class="mobile-links">
             <a href="index.html">HOME</a>
-            <a href="packages.html">PACKAGES</a>
-            <a href="about.html">ABOUT</a>
+            <a href="packages.html" class="active">PACKAGES</a>
             <a href="gallery.html">GALLERY</a>
+            <a href="about.html">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
     </div>
 
     <!-- PACKAGES HERO -->
-    <header class="packages-hero text-center" style="padding: 10rem 0 4rem; position: relative;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%); z-index: 0; pointer-events: none;"></div>
-        <div style="position: relative; z-index: 1;">
-            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light gsap-reveal" style="max-width: 150px; margin-bottom: 2rem;">
+    <header class="packages-hero text-center">
+        <div class="packages-hero__bg"></div>
+        <div class="packages-hero__content">
+            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light hero-logo gsap-reveal">
             <br>
-            <span class="eyebrow gsap-reveal">EVENT COLLECTIONS</span>
-            <h1 class="gsap-reveal" style="font-size: clamp(3rem, 6vw, 5.5rem); margin-bottom: 2rem;">DESIGNED FOR<br>YOUR CELEBRATION</h1>
-            <div class="gold-line gsap-reveal" style="width: 2px; height: 60px; background-color: var(--color-accent); margin: 0 auto 2rem;"></div>
-            <p class="gsap-reveal" style="max-width: 600px; margin: 0 auto; font-size: 1.15rem; line-height: 1.6; opacity: 0.8;">From essential event setups to complete destination experiences, choose the level of production that fits your celebration.</p>
+            <span class="editorial-eyebrow gsap-reveal">BIG DADDY EVENTS &bull; DESTINATION COLLECTION</span>
+            <h1 class="editorial-hero-title gsap-reveal">OUR PACKAGES</h1>
+            <div class="editorial-gold-line gsap-reveal"></div>
+            <p class="editorial-hero-lead gsap-reveal">YOUR CELEBRATION, YOUR WAY</p>
+            <p class="editorial-hero-desc gsap-reveal">From essential event setups to complete destination experiences, choose the level of production that fits your celebration.</p>
         </div>
     </header>
 
     <!-- PACKAGE FILTER -->
-    <div class="package-filter gsap-reveal">
-        <button class="filter-btn active">ALL</button>
-        <button class="filter-btn">WEDDINGS</button>
-        <button class="filter-btn">DESTINATION</button>
-        <button class="filter-btn">CORPORATE</button>
-        <button class="filter-btn">PRIVATE EVENTS</button>
-    </div>
-
-    <!-- PACKAGES GRID -->
-    <section class="packages-grid" id="packages-container">
-        <!-- Injected by JS -->
-    </section>
-
-    <!-- GLOBAL DETAIL PANEL -->
-    <div id="global-package-detail-panel" class="global-detail-panel">
-        <div class="gdp-header">
-            <div>
-                <span class="gdp-eyebrow">PACKAGE SERVICES</span>
-                <h3 id="gdp-title"></h3>
-                <p id="gdp-desc"></p>
-            </div>
-            <div class="gdp-actions">
-                <div class="gdp-price" id="gdp-price"></div>
-                <button type="button" class="btn-select" id="gdp-book-btn">BOOK PACKAGE &rarr;</button>
-            </div>
+    <nav class="package-filter-wrapper gsap-reveal" aria-label="Filter packages by celebration type">
+        <div class="package-filter">
+            <button class="filter-btn active" data-filter="all">ALL</button>
+            <button class="filter-btn" data-filter="wedding">WEDDINGS</button>
+            <button class="filter-btn" data-filter="destination">DESTINATION</button>
+            <button class="filter-btn" data-filter="corporate">CORPORATE</button>
+            <button class="filter-btn" data-filter="private">PRIVATE EVENTS</button>
         </div>
-        <div class="gdp-content" id="gdp-content">
-            <!-- Categories injected here -->
+    </nav>
+
+    <!-- PACKAGES SHOWCASE CONTAINER -->
+    <main class="packages-collection-section">
+        <div class="packages-section-intro text-center gsap-reveal">
+            <span class="editorial-eyebrow">YOUR PACKAGE</span>
+            <h2 class="editorial-sub-heading">Curated experiences for extraordinary celebrations</h2>
         </div>
-        <button type="button" class="btn-close-panel" onclick="closeGlobalPanel()">VIEW LESS &uarr;</button>
-    </div>
 
-    <!-- MODALS REMOVED IN FAVOR OF INLINE EXPANSION & CUSTOMIZATION FLOW -->
-
+        <div class="packages-editorial-container" id="packages-container">
+            <!-- Injected by JS -->
+        </div>
+    </main>
 
     <!-- FOOTER -->
     <footer class="site-footer">
@@ -105,6 +93,7 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="packages.html">Packages</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
@@ -127,119 +116,367 @@
 
     <script src="script.js"></script>
     <script>
+        const WHATSAPP_NUMBER = '917034252988';
+        const fallbackPackages = [
+            {
+                id: 'bronze',
+                name: 'STAGE BRONZE',
+                theme: 'theme-bronze',
+                desc: 'The Essential Celebration',
+                price: '₹15,000 - ₹30,000',
+                basePrice: 15000,
+                image: 'assets/images/event-private-celebration.jpg',
+                features: ['Pathway decoration', 'Entrance arch', 'Welcome board', 'Sound system'],
+                categories: {
+                    'DECORATION': ['Pathway decoration', 'Entrance arch', 'Welcome board'],
+                    'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
+                    'HOSPITALITY': ['Cake', 'Wine']
+                }
+            },
+            {
+                id: 'silver',
+                name: 'STAGE SILVER',
+                theme: 'theme-silver',
+                desc: 'More atmosphere. More celebration.',
+                price: '₹30,000 - ₹60,000',
+                basePrice: 30000,
+                image: 'assets/images/munnar-intimate-wedding.jpg',
+                features: ['15-foot ramp', 'Pathway decoration', 'Cold fire', 'Sound system'],
+                categories: {
+                    'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board'],
+                    'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
+                    'HOSPITALITY': ['Cake', 'Wine'],
+                    'EFFECTS': ['Cold fire']
+                }
+            },
+            {
+                id: 'gold',
+                name: 'STAGE GOLD',
+                theme: 'theme-gold',
+                desc: 'A richer celebration with entertainment.',
+                price: '₹60,000 - ₹1,00,000',
+                basePrice: 60000,
+                image: 'assets/images/hindu-destination-wedding.jpg',
+                features: ['MC & Hosting girls', 'SFS', 'Dry ice fog', 'Sound system'],
+                categories: {
+                    'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board'],
+                    'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
+                    'ENTERTAINMENT': ['MC', 'Hosting girls', 'SFS'],
+                    'HOSPITALITY': ['Cake', 'Wine'],
+                    'EFFECTS': ['Cold fire', 'Dry ice fog']
+                }
+            },
+            {
+                id: 'premium',
+                name: 'PREMIUM STAGE',
+                theme: 'theme-premium',
+                desc: 'A complete destination experience.',
+                price: '₹1,00,000 - ₹1,60,000',
+                basePrice: 100000,
+                image: 'assets/images/event-destination-outdoor.jpg',
+                features: ['Altar decoration', 'Confetti & Bubble machine', 'Live fusion', 'Welcome dance'],
+                categories: {
+                    'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Family table', 'Premium chairs'],
+                    'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
+                    'ENTERTAINMENT': ['MC', 'Hosting girls', 'SFS', 'Live fusion', 'Welcome dance'],
+                    'HOSPITALITY': ['Cake', 'Wine'],
+                    'EFFECTS': ['Cold fire', 'Dry ice fog', 'Confetti', 'Bubble machine']
+                }
+            },
+            {
+                id: 'premium-plus',
+                name: 'PREMIUM PLUS',
+                theme: 'theme-plus',
+                desc: 'The ultimate Big Daddy Events experience.',
+                price: '₹1,60,000',
+                basePrice: 160000,
+                image: 'assets/images/event-corporate-gala.jpg',
+                features: ['Custom & Ambiance lighting', 'LED walls', 'VIP sofa & Dining', 'Live fusion & Welcome dance'],
+                categories: {
+                    'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Hall dome / ceiling cloth', 'VIP sofa', 'Premium chairs', 'Dining table', 'Family table', 'Dining arrangements'],
+                    'LIGHTING': ['Custom lighting', 'Ambiance lighting', 'Sharpie lights', 'LED strobes', 'LED walls'],
+                    'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
+                    'ENTERTAINMENT': ['MC', 'Hosting girls', 'SFS', 'Live fusion', 'Welcome dance'],
+                    'HOSPITALITY': ['Cake', 'Wine'],
+                    'EFFECTS': ['Cold fire', 'Dry ice fog', 'Confetti', 'Bubble machine']
+                }
+            }
+        ];
         let packageData = [];
-        let selectedPackageData = null;
+        let currentFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const container = document.getElementById('packages-container');
-            
+            setupFilters();
             try {
                 const res = await fetch('/api/public/packages');
-                packageData = await res.json();
-                
-                packageData.forEach((pkg, index) => {
-                const delay = index * 100;
-                const signatureLabel = pkg.id === 'premium-plus' ? `<div class="signature-label">SIGNATURE EXPERIENCE</div>` : '';
-                const btnSelectText = (pkg.id === 'premium' || pkg.id === 'premium-plus') ? `BOOK ${pkg.name}` : `SELECT PACKAGE`;
-
-                const cardHtml = `
-                <div class="pkg-card ${pkg.theme} gsap-reveal" style="transition-delay: ${delay}ms;" id="card-${pkg.id}">
-                    ${signatureLabel}
-                    <div class="pkg-img-wrapper image-slot">
-                        <img src="${pkg.image}" alt="${pkg.name} Setup" style="display: block; width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    <div class="pkg-content">
-                        <span class="pkg-num">0${index + 1}</span>
-                        <h3>${pkg.name}</h3>
-                        <p class="pkg-desc">${pkg.desc}</p>
-                        <div class="pkg-price">${pkg.price}</div>
-                        
-                        <div class="pkg-actions">
-                            <button type="button" class="btn-details" aria-expanded="false" onclick="toggleDetails(this, '${pkg.id}')">VIEW DETAILS &rarr;</button>
-                            <button type="button" class="btn-select" onclick="selectPackage('${pkg.id}')">${btnSelectText}</button>
-                        </div>
-                    </div>
-                </div>`;
-                container.innerHTML += cardHtml;
-            });
+                if (res.ok) {
+                    const apiPkgs = await res.json();
+                    packageData = apiPkgs.length ? apiPkgs : fallbackPackages;
+                } else {
+                    packageData = fallbackPackages;
+                }
             } catch (err) {
-                console.error('Failed to load packages', err);
+                console.warn('Using fallback package data', err);
+                packageData = fallbackPackages;
             }
+            renderPackages();
         });
 
-        // GLOBAL DETAIL PANEL LOGIC
-        function toggleDetails(btn, id) {
-            const panel = document.getElementById('global-package-detail-panel');
+        function setupFilters() {
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentFilter = button.dataset.filter;
+                    closeAllInlineDetails();
+                    renderPackages();
+                });
+            });
+        }
+
+        function renderPackages() {
+            const container = document.getElementById('packages-container');
+            const visiblePackages = currentFilter === 'all'
+                ? packageData
+                : packageData.filter(pkg => {
+                    if (currentFilter === 'wedding') return pkg.id === 'silver' || pkg.id === 'gold' || pkg.id === 'premium';
+                    if (currentFilter === 'destination') return pkg.id === 'gold' || pkg.id === 'premium';
+                    if (currentFilter === 'corporate') return pkg.id === 'premium-plus';
+                    if (currentFilter === 'private') return pkg.id === 'bronze';
+                    return true;
+                });
+
+            container.innerHTML = '';
+
+            visiblePackages.forEach((pkg, index) => {
+                const isEven = index % 2 === 1;
+                const delay = index * 100;
+                
+                const featuresList = (pkg.features && pkg.features.length) ? pkg.features : [];
+                const featuresHtml = featuresList.map(feature => `
+                    <li>
+                        <svg class="inclusion-check" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>${escapeHtml(feature)}</span>
+                    </li>
+                `).join('');
+
+                // Build Complete Inline Categories & Services List (No limits, no slices, complete original data)
+                let allFeaturesHTML = '';
+                let totalRendered = 0;
+                if (pkg.categories && Object.keys(pkg.categories).length > 0) {
+                    for (const cat in pkg.categories) {
+                        const sList = pkg.categories[cat] || [];
+                        if (sList.length > 0) {
+                            allFeaturesHTML += `
+                            <div class="gdp-category">
+                                <h5 class="gdp-cat-title">${escapeHtml(cat)}</h5>
+                                <div class="gdp-feature-list">`;
+                            sList.forEach(feature => {
+                                totalRendered++;
+                                allFeaturesHTML += `
+                                <div class="gdp-feature-item">
+                                    <svg class="gdp-check" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>${escapeHtml(feature)}</span>
+                                </div>`;
+                            });
+                            allFeaturesHTML += `</div></div>`;
+                        }
+                    }
+                }
+
+                if (totalRendered === 0 && pkg.features && pkg.features.length > 0) {
+                    allFeaturesHTML += `
+                    <div class="gdp-category">
+                        <h5 class="gdp-cat-title">PACKAGE INCLUSIONS</h5>
+                        <div class="gdp-feature-list">`;
+                    pkg.features.forEach(feature => {
+                        allFeaturesHTML += `
+                        <div class="gdp-feature-item">
+                            <svg class="gdp-check" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>${escapeHtml(feature)}</span>
+                        </div>`;
+                    });
+                    allFeaturesHTML += `</div></div>`;
+                }
+
+                const itemHtml = `
+                <article class="pkg-editorial-item ${isEven ? 'pkg-item--reverse' : ''} ${pkg.theme || ''} gsap-reveal" style="transition-delay: ${delay}ms;" id="card-${pkg.id}">
+                    <div class="pkg-visual-col">
+                        <div class="pkg-image-frame image-slot">
+                            <img src="${pkg.image}" alt="${escapeHtml(pkg.name)} Setup" loading="lazy">
+                            <div class="pkg-image-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="pkg-info-col">
+                        <div class="pkg-header-meta">
+                            <span class="pkg-subtle-num">PACKAGE 0${index + 1}</span>
+                        </div>
+                        <h3 class="pkg-title">${escapeHtml(pkg.name)}</h3>
+                        <p class="pkg-description">${escapeHtml(pkg.desc)}</p>
+                        
+                        <div class="pkg-pricing-block">
+                            <span class="pkg-price-label">INVESTMENT</span>
+                            <div class="pkg-price-value">${escapeHtml(pkg.price)}</div>
+                        </div>
+
+                        ${featuresList.length ? `
+                        <div class="pkg-inclusions-block">
+                            <span class="pkg-section-label">PACKAGE SERVICES</span>
+                            <ul class="pkg-inclusions-list">${featuresHtml}</ul>
+                        </div>` : ''}
+                        
+                        <div class="pkg-cta-group">
+                            <button type="button" class="btn-editorial btn-editorial--details" id="btn-details-${pkg.id}" aria-expanded="false" onclick="toggleDetails('${pkg.id}')">
+                                <span class="btn-text">VIEW DETAILS</span>
+                                <span class="btn-arrow">&rarr;</span>
+                            </button>
+                            <button type="button" class="btn-editorial btn-editorial--whatsapp" onclick="enquireWhatsApp('${pkg.id}')" title="Enquire on WhatsApp">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
+                                <span>WHATSAPP</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- INLINE EXPANDABLE DETAILS SECTION (Immediately below the package card) -->
+                    <div class="pkg-inline-details" id="details-${pkg.id}" role="region" aria-label="${escapeHtml(pkg.name)} Complete Specifications">
+                        <div class="gdp-header">
+                            <div class="gdp-title-col">
+                                <span class="gdp-eyebrow">PACKAGE SPECIFICATION</span>
+                                <h4 class="gdp-inline-title">${escapeHtml(pkg.name)}</h4>
+                                <p class="gdp-inline-desc">${escapeHtml(pkg.desc)}</p>
+                            </div>
+                            <div class="gdp-actions">
+                                <div class="gdp-price-wrap">
+                                    <span class="gdp-price-label">INVESTMENT</span>
+                                    <div class="gdp-price">${escapeHtml(pkg.price)}</div>
+                                </div>
+                                <button type="button" class="btn-close-panel" onclick="closeInlineDetails('${pkg.id}')" aria-label="Close details for ${escapeHtml(pkg.name)}">
+                                    <span class="btn-text">CLOSE</span>
+                                    <span class="btn-icon">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="gdp-divider">
+                            <span class="gdp-divider-label">PACKAGE DETAILS &bull; ALL INCLUSIONS</span>
+                        </div>
+
+                        <div class="gdp-content">
+                            ${allFeaturesHTML}
+                        </div>
+
+                        <div class="gdp-footer">
+                            <button type="button" class="btn-whatsapp" onclick="enquireWhatsApp('${pkg.id}')" title="Enquire on WhatsApp">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
+                                <span>ENQUIRE ON WHATSAPP &rarr;</span>
+                            </button>
+                            <button type="button" class="btn-close-panel" onclick="closeInlineDetails('${pkg.id}', true)">
+                                <span>CLOSE DETAILS &uarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>`;
+                container.innerHTML += itemHtml;
+            });
+        }
+
+        // INLINE DETAIL EXPANSION LOGIC
+        function toggleDetails(id) {
             const card = document.getElementById('card-' + id);
-            
-            // If already active, close it
-            if (card.classList.contains('expanded-card')) {
-                closeGlobalPanel();
+            const details = document.getElementById('details-' + id);
+            const btn = document.getElementById('btn-details-' + id);
+            if (!card || !details) return;
+
+            const isAlreadyActive = details.classList.contains('active');
+
+            // Close any currently open inline details first
+            closeAllInlineDetails();
+
+            // If it was already active, we just closed it, so return
+            if (isAlreadyActive) {
                 return;
             }
-            
-            // Reset state
-            document.querySelectorAll('.pkg-card.expanded-card').forEach(el => el.classList.remove('expanded-card'));
-            document.querySelectorAll('.btn-details').forEach(el => {
-                el.innerHTML = 'VIEW DETAILS &rarr;';
-                el.setAttribute('aria-expanded', 'false');
-            });
-            
-            // Find package
-            const pkg = packageData.find(p => p.id === id);
-            if(!pkg) return;
 
-            // Populate header
-            document.getElementById('gdp-title').textContent = pkg.name;
-            document.getElementById('gdp-desc').textContent = pkg.desc;
-            document.getElementById('gdp-price').textContent = pkg.price;
-            
-            // Button setup
-            const bookBtn = document.getElementById('gdp-book-btn');
-            bookBtn.textContent = (pkg.id === 'premium' || pkg.id === 'premium-plus') ? `BOOK ${pkg.name} \u2192` : `SELECT PACKAGE \u2192`;
-            bookBtn.onclick = () => selectPackage(pkg.id);
-            
-            // Populate content
-            let allFeaturesHTML = '';
-            for (const cat in pkg.categories) {
-                allFeaturesHTML += `
-                <div class="gdp-category">
-                    <h5 class="gdp-cat-title">${cat}</h5>
-                    <div class="gdp-feature-list">`;
-                pkg.categories[cat].forEach(feature => {
-                    allFeaturesHTML += `<div class="gdp-feature-item">${feature}</div>`;
-                });
-                allFeaturesHTML += `</div></div>`;
-            }
-            document.getElementById('gdp-content').innerHTML = allFeaturesHTML;
-            
-            // Set active classes
+            // Open this package's inline details
             card.classList.add('expanded-card');
-            btn.innerHTML = 'VIEW LESS &uarr;';
-            btn.setAttribute('aria-expanded', 'true');
-            
-            // Set appropriate theme
-            panel.className = 'global-detail-panel ' + pkg.theme;
-            panel.classList.add('active');
-            
-            // Scroll to panel
+            details.classList.add('active');
+            if (btn) {
+                btn.innerHTML = '<span class="btn-text">CLOSE DETAILS</span> <span class="btn-arrow">&uarr;</span>';
+                btn.setAttribute('aria-expanded', 'true');
+            }
+
+            // Gentle scroll adjustment to ensure the top of the package card is comfortably visible
             setTimeout(() => {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+                const rect = card.getBoundingClientRect();
+                if (rect.top < 70 || rect.top > window.innerHeight * 0.35) {
+                    window.scrollTo({
+                        top: Math.max(0, window.pageYOffset + rect.top - 80),
+                        behavior: 'smooth'
+                    });
+                }
+            }, 60);
         }
-        
-        function closeGlobalPanel() {
-            const panel = document.getElementById('global-package-detail-panel');
-            panel.classList.remove('active');
-            document.querySelectorAll('.pkg-card.expanded-card').forEach(el => el.classList.remove('expanded-card'));
-            document.querySelectorAll('.btn-details').forEach(el => {
-                el.innerHTML = 'VIEW DETAILS &rarr;';
-                el.setAttribute('aria-expanded', 'false');
+
+        function closeInlineDetails(id, scrollBack = false) {
+            const card = document.getElementById('card-' + id);
+            const details = document.getElementById('details-' + id);
+            const btn = document.getElementById('btn-details-' + id);
+
+            if (details) details.classList.remove('active');
+            if (card) card.classList.remove('expanded-card');
+            if (btn) {
+                btn.innerHTML = '<span class="btn-text">VIEW DETAILS</span> <span class="btn-arrow">&rarr;</span>';
+                btn.setAttribute('aria-expanded', 'false');
+            }
+
+            if (scrollBack && card) {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < 0 || rect.top > window.innerHeight * 0.7) {
+                    window.scrollTo({
+                        top: Math.max(0, window.pageYOffset + rect.top - 80),
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }
+
+        function closeAllInlineDetails() {
+            document.querySelectorAll('.pkg-inline-details.active').forEach(d => {
+                d.classList.remove('active');
+            });
+            document.querySelectorAll('.pkg-editorial-item.expanded-card').forEach(c => {
+                c.classList.remove('expanded-card');
+            });
+            document.querySelectorAll('.btn-editorial--details').forEach(b => {
+                b.innerHTML = '<span class="btn-text">VIEW DETAILS</span> <span class="btn-arrow">&rarr;</span>';
+                b.setAttribute('aria-expanded', 'false');
             });
         }
 
-        function selectPackage(id) {
-            window.location.href = `booking.html?package=${id}`;
+        const closeGlobalPanel = closeAllInlineDetails;
+
+        function enquireWhatsApp(id) {
+            const pkg = packageData.find(p => p.id === id);
+            const packageName = pkg ? pkg.name : 'one of your event packages';
+            const price = pkg ? ` (${pkg.price})` : '';
+            const message = `Hi Big Daddy Events, I am interested in ${packageName}${price}. I would like to know more about the package services and availability.`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+        }
+
+        function escapeHtml(value = '') {
+            return String(value).replace(/[&<>"']/g, char => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[char]));
         }
     </script>
 </body>

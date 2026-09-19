@@ -201,14 +201,107 @@ db.serialize(() => {
                     seedPackages.forEach(p => stmtPkg.run(p));
                     stmtPkg.finalize();
                     
-                    // 3. Seed Services (Mock)
+                    // 3. Seed Services (Complete Original Package Services)
+                    const seedServices = [
+                        // STAGE BRONZE (8 services)
+                        ['bronze', 'DECORATION', 'Pathway decoration', 1],
+                        ['bronze', 'DECORATION', 'Entrance arch', 2],
+                        ['bronze', 'DECORATION', 'Welcome board', 3],
+                        ['bronze', 'PRODUCTION', 'Generator (genset) with fuel', 4],
+                        ['bronze', 'PRODUCTION', 'Sound system', 5],
+                        ['bronze', 'PRODUCTION', 'Top, sub & feedback', 6],
+                        ['bronze', 'HOSPITALITY', 'Cake', 7],
+                        ['bronze', 'HOSPITALITY', 'Wine', 8],
+
+                        // STAGE SILVER (10 services)
+                        ['silver', 'DECORATION', '15-foot ramp', 1],
+                        ['silver', 'DECORATION', 'Pathway decoration', 2],
+                        ['silver', 'DECORATION', 'Entrance arch', 3],
+                        ['silver', 'DECORATION', 'Welcome board', 4],
+                        ['silver', 'PRODUCTION', 'Generator (genset) with fuel', 5],
+                        ['silver', 'PRODUCTION', 'Sound system', 6],
+                        ['silver', 'PRODUCTION', 'Top, sub & feedback', 7],
+                        ['silver', 'HOSPITALITY', 'Cake', 8],
+                        ['silver', 'HOSPITALITY', 'Wine', 9],
+                        ['silver', 'EFFECTS', 'Cold fire', 10],
+
+                        // STAGE GOLD (14 services)
+                        ['gold', 'DECORATION', '15-foot ramp', 1],
+                        ['gold', 'DECORATION', 'Pathway decoration', 2],
+                        ['gold', 'DECORATION', 'Entrance arch', 3],
+                        ['gold', 'DECORATION', 'Welcome board', 4],
+                        ['gold', 'PRODUCTION', 'Generator (genset) with fuel', 5],
+                        ['gold', 'PRODUCTION', 'Sound system', 6],
+                        ['gold', 'PRODUCTION', 'Top, sub & feedback', 7],
+                        ['gold', 'ENTERTAINMENT', 'MC', 8],
+                        ['gold', 'ENTERTAINMENT', 'Hosting girls', 9],
+                        ['gold', 'ENTERTAINMENT', 'SFS', 10],
+                        ['gold', 'HOSPITALITY', 'Cake', 11],
+                        ['gold', 'HOSPITALITY', 'Wine', 12],
+                        ['gold', 'EFFECTS', 'Cold fire', 13],
+                        ['gold', 'EFFECTS', 'Dry ice fog', 14],
+
+                        // PREMIUM STAGE (23 services)
+                        ['premium', 'DECORATION', '15-foot ramp', 1],
+                        ['premium', 'DECORATION', 'Pathway decoration', 2],
+                        ['premium', 'DECORATION', 'Entrance arch', 3],
+                        ['premium', 'DECORATION', 'Welcome board', 4],
+                        ['premium', 'DECORATION', 'Mala', 5],
+                        ['premium', 'DECORATION', 'Altar decoration', 6],
+                        ['premium', 'DECORATION', 'Church arch', 7],
+                        ['premium', 'DECORATION', 'Family table', 8],
+                        ['premium', 'DECORATION', 'Premium chairs', 9],
+                        ['premium', 'PRODUCTION', 'Generator (genset) with fuel', 10],
+                        ['premium', 'PRODUCTION', 'Sound system', 11],
+                        ['premium', 'PRODUCTION', 'Top, sub & feedback', 12],
+                        ['premium', 'ENTERTAINMENT', 'MC', 13],
+                        ['premium', 'ENTERTAINMENT', 'Hosting girls', 14],
+                        ['premium', 'ENTERTAINMENT', 'SFS', 15],
+                        ['premium', 'ENTERTAINMENT', 'Live fusion', 16],
+                        ['premium', 'ENTERTAINMENT', 'Welcome dance', 17],
+                        ['premium', 'HOSPITALITY', 'Cake', 18],
+                        ['premium', 'HOSPITALITY', 'Wine', 19],
+                        ['premium', 'EFFECTS', 'Cold fire', 20],
+                        ['premium', 'EFFECTS', 'Dry ice fog', 21],
+                        ['premium', 'EFFECTS', 'Confetti', 22],
+                        ['premium', 'EFFECTS', 'Bubble machine', 23],
+
+                        // PREMIUM PLUS (32 services)
+                        ['premium-plus', 'DECORATION', '15-foot ramp', 1],
+                        ['premium-plus', 'DECORATION', 'Pathway decoration', 2],
+                        ['premium-plus', 'DECORATION', 'Entrance arch', 3],
+                        ['premium-plus', 'DECORATION', 'Welcome board', 4],
+                        ['premium-plus', 'DECORATION', 'Mala', 5],
+                        ['premium-plus', 'DECORATION', 'Altar decoration', 6],
+                        ['premium-plus', 'DECORATION', 'Church arch', 7],
+                        ['premium-plus', 'DECORATION', 'Hall dome / ceiling cloth', 8],
+                        ['premium-plus', 'DECORATION', 'VIP sofa', 9],
+                        ['premium-plus', 'DECORATION', 'Premium chairs', 10],
+                        ['premium-plus', 'DECORATION', 'Dining table', 11],
+                        ['premium-plus', 'DECORATION', 'Family table', 12],
+                        ['premium-plus', 'DECORATION', 'Dining arrangements', 13],
+                        ['premium-plus', 'LIGHTING', 'Custom lighting', 14],
+                        ['premium-plus', 'LIGHTING', 'Ambiance lighting', 15],
+                        ['premium-plus', 'LIGHTING', 'Sharpie lights', 16],
+                        ['premium-plus', 'LIGHTING', 'LED strobes', 17],
+                        ['premium-plus', 'LIGHTING', 'LED walls', 18],
+                        ['premium-plus', 'PRODUCTION', 'Generator (genset) with fuel', 19],
+                        ['premium-plus', 'PRODUCTION', 'Sound system', 20],
+                        ['premium-plus', 'PRODUCTION', 'Top, sub & feedback', 21],
+                        ['premium-plus', 'ENTERTAINMENT', 'MC', 22],
+                        ['premium-plus', 'ENTERTAINMENT', 'Hosting girls', 23],
+                        ['premium-plus', 'ENTERTAINMENT', 'SFS', 24],
+                        ['premium-plus', 'ENTERTAINMENT', 'Live fusion', 25],
+                        ['premium-plus', 'ENTERTAINMENT', 'Welcome dance', 26],
+                        ['premium-plus', 'HOSPITALITY', 'Cake', 27],
+                        ['premium-plus', 'HOSPITALITY', 'Wine', 28],
+                        ['premium-plus', 'EFFECTS', 'Cold fire', 29],
+                        ['premium-plus', 'EFFECTS', 'Dry ice fog', 30],
+                        ['premium-plus', 'EFFECTS', 'Confetti', 31],
+                        ['premium-plus', 'EFFECTS', 'Bubble machine', 32]
+                    ];
                     const stmtSrv = db.prepare(`INSERT INTO package_services (package_id, category_group, service_name, display_order) VALUES (?, ?, ?, ?)`);
-                    stmtSrv.run('bronze', 'DECORATION', 'Pathway decoration', 1);
-                    stmtSrv.run('bronze', 'PRODUCTION', 'Sound system', 1);
-                    stmtSrv.run('silver', 'DECORATION', '15-foot ramp', 1);
-                    stmtSrv.run('gold', 'ENTERTAINMENT', 'MC', 1);
-                    stmtSrv.run('premium', 'DECORATION', 'Altar decoration', 1);
-                    stmtSrv.run('premium-plus', 'LIGHTING', 'Custom lighting', 1);
+                    seedServices.forEach(s => stmtSrv.run(s));
                     stmtSrv.finalize();
                     
                     console.log("Migration complete.");
@@ -246,7 +339,7 @@ app.get('/api/public/packages', (req, res) => {
                         categoriesObj[ps.category_group] = [];
                     }
                     categoriesObj[ps.category_group].push(ps.service_name);
-                    if (featuresArr.length < 4) featuresArr.push(ps.service_name); // First 4 for short features list
+                    featuresArr.push(ps.service_name); // Include all package services without limit
                 });
                 
                 return {

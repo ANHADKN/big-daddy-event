@@ -146,23 +146,35 @@
         .cta-buttons { display: flex; gap: 1rem; justify-content: center; }
 
         /* RESPONSIVE */
+        @media (max-width: 1199px) {
+            .ecosystem-graphic { height: auto; flex-direction: column; gap: 2rem; }
+            .ecosystem-center { width: 100%; max-width: 350px; height: 400px; border-radius: 0; }
+            .eco-label { position: static; display: inline-block; margin: 0.5rem; font-size: 1rem; border: 1px solid rgba(200, 164, 93, 0.3); padding: 0.5rem 1rem; border-radius: 2rem; }
+        }
         @media (max-width: 992px) {
             .service-grid { grid-template-columns: repeat(2, 1fr); }
             .approach-timeline { grid-template-columns: repeat(2, 1fr); gap: 3rem 2rem; }
             .why-grid { grid-template-columns: repeat(2, 1fr); }
             .why-item:nth-child(4) { grid-column: auto; }
-            .ecosystem-graphic { height: auto; flex-direction: column; gap: 2rem; }
-            .ecosystem-center { width: 100%; max-width: 350px; height: 400px; border-radius: 0; }
-            .eco-label { position: static; display: inline-block; margin: 0.5rem; font-size: 1rem; border: 1px solid rgba(200, 164, 93, 0.3); padding: 0.5rem 1rem; border-radius: 2rem; }
             .experience-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
+            .page-hero { padding: calc(6rem + var(--safe-top)) 4vw 3rem; }
+            .about-services, .about-approach, .about-why, .about-experience { padding: 4rem 4vw; }
+            .about-ecosystem, .about-cta { padding: 5rem 4vw; }
             .service-grid { grid-template-columns: 1fr; }
             .approach-timeline { grid-template-columns: 1fr; gap: 2rem; }
             .timeline-stage { padding-top: 0; padding-left: 2rem; border-top: none; border-left: 1px solid var(--color-accent); }
             .timeline-stage::before { top: 0; left: -4px; }
             .why-grid { grid-template-columns: 1fr; }
-            .cta-buttons { flex-direction: column; }
+            .cta-buttons { flex-direction: column; align-items: stretch; max-width: 380px; margin: 0 auto; }
+            .cta-buttons .btn-primary, .cta-buttons .btn-secondary { width: 100%; text-align: center; }
+        }
+        @media (max-width: 374px) {
+            .page-hero h1 { font-size: clamp(2.2rem, 10vw, 3rem); }
+            .section-header h2 { font-size: 1.85rem; }
+            .about-cinematic h2 { font-size: 2.2rem; }
+            .about-cta h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -174,8 +186,8 @@
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
-            <a href="about.html" class="active">ABOUT</a>
             <a href="gallery.html">GALLERY</a>
+            <a href="about.html" class="active">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
         <div class="nav-right">
@@ -191,8 +203,8 @@
         <div class="mobile-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
-            <a href="about.html">ABOUT</a>
             <a href="gallery.html">GALLERY</a>
+            <a href="about.html" class="active">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
     </div>
@@ -372,6 +384,7 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="packages.html">Packages</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>

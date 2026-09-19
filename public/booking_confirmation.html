@@ -170,8 +170,16 @@
         }
         
         @media (max-width: 600px) {
-            .cert-container { padding: 2rem; }
+            .booking-page { padding: calc(1rem + var(--safe-top, 0px)) max(14px, var(--safe-right, 0px)) calc(1rem + var(--safe-bottom, 0px)) max(14px, var(--safe-left, 0px)); }
+            .cert-container { padding: 2rem 1.5rem; }
             .cert-grid { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 0; }
+            .actions { flex-direction: column; align-items: stretch; gap: 1rem; }
+            .actions button { width: 100%; min-height: 44px; text-align: center; }
+        }
+        @media (max-width: 374px) {
+            .cert-container { padding: 1.5rem 1rem; }
+            .cert-bid { font-size: 1.25rem; }
+            .cert-logo { max-width: 200px; }
         }
     </style>
 </head>

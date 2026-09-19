@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="style.css?v=20260912">
     <style>
         .page-hero {
-            position: relative; padding: 12rem 4vw 6rem;
+            position: relative; padding: calc(clamp(6rem, 14vh, 12rem) + var(--safe-top)) 4vw clamp(3rem, 6vh, 6rem);
             text-align: center; background-color: var(--color-bg);
         }
-        .page-hero h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); margin-bottom: 1.5rem; line-height: 1; }
+        .page-hero h1 { font-size: clamp(3rem, 8vw, 6.5rem); margin-bottom: 1.5rem; line-height: 1; }
         .page-hero p { font-size: 1.25rem; color: var(--color-secondary); max-width: 600px; margin: 0 auto; }
         
         .contact-grid {
@@ -27,10 +27,10 @@
         .info-block span { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 0.5rem; }
         .info-block p, .info-block a { font-size: 1.25rem; color: var(--color-text); }
         
-        .contact-form { background: #fff; padding: 4rem 3.5rem; border: 1px solid rgba(197, 183, 159, 0.3); position: relative; }
+        .contact-form { background: #fff; padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.5rem); border: 1px solid rgba(197, 183, 159, 0.3); position: relative; }
         .form-group { margin-bottom: 2rem; position: relative; }
         .form-group label { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; color: var(--color-primary); }
-        .form-group input, .form-group textarea { width: 100%; padding: 1.25rem 1rem; border: 1px solid rgba(49, 63, 51, 0.2); background: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; transition: all 0.4s var(--ease-slow); }
+        .form-group input, .form-group textarea { width: 100%; padding: 1.25rem 1rem; border: 1px solid rgba(49, 63, 51, 0.2); background: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; transition: all 0.4s var(--ease-slow); box-sizing: border-box; }
         .form-group input:focus, .form-group textarea:focus { border-color: var(--color-accent); background: #FDFBF7; }
         .form-group textarea { height: 160px; resize: none; }
         .form-success-msg {
@@ -48,8 +48,18 @@
         .info-block a:hover::after { width: 100%; }
 
         @media(max-width: 992px) {
-            .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .contact-grid { grid-template-columns: 1fr; gap: 4rem; padding-bottom: 6rem; }
             .contact-form { padding: 3rem 2rem; }
+        }
+        @media(max-width: 768px) {
+            .contact-info h3 { font-size: 2rem; }
+            .contact-grid { gap: 3rem; padding-top: 2rem; }
+        }
+        @media(max-width: 374px) {
+            .page-hero h1 { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+            .contact-form { padding: 1.75rem 1.15rem; }
+            .contact-info h3 { font-size: 1.75rem; }
+            .info-block p, .info-block a { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -61,6 +71,7 @@
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
+            <a href="gallery.html">GALLERY</a>
             <a href="about.html">ABOUT</a>
             <a href="contact.html" class="active">CONTACT</a>
         </div>
@@ -77,9 +88,9 @@
         <div class="mobile-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
-            <a href="about.html">ABOUT</a>
             <a href="gallery.html">GALLERY</a>
-            <a href="contact.html">CONTACT</a>
+            <a href="about.html">ABOUT</a>
+            <a href="contact.html" class="active">CONTACT</a>
         </div>
     </div>
 
@@ -155,6 +166,7 @@
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="packages.html">Packages</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="about.html">About</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>

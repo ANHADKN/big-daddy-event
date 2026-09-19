@@ -15,6 +15,12 @@
     --font-display: 'Cormorant Garamond', serif;
     --font-body: 'Manrope', sans-serif;
 
+    /* Safe Area Insets (iOS / Android Notch & Home Indicator) */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+
     /* Easing */
     --ease-slow: cubic-bezier(0.25, 1, 0.5, 1); /* Cinematic */
 }
@@ -28,9 +34,15 @@
     padding: 0;
 }
 
+:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -62,6 +74,7 @@ ul {
 
 img {
     max-width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -141,7 +154,8 @@ img {
 .btn-primary, .btn-secondary, .btn-text {
     display: inline-flex; align-items: center; justify-content: center;
     font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.6s var(--ease-slow); text-decoration: none;
+    cursor: pointer; transition: all 0.4s var(--ease-slow); text-decoration: none;
+    box-sizing: border-box; min-height: 44px;
 }
 .btn-primary {
     padding: 1rem 2.5rem; background-color: var(--color-primary); color: var(--color-bg);
@@ -162,6 +176,7 @@ img {
 .btn-text {
     padding: 0; border: none; background: none; color: var(--color-primary);
     border-bottom: 1px solid var(--color-accent); padding-bottom: 0.2rem;
+    min-height: 44px;
 }
 .btn-text:hover { color: var(--color-accent); }
 
@@ -170,26 +185,28 @@ img {
    ========================================= */
 .site-nav {
     position: fixed; top: 0; left: 0; width: 100%;
-    padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center;
-    z-index: 200; transition: all 0.6s var(--ease-slow);
+    padding: calc(1.5rem + var(--safe-top)) max(4vw, var(--safe-right)) 1.5rem max(4vw, var(--safe-left));
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 200; transition: all 0.4s var(--ease-slow);
     color: var(--color-white);
     background: linear-gradient(to bottom, rgba(3, 27, 22, 0.4) 0%, rgba(0, 0, 0, 0) 100%);
+    box-sizing: border-box;
 }
 
 .site-nav.scrolled {
-    padding: 1rem 4vw; 
-    background-color: rgba(26, 38, 29, 0.95); /* Match new primary color with opacity */
+    padding: calc(0.85rem + var(--safe-top)) max(4vw, var(--safe-right)) 0.85rem max(4vw, var(--safe-left)); 
+    background-color: rgba(26, 38, 29, 0.96);
     backdrop-filter: blur(12px); 
-    border-bottom: 1px solid rgba(184, 156, 109, 0.2); /* Subtle Champagne Gold border */
-    color: var(--color-bg); /* Ivory text */
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184, 156, 109, 0.2);
+    color: var(--color-bg);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
-.logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.1em; z-index: 101; }
-/* Keep image logo properly sized */
+.logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.1em; z-index: 101; display: flex; align-items: center; }
 .nav-logo-img { height: 40px; width: auto; object-fit: contain; }
 
-.nav-links { display: flex; gap: 3rem; }
+.nav-links { display: flex; gap: clamp(1rem, 2.5vw, 3rem); align-items: center; }
 .nav-links a { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; position: relative; font-weight: 500; }
 .nav-links a::after {
     content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
@@ -198,32 +215,39 @@ img {
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 .nav-links a.active { color: var(--color-accent); }
 
-.nav-right { display: flex; align-items: center; gap: 2rem; }
+.nav-right { display: flex; align-items: center; gap: clamp(1rem, 2vw, 2rem); }
 .nav-cta {
     font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-    padding: 0.75rem 1.5rem; border: 1px solid currentColor; transition: all 0.6s var(--ease-slow);
-    font-weight: 500;
+    padding: 0.75rem 1.5rem; border: 1px solid currentColor; transition: all 0.4s var(--ease-slow);
+    font-weight: 500; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+    box-sizing: border-box;
 }
 .nav-cta:hover { background-color: var(--color-accent); color: var(--color-primary); border-color: var(--color-accent); }
 
 /* Mobile Menu */
-.hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 101; }
-.hamburger span { width: 24px; height: 1px; background-color: currentColor; transition: all 0.4s ease; }
+.hamburger {
+    display: none; flex-direction: column; justify-content: center; align-items: center;
+    gap: 6px; cursor: pointer; z-index: 101; width: 44px; height: 44px; padding: 8px;
+    border: none; background: transparent; border-radius: 4px; box-sizing: border-box;
+}
+.hamburger span { width: 24px; height: 2px; background-color: currentColor; transition: all 0.35s ease; }
 .mobile-menu {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
+    padding: calc(4rem + var(--safe-top)) max(4vw, var(--safe-right)) calc(2rem + var(--safe-bottom)) max(4vw, var(--safe-left));
     background-color: var(--color-primary); display: flex; align-items: center; justify-content: center;
-    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.6s var(--ease-slow);
+    z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-slow);
+    box-sizing: border-box;
 }
 .mobile-menu.active { opacity: 1; pointer-events: all; }
 .mobile-links { display: flex; flex-direction: column; text-align: center; gap: 2rem; }
 .mobile-links a {
     font-family: var(--font-display); font-size: 2.5rem; color: var(--color-bg);
-    opacity: 0; transform: translateY(20px); transition: all 0.6s var(--ease-slow);
+    opacity: 0; transform: translateY(20px); transition: all 0.4s var(--ease-slow);
 }
 .mobile-menu.active .mobile-links a { opacity: 1; transform: translateY(0); }
-.hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); background-color: var(--color-bg); }
+.hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); background-color: var(--color-bg); }
 .hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background-color: var(--color-bg); }
+.hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); background-color: var(--color-bg); }
 
 /* =========================================
    HERO SECTION
@@ -236,10 +260,9 @@ img {
     position: absolute; inset: 0; z-index: 1;
 }
 
-/* Invisible Hotspots */
+/* Hotspots */
 .hero-hotspots {
     position: absolute; z-index: 10;
-    /* Approximate positioning - user may need to adjust these percentages */
     top: 65%; left: 6%; 
     display: flex; gap: 1.5rem; flex-wrap: wrap;
 }
@@ -278,7 +301,7 @@ img {
 .brand-tag { font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.3em; color: var(--color-accent); font-weight: 500; }
 
 .dest-content .eyebrow { color: var(--color-primary); opacity: 0.7; }
-.dest-content h2 { font-size: clamp(4rem, 8vw, 7.5rem); margin-bottom: 0.5rem; line-height: 0.9; font-weight: 300; }
+.dest-content h2 { font-size: clamp(3.5rem, 8vw, 7.5rem); margin-bottom: 0.5rem; line-height: 0.9; font-weight: 300; }
 .dest-content h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); color: var(--color-primary); font-style: italic; font-weight: 300; margin-bottom: 2.5rem; line-height: 1.2; }
 .dest-content p { font-size: 1.15rem; color: var(--color-primary); opacity: 0.85; max-width: 480px; line-height: 1.7; margin-bottom: 3.5rem; }
 .dest-content .btn-text { color: var(--color-accent); font-weight: 500; font-size: 0.9rem; letter-spacing: 0.2em; border-bottom: 1px solid rgba(200, 164, 93, 0.3); padding-bottom: 5px; transition: border-color 0.3s ease; }
@@ -302,13 +325,12 @@ img {
 .band-tagline { font-family: var(--font-display); font-style: italic; font-size: 1.1rem; color: var(--color-bg); opacity: 0.9; }
 .band-brand { font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.3em; font-weight: 500; color: var(--color-accent); }
 
-
 /* =========================================
    WHAT WE DO
    ========================================= */
 .what-we-do { padding: 8rem 0; background-color: var(--color-primary); color: var(--color-bg); }
-.wwd-header { text-align: center; max-width: 800px; margin: 0 auto 5rem; }
-.wwd-header h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--color-bg); margin-bottom: 2rem; }
+.wwd-header { text-align: center; max-width: 800px; margin: 0 auto 5rem; padding: 0 4vw; }
+.wwd-header h2 { font-size: clamp(2.2rem, 5vw, 4.5rem); color: var(--color-bg); margin-bottom: 2rem; }
 .wwd-header p { font-size: 1.1rem; opacity: 0.8; }
 .wwd-header .btn-primary { background-color: var(--color-accent); border-color: var(--color-accent); color: var(--color-primary); }
 
@@ -322,8 +344,6 @@ img {
 .wwd-editorial-left img, .wwd-editorial-right img { object-position: center center; }
 .wwd-editorial-gallery .img-wrapper:hover img { transform: scale(1.03); }
 
-
-
 /* =========================================
    EVENT MANAGEMENT CAPABILITIES
    ========================================= */
@@ -335,8 +355,8 @@ img {
     cursor: pointer;
 }
 .cap-row:hover { border-bottom-color: var(--color-accent); transform: translateX(10px); }
-.cap-num { font-family: var(--font-display); font-size: 1.5rem; font-style: italic; color: var(--color-accent); }
-.cap-name { font-family: var(--font-display); font-size: 2.5rem; color: var(--color-primary); }
+.cap-num { font-family: var(--font-display); font-size: 1.5rem; font-style: italic; color: var(--color-accent); flex-shrink: 0; }
+.cap-name { font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.5rem); color: var(--color-primary); }
 .cap-row:hover .cap-name { color: var(--color-accent); }
 
 /* =========================================
@@ -356,18 +376,19 @@ img {
 .exp-square { grid-column: span 1; grid-row: span 1; }
 .image-slot { width: 100%; height: 100%; }
 .image-slot img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 1; visibility: visible; }
+
 /* =========================================
    FINAL CTA
    ========================================= */
 .final-cta { padding: 10rem 0; background-color: var(--color-primary); text-align: center; color: var(--color-bg); position: relative; }
 .cta-botanical { width: 80px; height: 80px; margin: 0 auto 2rem; display: block; opacity: 0.5; }
-.final-cta h2 { font-size: clamp(3rem, 5vw, 4.5rem); color: var(--color-bg); margin-bottom: 1.5rem; }
+.final-cta h2 { font-size: clamp(2.3rem, 5vw, 4.5rem); color: var(--color-bg); margin-bottom: 1.5rem; }
 .final-cta p { font-size: 1.25rem; font-family: var(--font-display); font-style: italic; color: var(--color-accent); margin-bottom: 3rem; }
 
 /* =========================================
    FOOTER
    ========================================= */
-.site-footer { background-color: var(--color-primary); color: var(--color-bg); padding: 4rem 0 2rem; border-top: 1px solid rgba(246,242,233,0.05); }
+.site-footer { background-color: var(--color-primary); color: var(--color-bg); padding: 4rem 0 calc(2rem + var(--safe-bottom)); border-top: 1px solid rgba(246,242,233,0.05); }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
 .footer-brand h3 { font-family: var(--font-display); font-size: 2rem; color: var(--color-accent); margin-bottom: 1rem; }
 .footer-brand p { opacity: 0.6; max-width: 300px; }
@@ -378,47 +399,6 @@ img {
 .footer-bottom { display: flex; justify-content: space-between; padding-top: 2rem; border-top: 1px solid rgba(246,242,233,0.1); opacity: 0.5; font-size: 0.8rem; }
 
 /* =========================================
-   RESPONSIVE DESIGN
-   ========================================= */
-@media (max-width: 1024px) {
-    .dest-split { grid-template-columns: 1fr; gap: 4rem; }
-    .dest-visual { height: 500px; }
-    .strip-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-    .strip-item { border-right: none; padding: 1rem 0; border-bottom: 1px solid rgba(200, 164, 93, 0.15); }
-    .strip-item:nth-child(3), .strip-item:nth-child(4) { border-bottom: none; }
-    .wwd-grid { grid-template-columns: 1fr; gap: 2rem; height: auto; }
-    .wwd-img-1, .wwd-img-2, .wwd-img-3 { position: relative; height: 300px; grid-column: auto; grid-row: auto; transform: none; width: 100%; border-width: 8px; }
-    .cap-row { flex-direction: column; gap: 0.5rem; }
-    .cap-name { font-size: 1.8rem; }
-    .exp-grid { grid-template-columns: 1fr; grid-auto-rows: 250px; }
-    .exp-tall, .exp-wide, .exp-square { grid-column: span 1; grid-row: span 1; }
-    .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
-}
-
-@media (max-width: 768px) {
-    html { font-size: 14px; }
-    .nav-links, .nav-cta { display: none; }
-    .hamburger { display: flex; }
-    .hero { min-height: 100svh; height: auto; }
-    .hero-hotspots { top: 75%; left: 5%; flex-direction: column; gap: 1rem; }
-    .feature-promises { padding: 4rem 4vw; }
-    .strip-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .strip-item { border-bottom: 1px solid rgba(200, 164, 93, 0.15); border-right: none; }
-    .strip-item:last-child { border-bottom: none; }
-    .dest-split { grid-template-columns: 1fr; gap: 4rem; }
-    .dest-content { padding-right: 0; text-align: center; margin-bottom: 0; }
-    .dest-brand-intro { align-items: center; }
-    .dest-content p { margin: 0 auto 3.5rem; }
-    .destination-visual { height: auto; display: flex; flex-direction: column; gap: 2rem; margin-top: 2rem; }
-    .destination-main-image, .destination-secondary-image, .destination-wedding-image { position: relative; right: auto; left: auto; top: auto; bottom: auto; width: 100%; height: 450px; border: 4px solid var(--color-bg); box-shadow: none; }
-    .dest-characteristics { flex-direction: column; align-items: center; gap: 2rem; margin: 4rem auto; }
-    .wwd-editorial-gallery { height: auto; display: flex; flex-direction: column; gap: 2rem; padding: 0 4vw; margin-top: 2rem; }
-    .wwd-editorial-main, .wwd-editorial-left, .wwd-editorial-right { position: relative; width: 100%; left: auto; right: auto; top: auto; bottom: auto; height: 450px; box-shadow: none; transform: none; }
-
-    .footer-band-inner { flex-direction: column; gap: 1rem; text-align: center; }
-    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-}
-/* =========================================
    BRAND LOGO SYSTEM
    ========================================= */
 .brand-logo {
@@ -428,22 +408,13 @@ img {
     object-fit: contain;
 }
 
-/* Light/Ivory Backgrounds: 'multiply' drops pure white backgrounds */
 .brand-logo--light {
     mix-blend-mode: multiply;
 }
 
-/* Dark Green Backgrounds: 'invert' turns white black, 'screen' drops black.
-   sepia & hue-rotate recolors inverted logo to champagne gold */
 .brand-logo--dark {
     filter: invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.5);
     mix-blend-mode: screen;
-}
-
-/* Specific Placements */
-.nav-logo-img {
-    height: 35px;
-    width: auto;
 }
 
 .footer-logo-img {
@@ -463,10 +434,352 @@ img {
     pointer-events: none;
     z-index: 0;
 }
-. b r a n d - l o g o  
-   m i x - b l e n d - m o d e :   m u l t i p l y ;    
- 
 
+/* =========================================
+   SUBPAGE & COMPONENT COMPATIBILITY SYSTEM
+   (Weddings, Celebrations, Corporate, Booking)
+   ========================================= */
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(26, 38, 29, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184, 156, 109, 0.2);
+    padding: calc(0.85rem + var(--safe-top)) max(4vw, var(--safe-right)) 0.85rem max(4vw, var(--safe-left));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 200;
+    color: var(--color-bg);
+}
+
+.navbar .nav-left, .navbar .nav-right {
+    display: flex;
+    gap: clamp(1rem, 2vw, 2.5rem);
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar a {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-bg);
+    transition: color 0.3s ease;
+}
+.navbar a:hover { color: var(--color-accent); }
+
+.logo-center {
+    text-align: center;
+}
+.logo-center h1 {
+    font-size: 1.25rem;
+    color: var(--color-accent);
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+.logo-center span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--color-bg-alt);
+    text-transform: uppercase;
+}
+.logo-center .crown {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Grid & Cards for Subpages */
+.wedding-section, .celebration-section {
+    padding: 6rem 4vw;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.section-title {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+.section-title h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.wedding-grid, .celebration-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.wedding-card, .celebration-card, .service-card {
+    background: #fff;
+    border: 1px solid rgba(184, 156, 109, 0.25);
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-slow), box-shadow 0.4s var(--ease-slow);
+}
+.wedding-card:hover, .celebration-card:hover, .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(26, 38, 29, 0.08);
+}
+.wedding-card img, .celebration-card img, .service-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+.card-content, .service-card .card-content {
+    padding: 1.75rem;
+}
+.wedding-card h3, .celebration-card h3, .service-card h3 {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-primary);
+}
+.wedding-card p, .celebration-card p, .service-card p {
+    font-size: 0.92rem;
+    color: var(--color-secondary);
+    line-height: 1.6;
+}
+
+.feature-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 6rem 4vw;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.feature-image img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid rgba(184, 156, 109, 0.3);
+}
+.feature-content h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    margin-bottom: 1.25rem;
+}
+.feature-content p {
+    font-size: 1.05rem;
+    color: var(--color-secondary);
+    line-height: 1.7;
+}
+
+.cta {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    text-align: center;
+    padding: 6rem 4vw;
+}
+.cta h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--color-bg);
+    margin-bottom: 1rem;
+}
+.cta p {
+    font-size: 1.1rem;
+    color: rgba(246, 242, 233, 0.85);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+}
+.cta .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    border-color: var(--color-accent);
+}
+
+footer.footer {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
+    padding: 4rem 4vw calc(2rem + var(--safe-bottom));
+    border-top: 1px solid rgba(184, 156, 109, 0.2);
+}
+.footer-logo {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.footer-logo h2 {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin: 0.5rem 0 0;
+}
+.footer-logo span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: rgba(246, 242, 233, 0.7);
+}
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+    text-align: center;
+}
+.footer-links h4 {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+.footer-links a, .footer-links p {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+.footer-links a:hover { opacity: 1; color: var(--color-accent); }
+.copyright {
+    text-align: center;
+    border-top: 1px solid rgba(246, 242, 233, 0.1);
+    padding-top: 1.5rem;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* Floating WhatsApp CTA */
+.whatsapp-float {
+    position: fixed;
+    bottom: calc(1.5rem + var(--safe-bottom));
+    right: calc(1.5rem + var(--safe-right));
+    width: 52px;
+    height: 52px;
+    background-color: #1A261D;
+    color: #FAF8F5;
+    border: 1px solid var(--color-accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.whatsapp-float:hover {
+    transform: scale(1.08);
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MASTER MATRIX)
+   ========================================= */
+
+/* 1. Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+    .container { max-width: 1680px; }
+    .dest-split { max-width: 1680px; }
+    .destination-visual { height: 960px; }
+}
+
+/* 2. Tablet Landscape & Compact Laptop (1024px) */
+@media (max-width: 1024px) {
+    .dest-split { grid-template-columns: 1fr; gap: 4rem; }
+    .destination-visual { height: 500px; }
+    .strip-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .strip-item { border-right: none; padding: 1rem 0; border-bottom: 1px solid rgba(200, 164, 93, 0.15); }
+    .strip-item:nth-child(3), .strip-item:nth-child(4) { border-bottom: none; }
+    
+    .wwd-editorial-gallery { height: auto; display: flex; flex-direction: column; gap: 2rem; padding: 0 4vw; }
+    .wwd-editorial-main, .wwd-editorial-left, .wwd-editorial-right {
+        position: relative; width: 100%; left: auto; right: auto; top: auto; bottom: auto;
+        height: 420px; box-shadow: none; transform: none;
+    }
+    
+    .cap-row { gap: 2rem; }
+    .exp-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 260px; }
+    .exp-tall, .exp-wide, .exp-square { grid-column: span 1; grid-row: span 1; }
+    .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+    
+    .wedding-grid, .celebration-grid { grid-template-columns: repeat(2, 1fr); }
+    .navbar .nav-left, .navbar .nav-right { gap: 1rem; }
+}
+
+/* 3. iPad Portrait & Mobile (768px) */
+@media (max-width: 768px) {
+    html { font-size: 14px; }
+    .nav-links, .nav-cta { display: none; }
+    .navbar .nav-left, .navbar .nav-right { display: none; }
+    .hamburger { display: flex; }
+    
+    .hero { min-height: 100svh; height: auto; }
+    .hero-hotspots { top: 70%; left: 5%; flex-direction: column; gap: 0.85rem; }
+    .hotspot-btn { width: min(260px, 85vw); height: 48px; }
+    
+    .feature-promises { padding: 4rem 4vw; }
+    .strip-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .strip-item { border-bottom: 1px solid rgba(200, 164, 93, 0.15); border-right: none; }
+    .strip-item:last-child { border-bottom: none; }
+    
+    .dest-split { grid-template-columns: 1fr; gap: 3rem; }
+    .dest-content { padding-right: 0; text-align: center; margin-bottom: 0; }
+    .dest-brand-intro { align-items: center; }
+    .dest-content p { margin: 0 auto 2.5rem; }
+    
+    .destination-visual { height: auto; display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+    .destination-main-image, .destination-secondary-image, .destination-wedding-image {
+        position: relative; right: auto; left: auto; top: auto; bottom: auto;
+        width: 100%; height: 380px; border: 4px solid var(--color-bg); box-shadow: none;
+    }
+    .dest-characteristics { flex-direction: column; align-items: center; gap: 1.75rem; margin: 3.5rem auto; }
+    
+    .wwd-editorial-gallery { height: auto; display: flex; flex-direction: column; gap: 1.5rem; padding: 0 4vw; margin-top: 2rem; }
+    .wwd-editorial-main, .wwd-editorial-left, .wwd-editorial-right {
+        position: relative; width: 100%; left: auto; right: auto; top: auto; bottom: auto;
+        height: 380px; box-shadow: none; transform: none;
+    }
+    
+    .cap-row { flex-direction: column; gap: 0.5rem; }
+    .cap-name { font-size: 1.8rem; }
+    
+    .exp-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+    .exp-tall, .exp-wide, .exp-square { grid-column: span 1; grid-row: span 1; }
+    
+    .wedding-grid, .celebration-grid { grid-template-columns: 1fr; }
+    .feature-section { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-links { grid-template-columns: 1fr; gap: 2rem; }
+    
+    .footer-band-inner { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+/* 4. Small Mobile (320px – 374px) */
+@media (max-width: 374px) {
+    .container { padding: 0 14px; }
+    .site-nav { padding-left: 14px; padding-right: 14px; }
+    .dest-content h2 { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+    .dest-content h3 { font-size: 1.25rem; }
+    .dest-content p { font-size: 0.95rem; }
+    .wwd-header h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+    .final-cta h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+    .btn-primary, .btn-secondary { padding: 0.85rem 1.4rem; font-size: 0.72rem; }
+    .hotspot-btn { width: 100%; }
+}
+
+/* 5. Mobile Landscape Mode (e.g. 568x320, 667x375, 844x390) */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero { min-height: 100vh; }
+    .hero-hotspots { top: 55%; left: 4vw; flex-direction: row; gap: 0.75rem; }
+    .hotspot-btn { width: 190px; height: 44px; }
+    .site-nav { padding: calc(0.5rem + var(--safe-top)) max(4vw, var(--safe-right)) 0.5rem max(4vw, var(--safe-left)); }
+    .destination-main-image, .destination-secondary-image, .destination-wedding-image { height: 260px; }
+    .wwd-editorial-main, .wwd-editorial-left, .wwd-editorial-right { height: 260px; }
+}
+
+/* Touch Interactions */
+@media (hover: none) and (pointer: coarse) {
+    .btn-primary:active, .btn-secondary:active, .btn-text:active, .nav-cta:active, .hotspot-btn:active {
+        transform: scale(0.97);
+    }
+}
+
+/* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
         animation-duration: 0.01ms !important;

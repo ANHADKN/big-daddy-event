@@ -19,23 +19,25 @@
 </head>
 <body>
     <h1>Bookings Dashboard</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Booking ID</th>
-                <th>Customer</th>
-                <th>Package</th>
-                <th>Event Date</th>
-                <th>Total</th>
-                <th>Paid</th>
-                <th>Payment Status</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="bookings-tbody">
-            <!-- Injected -->
-        </tbody>
-    </table>
+    <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; margin-bottom: 2rem;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Package</th>
+                    <th>Event Date</th>
+                    <th>Total</th>
+                    <th>Paid</th>
+                    <th>Payment Status</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+                <!-- Injected -->
+            </tbody>
+        </table>
+    </div>
 
     <script>
         const formatINR = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
