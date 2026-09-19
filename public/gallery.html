@@ -1,49 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <meta name="description" content="Big Daddy Events provides premium event management services including weddings, corporate events, and celebrations in Kerala and Tamil Nadu.">
 <title>Gallery | Big Daddy Event Management</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css?v=20260912">
+
 <style>
+    /* PREMIUM GALLERY STYLES */
+    :root {
+        --ease-cinematic: cubic-bezier(0.25, 1, 0.5, 1);
+        --transition-slow: 1.2s var(--ease-cinematic);
+        --transition-medium: 0.8s var(--ease-cinematic);
+    }
+
+    body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+    }
+
     /* HERO */
-    .page-hero {
-        position: relative; padding: 12rem 4vw 6rem;
-        background: var(--color-bg); overflow: hidden;
-        text-align: center;
-        min-height: 70vh;
+    .gallery-hero {
+        position: relative;
+        height: 80vh;
+        min-height: 600px;
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-    .page-hero .hero-bg {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; opacity: 0.15; z-index: 0;
-    }
-    .page-hero-content {
-        position: relative; z-index: 1; max-width: 800px; margin: 0 auto;
-    }
-    .page-hero h1 {
-        font-family: var(--font-display);
-        font-size: clamp(3rem, 6vw, 5.5rem);
-        color: var(--color-primary); margin-bottom: 1.5rem;
-    }
-    .page-hero p {
-        font-family: var(--font-body);
-        font-size: 1.1rem; opacity: 0.8; max-width: 600px; margin: 0 auto 3rem;
+        text-align: center;
+        overflow: hidden;
+        background-color: var(--color-primary);
     }
     
+    .gallery-hero-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+        z-index: 0;
+        transform: scale(1.05);
+        animation: heroBgEntrance 2s var(--ease-cinematic) forwards;
+    }
+
+    @keyframes heroBgEntrance {
+        from { transform: scale(1.1); opacity: 0; }
+        to { transform: scale(1); opacity: 0.4; }
+    }
+
+    .gallery-hero-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, rgba(26,38,29,0.3) 0%, rgba(26,38,29,0.7) 100%);
+        z-index: 1;
+    }
+
+    .gallery-hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        padding: 0 4vw;
+        color: var(--color-white);
+    }
+
+    .gallery-eyebrow {
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        margin-bottom: 1.5rem;
+        display: block;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: revealUp 1.2s var(--ease-cinematic) 0.3s forwards;
+    }
+
+    .gallery-hero-content h1 {
+        font-family: var(--font-display);
+        font-size: clamp(3.5rem, 8vw, 6.5rem);
+        line-height: 1;
+        margin-bottom: 2rem;
+        font-weight: 400;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: revealUp 1.2s var(--ease-cinematic) 0.5s forwards;
+    }
+
+    .gallery-hero-content p {
+        font-family: var(--font-body);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        line-height: 1.6;
+        opacity: 0;
+        max-width: 600px;
+        margin: 0 auto;
+        transform: translateY(20px);
+        animation: revealUp 1.2s var(--ease-cinematic) 0.7s forwards;
+    }
+
+    @keyframes revealUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* INTRO */
+    .gallery-intro {
+        padding: 10rem 4vw;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .gallery-intro h2 {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+        margin-bottom: 2.5rem;
+    }
+
+    .gallery-intro p {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.3;
+        color: var(--color-primary);
+        font-style: italic;
+    }
+
+    .gold-divider {
+        width: 1px;
+        height: 80px;
+        background-color: var(--color-accent);
+        margin: 4rem auto 0;
+    }
+
+    /* CATEGORIES */
+    .gallery-categories {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        padding: 0 4vw 4rem;
+        flex-wrap: wrap;
+    }
+
+    .cat-label {
+        font-family: var(--font-body);
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--color-secondary);
+        opacity: 0.6;
+    }
+
+    .cat-label.active {
+        opacity: 1;
+        color: var(--color-primary);
+        border-bottom: 1px solid var(--color-accent);
+        padding-bottom: 4px;
+    }
+
+    /* MASONRY GRID */
+    .masonry-wrapper {
+        padding: 0 4vw 10rem;
+        max-width: 1800px;
+        margin: 0 auto;
+    }
+
+    .masonry-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 350px;
+        gap: 2rem;
+        grid-auto-flow: dense;
+    }
+
+    .grid-item {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        background-color: var(--color-primary);
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 1s var(--ease-cinematic), transform 1s var(--ease-cinematic);
+    }
+    
+    .grid-item.in-view {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .grid-item.feature { grid-column: span 2; grid-row: span 2; }
+    .grid-item.portrait { grid-row: span 2; }
+    .grid-item.landscape { grid-column: span 2; }
+
+    .grid-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-slow);
+    }
+
+    .grid-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(26, 38, 29, 0.4);
+        opacity: 0;
+        transition: opacity var(--transition-medium);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .hover-title {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        color: var(--color-white);
+        margin-bottom: 0.5rem;
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all var(--transition-medium);
+    }
+
+    .hover-sub {
+        font-family: var(--font-body);
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-accent);
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all var(--transition-medium);
+        transition-delay: 0.1s;
+    }
+
+    .grid-item:hover .grid-img {
+        transform: scale(1.08);
+    }
+
+    .grid-item:hover .grid-overlay {
+        opacity: 1;
+    }
+
+    .grid-item:hover .hover-title,
+    .grid-item:hover .hover-sub {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    /* RESPONSIVE MASONRY */
+    @media (max-width: 1024px) {
+        .masonry-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-item.feature { grid-column: span 2; grid-row: span 2; }
+        .grid-item.landscape { grid-column: span 2; }
+    }
+
     @media (max-width: 768px) {
-        .page-hero { padding-top: 8rem; min-height: auto; }
+        .masonry-grid { grid-template-columns: 1fr; grid-auto-rows: 400px; gap: 1rem; }
+        .grid-item.feature, .grid-item.landscape, .grid-item.portrait {
+            grid-column: span 1; grid-row: span 1;
+        }
+    }
+
+    /* PREMIUM CTA */
+    .premium-cta {
+        padding: 10rem 4vw;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        text-align: center;
+    }
+
+    .premium-cta h2 {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        font-weight: 300;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 1s var(--ease-cinematic);
+    }
+
+    .premium-cta p {
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        color: var(--color-accent-soft);
+        margin-bottom: 3rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 1s var(--ease-cinematic) 0.2s;
+    }
+    
+    .premium-cta.in-view h2, .premium-cta.in-view p {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .btn-gold {
+        display: inline-block;
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        background-color: var(--color-accent);
+        padding: 1.2rem 3rem;
+        text-decoration: none;
+        transition: all 0.4s ease;
+    }
+
+    .btn-gold:hover {
+        background-color: var(--color-white);
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(26, 38, 29, 0.95);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+    }
+    .lightbox.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .lightbox-img {
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
+        transform: scale(0.95);
+        transition: transform 0.5s var(--ease-cinematic);
+    }
+    .lightbox.active .lightbox-img {
+        transform: scale(1);
+    }
+    .lightbox-close {
+        position: absolute;
+        top: 2rem;
+        right: 3rem;
+        color: var(--color-white);
+        font-size: 3rem;
+        font-weight: 100;
+        cursor: pointer;
+        font-family: var(--font-body);
     }
 </style>
 </head>
@@ -61,6 +373,7 @@
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
+            <a href="gallery.html" class="active">GALLERY</a>
             <a href="about.html">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
@@ -77,301 +390,218 @@
         <div class="mobile-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
+            <a href="gallery.html">GALLERY</a>
             <a href="about.html">ABOUT</a>
             <a href="contact.html">CONTACT</a>
         </div>
     </div>
 
     <!-- HERO -->
-    <section class="page-hero">
-        <img src="assets/images/gallery-banner.jpg" alt="" class="hero-bg" loading="lazy">
-        <div class="page-hero-content">
-            <span class="eyebrow reveal-up" style="color: var(--color-accent); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;">Photography & Media Production</span>
-            <h1 class="reveal-up" style="transition-delay: 0.1s;">Every Moment.<br>Beautifully Captured.</h1>
-            <p class="reveal-up" style="transition-delay: 0.2s;">
-                Professional Photography, Cinematic Videography,
-                Drone Coverage and Live Streaming Solutions.
-            </p>
+    <section class="gallery-hero">
+        <img src="assets/images/gallery-banner.jpg" alt="Destination Wedding in Munnar" class="gallery-hero-bg">
+        <div class="gallery-hero-overlay"></div>
+        <div class="gallery-hero-content">
+            <span class="gallery-eyebrow">BIG DADDY EVENTS</span>
+            <h1>WEDDING<br>GALLERY</h1>
+            <p>A cinematic collection of destination weddings, celebrations and unforgettable moments crafted in Munnar and beyond.</p>
         </div>
     </section>
 
-<!-- WEDDING EDITORIAL GALLERY -->
-<style id="gallery-masonry-styles">
-    .gallery-masonry { padding: 6rem 4vw; max-width: 1600px; margin: 0 auto; }
-    .gallery-header { margin-bottom: 4rem; }
-    .masonry-grid {
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-        grid-auto-rows: 250px; 
-        gap: 1.5rem; 
-        grid-auto-flow: dense;
-    }
-    .masonry-item { overflow: hidden; position: relative; cursor: pointer; }
-    .masonry-item img {
-        width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-slow);
-    }
-    .masonry-item:hover img { transform: scale(1.05); }
-    
-    .span-2-both { grid-row: span 2; grid-column: span 2; }
-    .span-2-row { grid-row: span 2; }
-    .span-2-col { grid-row: span 1; grid-column: span 2; }
-    
-    @media (max-width: 768px) {
-        .span-2-both, .span-2-row, .span-2-col {
-            grid-column: span 1 !important;
-            grid-row: span 1 !important;
-        }
-        .masonry-grid {
-            grid-template-columns: 1fr !important;
-            grid-auto-rows: 300px !important;
-        }
-    }
-</style>
-<section class="gallery-masonry" >
-    <div class="gallery-header text-center" >
-        <span class="eyebrow" style="color: var(--color-accent); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;">PORTFOLIO</span>
-        <h2 style="font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem); color: var(--color-primary); margin-top: 1rem;">THE WEDDING COLLECTION</h2>
+    <!-- INTRO -->
+    <section class="gallery-intro scroll-reveal">
+        <h2>OUR STORIES</h2>
+        <p>Every celebration has a story. We capture the atmosphere, emotion, details and unforgettable moments behind every event.</p>
+        <div class="gold-divider"></div>
+    </section>
+
+    <!-- CATEGORIES (Non-functional editorial labels) -->
+    <div class="gallery-categories scroll-reveal">
+        <span class="cat-label active">ALL</span>
+        <span class="cat-label">WEDDINGS</span>
+        <span class="cat-label">CEREMONIES</span>
+        <span class="cat-label">DECOR</span>
+        <span class="cat-label">CELEBRATIONS</span>
     </div>
 
-    <div class="masonry-grid" >
-        
-        <div class="masonry-item span-2-both">
-            <img src="assets/images/hindu-destination-wedding.jpg" alt="Hindu destination wedding in Munnar" loading="lazy" >
-        </div>
-        
-        <div class="masonry-item">
-            <img src="assets/images/christian-wedding.jpg" alt="Christian wedding ceremony" loading="lazy" >
-        </div>
-        
-        <div class="masonry-item span-2-row">
-            <img src="assets/images/muslim-destination-wedding.jpg" alt="Muslim destination wedding in Munnar" loading="lazy" >
-        </div>
-
-        <div class="masonry-item">
-            <img src="assets/images/indoor-wedding.jpg" alt="Indoor wedding decor" loading="lazy" >
-        </div>
-
-        <div class="masonry-item span-2-row">
-            <img src="assets/images/outdoor-wedding.jpg" alt="Outdoor wedding setup" loading="lazy" >
-        </div>
-
-        <div class="masonry-item span-2-col">
-            <img src="assets/images/destination-wedding.jpg" alt="Destination wedding landscape" loading="lazy" >
-        </div>
-
-        <div class="masonry-item span-2-both">
-            <img src="assets/images/christian-destination-wedding.jpg" alt="Christian destination wedding in Munnar" loading="lazy" >
-        </div>
-        
-        <div class="masonry-item">
-            <img src="assets/images/hindu-wedding.jpg" alt="Hindu wedding rituals" loading="lazy" >
-        </div>
-
-    </div>
-</section>
-
-<!-- SIMPLE LIGHTBOX SCRIPT -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const items = document.querySelectorAll('.masonry-item');
-        
-        items.forEach(item => {
-            item.style.overflow = 'hidden';
-            item.style.position = 'relative';
-            item.style.cursor = 'pointer';
+    <!-- MASONRY GALLERY -->
+    <section class="masonry-wrapper">
+        <div class="masonry-grid">
             
-            const img = item.querySelector('img');
-            item.addEventListener('mouseenter', () => {
-                img.style.transform = 'scale(1.05)';
+            <div class="grid-item feature" data-src="assets/images/hindu-destination-wedding.jpg">
+                <img src="assets/images/hindu-destination-wedding.jpg" alt="Hindu destination wedding in Munnar" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Traditional Elegance</h3>
+                    <span class="hover-sub">WEDDING CEREMONY • MUNNAR</span>
+                </div>
+            </div>
+            
+            <div class="grid-item portrait" data-src="assets/images/christian-wedding.jpg">
+                <img src="assets/images/christian-wedding.jpg" alt="Christian wedding ceremony" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Holy Matrimony</h3>
+                    <span class="hover-sub">CHRISTIAN WEDDING</span>
+                </div>
+            </div>
+            
+            <div class="grid-item" data-src="assets/images/stage-decoration.jpg">
+                <img src="assets/images/stage-decoration.jpg" alt="Stage Decoration" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Floral Canopy</h3>
+                    <span class="hover-sub">EVENT DECOR</span>
+                </div>
+            </div>
+
+            <div class="grid-item landscape" data-src="assets/images/muslim-destination-wedding.jpg">
+                <img src="assets/images/muslim-destination-wedding.jpg" alt="Muslim destination wedding" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Grand Celebration</h3>
+                    <span class="hover-sub">DESTINATION NIKAH</span>
+                </div>
+            </div>
+
+            <div class="grid-item portrait" data-src="assets/images/indoor-wedding.jpg">
+                <img src="assets/images/indoor-wedding.jpg" alt="Indoor wedding decor" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Luxury Banquet</h3>
+                    <span class="hover-sub">INDOOR RECEPTION</span>
+                </div>
+            </div>
+
+            <div class="grid-item feature" data-src="assets/images/christian-destination-wedding.jpg">
+                <img src="assets/images/christian-destination-wedding.jpg" alt="Christian destination wedding" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Mountain Blessing</h3>
+                    <span class="hover-sub">DESTINATION WEDDING</span>
+                </div>
+            </div>
+
+            <div class="grid-item" data-src="assets/images/wedding-photography.jpg">
+                <img src="assets/images/wedding-photography.jpg" alt="Wedding photography" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Couple Portraits</h3>
+                    <span class="hover-sub">PHOTOGRAPHY</span>
+                </div>
+            </div>
+            
+            <div class="grid-item landscape" data-src="assets/images/outdoor-wedding.jpg">
+                <img src="assets/images/outdoor-wedding.jpg" alt="Outdoor wedding setup" class="grid-img" loading="lazy">
+                <div class="grid-overlay">
+                    <h3 class="hover-title">Nature's Altar</h3>
+                    <span class="hover-sub">OUTDOOR SETUP</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PREMIUM CTA -->
+    <section class="premium-cta">
+        <h2>YOUR STORY DESERVES<br>TO BE REMEMBERED.</h2>
+        <p>Plan your destination wedding with Big Daddy Events.</p>
+        <a href="contact.html" class="btn-gold">PLAN YOUR WEDDING &rarr;</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">
+            <div class="crown">👑</div>
+            <h2>BIG DADDY</h2>
+            <span>EVENT MANAGEMENT</span>
+        </div>
+        <div class="footer-links">
+            <div>
+                <h4>Company</h4>
+                <a href="about.html">About</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div>
+                <h4>Events</h4>
+                <a href="weddings.html">Weddings</a>
+                <a href="corporate.html">Corporate</a>
+                <a href="entertainment.html">Entertainment</a>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Kerala, India</p>
+                <p>+91 7034252988</p>
+                <p>info@bigdaddyevents.com</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 Big Daddy Event Management. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX HTML -->
+    <div class="lightbox" id="galleryLightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Gallery Fullscreen" class="lightbox-img" id="lightboxImg">
+    </div>
+
+    <script src="script.js"></script>
+    
+    <!-- GALLERY SCRIPTS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal Animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -100px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('in-view');
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.grid-item, .premium-cta, .scroll-reveal').forEach(el => {
+                observer.observe(el);
             });
-            item.addEventListener('mouseleave', () => {
-                img.style.transform = 'scale(1)';
+
+            // Lightbox Implementation
+            const lightbox = document.getElementById('galleryLightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const closeBtn = document.querySelector('.lightbox-close');
+            const items = document.querySelectorAll('.grid-item');
+
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const src = item.getAttribute('data-src');
+                    if (src) {
+                        lightboxImg.src = src;
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling
+                    }
+                });
+            });
+
+            const closeLightbox = () => {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                setTimeout(() => { lightboxImg.src = ''; }, 500);
+            };
+
+            closeBtn.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) closeLightbox();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
             });
         });
-    });
-</script>
-
-<!-- SERVICES -->
-
-<section class="production-services">
-
-    <div class="section-title">
-        <h2>Media Production Services</h2>
-    </div>
-
-    <div class="production-grid">
-
-        <div class="production-card">
-            <img src="assets/images/event-photography.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Event Photography</h3>
-        </div>
-
-        <div class="production-card">
-            <img src="assets/images/drone-videography.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Drone Videography</h3>
-        </div>
-
-        <div class="production-card">
-            <img src="assets/images/live-streaming.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Live Streaming</h3>
-        </div>
-
-        <div class="production-card">
-            <img src="assets/images/multi-camera-setup.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Multi-Camera Production</h3>
-        </div>
-
-        <div class="production-card">
-            <img src="assets/images/reels-content.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Reels & Social Content</h3>
-        </div>
-
-        <div class="production-card">
-            <img src="assets/images/event-documentary.jpg" alt="Big Daddy Event" loading="lazy">
-            <h3>Highlight Films</h3>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- EQUIPMENT -->
-
-<section class="equipment-section">
-
-    <div class="equipment-left">
-
-        <h2>Professional Equipment</h2>
-
-        <ul>
-
-            <li>Professional DSLR Cameras</li>
-
-            <li>Mirrorless Camera Systems</li>
-
-            <li>Cinema Cameras</li>
-
-            <li>4K Recording Systems</li>
-
-            <li>Drone Camera Systems</li>
-
-            <li>Stabilizers & Gimbals</li>
-
-            <li>Wireless Audio Systems</li>
-
-            <li>Professional Lighting Kits</li>
-
-            <li>Multi-Camera Broadcast Setup</li>
-
-        </ul>
-
-    </div>
-
-    <div class="equipment-right">
-
-        <img src="assets/images/production-showcase.jpg" alt="Big Daddy Event" loading="lazy">
-
-    </div>
-
-</section>
-
-<!-- TEAM -->
-
-<section class="team-showcase">
-
-    <img src="camera-team.jpg" alt="Big Daddy Event" loading="lazy">
-
-    <div class="team-overlay">
-
-        <h2>Experienced Media Team</h2>
-
-        <p>
-            Dedicated photographers, videographers,
-            drone operators and production specialists
-            committed to capturing every detail.
-        </p>
-
-    </div>
-
-</section>
-
-<!-- CTA -->
-
-<section class="gallery-cta">
-
-    <h2>
-        Let's Capture Your Next Event
-    </h2>
-
-    <p>
-        Photography, Videography, Drone Coverage and
-        Live Streaming across Kerala and Tamil Nadu.
-    </p>
-
-    <a href="contact.html" class="btn-primary">
-        Book Media Services
-    </a>
-
-</section>
-
-
-<footer>
-
-    <div class="footer-logo">
-
-        <div class="crown">👑</div>
-
-        <h2>BIG DADDY</h2>
-
-        <span>EVENT MANAGEMENT</span>
-
-    </div>
-
-    <div class="footer-links">
-
-        <div>
-            <h4>Company</h4>
-
-            <a href="about.html">About</a>
-            <a href="gallery.html">Gallery</a>
-            <a href="contact.html">Contact</a>
-
-        </div>
-
-        <div>
-            <h4>Events</h4>
-
-            <a href="weddings.html">Weddings</a>
-            <a href="corporate.html">Corporate</a>
-            <a href="entertainment.html">Entertainment</a>
-
-        </div>
-
-        <div>
-            <h4>Contact</h4>
-
-            <p>Kerala, India</p>
-            <p>+91 7034252988</p>
-            <p>info@bigdaddyevents.com</p>
-
-        </div>
-
-    </div>
-
-    <div class="copyright">
-
-        © 2026 Big Daddy Event Management.
-        All Rights Reserved.
-
-    </div>
-
-</footer>
-
-<script src="script.js"></script>
-<!-- ================= WHATSAPP FLOATING BUTTON ================= -->
-<a href="https://wa.me/917034252988?text=Hi,%20I%20want%20to%20inquire%20about%20event%20management%20services." class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
-    💬
-</a>
+    </script>
+    
+    <!-- WHATSAPP FLOATING BUTTON -->
+    <a href="https://wa.me/917034252988?text=Hi,%20I%20want%20to%20inquire%20about%20event%20management%20services." class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">💬</a>
 
 </body>
 </html>
