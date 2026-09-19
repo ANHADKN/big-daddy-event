@@ -102,6 +102,156 @@ img {
 }
 @keyframes preloaderOut { 100% { opacity: 0; visibility: hidden; } }
 
+/* =========================================
+   CINEMATIC ENTRANCE OVERLAY SYSTEM (HOMEPAGE)
+   ========================================= */
+.cinematic-entrance-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #FFFFFF;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: cinematicOverlayExit 0.8s cubic-bezier(0.25, 1, 0.5, 1) 1.5s forwards;
+    will-change: opacity, visibility;
+}
+
+.cinematic-entrance-overlay.is-dismissed {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.entrance-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    max-width: 480px;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.entrance-logo-frame {
+    width: 100%;
+    max-width: 260px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: cinematicLogoEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    opacity: 0;
+    transform: scale(0.92);
+}
+
+.entrance-logo-img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.entrance-gold-line {
+    width: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--color-accent, #B89C6D) 50%, transparent);
+    margin: 1.25rem 0 0.75rem;
+    opacity: 0;
+    animation: cinematicGoldLineReveal 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+}
+
+.entrance-brand-tag {
+    font-family: var(--font-body, 'Manrope', sans-serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-accent, #B89C6D);
+    opacity: 0;
+    animation: cinematicTagFadeIn 0.8s ease 0.8s forwards;
+}
+
+@keyframes cinematicLogoEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes cinematicGoldLineReveal {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        width: 160px;
+        opacity: 0.9;
+    }
+}
+
+@keyframes cinematicTagFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    100% {
+        opacity: 0.85;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cinematicOverlayExit {
+    0% {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+    }
+    99% {
+        opacity: 0;
+        visibility: visible;
+        pointer-events: none;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cinematic-entrance-overlay {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        display: none !important;
+    }
+    .entrance-logo-frame, .entrance-gold-line, .entrance-brand-tag {
+        animation: none !important;
+    }
+}
+
+
 /* Image Placeholder System */
 .image-slot {
     width: 100%;
@@ -203,8 +353,17 @@ img {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
-.logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.1em; z-index: 101; display: flex; align-items: center; }
-.nav-logo-img { height: 40px; width: auto; object-fit: contain; }
+.logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.1em; z-index: 101; display: flex; align-items: center; max-height: 44px; }
+.site-nav .logo img,
+.logo .nav-logo-img,
+.nav-logo-img { 
+    height: 40px !important; 
+    max-height: 40px !important; 
+    width: auto !important; 
+    max-width: 180px !important; 
+    object-fit: contain; 
+    display: block; 
+}
 
 .nav-links { display: flex; gap: clamp(1rem, 2.5vw, 3rem); align-items: center; }
 .nav-links a { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; position: relative; font-weight: 500; }
@@ -404,8 +563,10 @@ img {
 .brand-logo {
     display: inline-block;
     max-width: 100%;
-    height: auto;
     object-fit: contain;
+}
+.brand-logo:not(.nav-logo-img) {
+    height: auto;
 }
 
 .brand-logo--light {

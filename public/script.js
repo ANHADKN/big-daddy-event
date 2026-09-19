@@ -1,5 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // 0. CINEMATIC ENTRANCE OVERLAY CONTROLLER (HOMEPAGE)
+    const entranceOverlay = document.getElementById('cinematicEntranceOverlay');
+    if (entranceOverlay) {
+        let isReleased = false;
+        const releaseOverlay = () => {
+            if (isReleased) return;
+            isReleased = true;
+            entranceOverlay.classList.add('is-dismissed');
+            entranceOverlay.style.opacity = '0';
+            entranceOverlay.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                entranceOverlay.style.visibility = 'hidden';
+                entranceOverlay.style.display = 'none';
+                if (entranceOverlay.parentNode) {
+                    entranceOverlay.parentNode.removeChild(entranceOverlay);
+                }
+            }, 850);
+        };
+
+        entranceOverlay.addEventListener('animationend', (e) => {
+            if (e.animationName === 'cinematicOverlayExit') {
+                releaseOverlay();
+            }
+        });
+
+        if (document.readyState === 'complete') {
+            setTimeout(releaseOverlay, 1800);
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(releaseOverlay, 1600);
+            });
+        }
+
+        // Guaranteed Absolute Timeout Fallback
+        setTimeout(releaseOverlay, 2200);
+    }
+
     // 1. STICKY NAVIGATION
     const nav = document.querySelector('.site-nav');
     

@@ -13,10 +13,41 @@
 </head>
 <body>
 
-    <!-- PRELOADER -->
-    <div class="preloader">
-        <div class="preloader-logo">BIG DADDY</div>
+    <!-- CINEMATIC LOGO ENTRANCE OVERLAY -->
+    <div class="cinematic-entrance-overlay" id="cinematicEntranceOverlay" role="dialog" aria-modal="true" aria-label="Big Daddy Events Entrance">
+        <div class="entrance-container">
+            <div class="entrance-logo-frame">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="entrance-logo-img">
+            </div>
+            <div class="entrance-gold-line" aria-hidden="true"></div>
+            <div class="entrance-brand-tag" aria-hidden="true">LUXURY WEDDINGS &amp; EVENTS &bull; MUNNAR</div>
+        </div>
     </div>
+    <script>
+        (function() {
+            var ov = document.getElementById('cinematicEntranceOverlay');
+            if (!ov) return;
+            var done = false;
+            function closeOv() {
+                if (done) return;
+                done = true;
+                ov.classList.add('is-dismissed');
+                ov.style.opacity = '0';
+                ov.style.pointerEvents = 'none';
+                setTimeout(function() {
+                    ov.style.visibility = 'hidden';
+                    ov.style.display = 'none';
+                    if (ov.parentNode) ov.parentNode.removeChild(ov);
+                }, 850);
+            }
+            ov.addEventListener('animationend', function(e) {
+                if (e.animationName === 'cinematicOverlayExit') closeOv();
+            });
+            window.addEventListener('load', function() { setTimeout(closeOv, 1600); });
+            setTimeout(closeOv, 2200);
+        })();
+    </script>
+
 
     <!-- NAVIGATION -->
     <nav class="site-nav">
