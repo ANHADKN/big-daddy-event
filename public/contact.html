@@ -3,71 +3,566 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Big Daddy Events</title>
+    <meta name="description" content="Contact Big Daddy Events for bespoke luxury weddings and event productions in Munnar, Kerala. Direct telephone, WhatsApp, official email, and online enquiry.">
+    <title>Contact Us | Big Daddy Events Munnar</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css?v=20260912">
+    <link rel="stylesheet" href="style.css?v=20260928">
+    
     <style>
-        .page-hero {
-            position: relative; padding: calc(clamp(6rem, 14vh, 12rem) + var(--safe-top)) 4vw clamp(3rem, 6vh, 6rem);
-            text-align: center; background-color: var(--color-bg);
+        :root {
+            --bde-forest: #062D24;
+            --bde-deep: #031B16;
+            --bde-gold: #C8A45D;
+            --bde-gold-hover: #b08d46;
+            --bde-gold-light: #EBD8B0;
+            --bde-ivory: #F5F1EA;
+            --bde-white: #FFFFFF;
+            --bde-charcoal: #27231F;
+            --bde-taupe: #78716A;
+            --bde-border: rgba(200, 164, 93, 0.25);
+            --bde-border-soft: rgba(6, 45, 36, 0.08);
+            --bde-card-shadow: 0 12px 36px rgba(6, 45, 36, 0.04);
+            --bde-card-hover-shadow: 0 18px 48px rgba(6, 45, 36, 0.09);
         }
-        .page-hero h1 { font-size: clamp(3rem, 8vw, 6.5rem); margin-bottom: 1.5rem; line-height: 1; }
-        .page-hero p { font-size: 1.25rem; color: var(--color-secondary); max-width: 600px; margin: 0 auto; }
-        
-        .contact-grid {
-            max-width: 1200px; margin: 0 auto; padding: 4rem 4vw 12rem;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
-        }
-        .contact-info h3 { font-size: 2.5rem; margin-bottom: 2rem; }
-        .info-block { margin-bottom: 2rem; }
-        .info-block span { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 0.5rem; }
-        .info-block p, .info-block a { font-size: 1.25rem; color: var(--color-text); }
-        
-        .contact-form { background: #fff; padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3.5rem); border: 1px solid rgba(197, 183, 159, 0.3); position: relative; }
-        .form-group { margin-bottom: 2rem; position: relative; }
-        .form-group label { display: block; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; color: var(--color-primary); }
-        .form-group input, .form-group textarea { width: 100%; padding: 1.25rem 1rem; border: 1px solid rgba(49, 63, 51, 0.2); background: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; transition: all 0.4s var(--ease-slow); box-sizing: border-box; }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--color-accent); background: #FDFBF7; }
-        .form-group textarea { height: 160px; resize: none; }
-        .form-success-msg {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; padding: 3rem; z-index: 10; opacity: 0; transition: opacity 0.6s ease;
-        }
-        .form-success-msg h4 { font-size: 2rem; margin-bottom: 1rem; color: var(--color-primary); }
-        .form-success-msg p { font-size: 1.1rem; color: var(--color-secondary); line-height: 1.6; }
-        .form-success-msg.show { display: flex; opacity: 1; }
-        
-        .info-block a { transition: color 0.3s ease; position: relative; display: inline-block; }
-        .info-block a::after { content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0; background: var(--color-accent); transition: width 0.4s ease; }
-        .info-block a:hover { color: var(--color-accent); }
-        .info-block a:hover::after { width: 100%; }
 
-        @media(max-width: 992px) {
-            .contact-grid { grid-template-columns: 1fr; gap: 4rem; padding-bottom: 6rem; }
-            .contact-form { padding: 3rem 2rem; }
+        body.contact-page {
+            background-color: var(--bde-ivory);
+            color: var(--bde-charcoal);
+            font-family: 'Manrope', -apple-system, sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
-        @media(max-width: 768px) {
-            .contact-info h3 { font-size: 2rem; }
-            .contact-grid { gap: 3rem; padding-top: 2rem; }
+
+        /* 1. HERO SECTION */
+        .contact-hero {
+            position: relative;
+            padding: calc(clamp(5.5rem, 11vh, 8.5rem) + var(--safe-top)) clamp(1.2rem, 4vw, 4rem) clamp(3rem, 6vh, 4.5rem);
+            text-align: center;
+            background: radial-gradient(circle at 50% 20%, rgba(200, 164, 93, 0.08) 0%, transparent 60%), #FAF8F3;
+            border-bottom: 1px solid var(--bde-border);
         }
-        @media(max-width: 374px) {
-            .page-hero h1 { font-size: clamp(2.4rem, 11vw, 3.2rem); }
-            .contact-form { padding: 1.75rem 1.15rem; }
-            .contact-info h3 { font-size: 1.75rem; }
-            .info-block p, .info-block a { font-size: 1.1rem; }
+
+        .contact-hero-inner {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .contact-hero .hero-eyebrow {
+            display: inline-block;
+            font-size: 0.76rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--bde-gold);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .contact-hero h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: var(--bde-forest);
+            margin: 0 0 1.25rem;
+            line-height: 1.05;
+        }
+
+        .contact-hero p.hero-subtitle {
+            font-size: clamp(1rem, 1.3vw, 1.18rem);
+            color: var(--bde-taupe);
+            line-height: 1.65;
+            margin: 0 auto 2.5rem;
+            max-width: 680px;
+            font-weight: 400;
+        }
+
+        /* QUICK ACTION CTA BAR */
+        .quick-cta-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.85rem 1.6rem;
+            background: #fff;
+            color: var(--bde-forest);
+            border: 1px solid rgba(6, 45, 36, 0.15);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(6, 45, 36, 0.04);
+        }
+
+        .cta-pill-btn svg {
+            stroke: var(--bde-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .cta-pill-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--bde-gold);
+            box-shadow: 0 8px 24px rgba(6, 45, 36, 0.08);
+            color: var(--bde-gold-hover);
+        }
+
+        .cta-pill-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        .cta-pill-btn.cta-pill-gold {
+            background: var(--bde-forest);
+            color: #FAF8F3;
+            border-color: var(--bde-forest);
+        }
+
+        .cta-pill-btn.cta-pill-gold svg {
+            stroke: var(--bde-gold);
+        }
+
+        .cta-pill-btn.cta-pill-gold:hover {
+            background: #0A1C16;
+            color: #fff;
+            border-color: var(--bde-gold);
+        }
+
+        /* 2. MAIN CONTACT SECTION */
+        .contact-content-section {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: clamp(3rem, 6vw, 5.5rem) clamp(1.2rem, 4vw, 3rem) clamp(4rem, 8vw, 7rem);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: clamp(2.5rem, 5vw, 5rem);
+            align-items: start;
+        }
+
+        /* LEFT COLUMN: INFO CARDS */
+        .contact-left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-intro-block {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-intro-block h2 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2rem, 3.2vw, 2.75rem);
+            color: var(--bde-forest);
+            font-weight: 500;
+            line-height: 1.15;
+            margin: 0 0 1rem;
+        }
+
+        .contact-intro-block p {
+            font-size: 0.96rem;
+            color: var(--bde-taupe);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        .contact-card {
+            background: var(--bde-white);
+            border: 1px solid var(--bde-border-soft);
+            border-left: 3px solid var(--bde-gold);
+            border-radius: 4px;
+            padding: 1.6rem 1.8rem;
+            box-shadow: var(--bde-card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--bde-card-hover-shadow);
+            border-color: rgba(200, 164, 93, 0.4);
+            border-left-color: var(--bde-gold);
+        }
+
+        .contact-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(200, 164, 93, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bde-gold);
+            flex-shrink: 0;
+        }
+
+        .contact-card-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--bde-forest);
+        }
+
+        .contact-card .card-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--bde-gold);
+            margin: 0;
+        }
+
+        .contact-card .card-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.45rem;
+            color: var(--bde-forest);
+            font-weight: 600;
+            margin: 0 0 0.4rem;
+            line-height: 1.2;
+        }
+
+        .contact-card .card-value-link {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--bde-forest);
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.2s ease;
+            word-break: break-all;
+        }
+
+        .contact-card .card-value-link:hover {
+            color: var(--bde-gold);
+        }
+
+        .contact-card .card-note {
+            font-size: 0.85rem;
+            color: var(--bde-taupe);
+            margin: 0.5rem 0 0;
+            line-height: 1.5;
+        }
+
+        .contact-card .card-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 0.75rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--bde-gold);
+            text-decoration: none;
+            transition: gap 0.2s ease, color 0.2s ease;
+        }
+
+        .contact-card .card-action-link:hover {
+            color: var(--bde-forest);
+            gap: 0.65rem;
+        }
+
+        /* RIGHT COLUMN: CONTACT FORM */
+        .contact-form-container {
+            background: var(--bde-white);
+            border: 1px solid var(--bde-border);
+            border-radius: 6px;
+            padding: clamp(2rem, 5vw, 3.5rem);
+            box-shadow: 0 16px 45px rgba(6, 45, 36, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bde-forest), var(--bde-gold), var(--bde-forest));
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+        }
+
+        .form-header .form-eyebrow {
+            font-size: 0.74rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--bde-gold);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-header h3 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.8rem, 2.8vw, 2.3rem);
+            color: var(--bde-forest);
+            margin: 0 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            font-size: 0.9rem;
+            color: var(--bde-taupe);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.45rem;
+            color: var(--bde-forest);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.95rem 1.05rem;
+            border: 1px solid rgba(6, 45, 36, 0.18);
+            border-radius: 4px;
+            background: #FAF8F5;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.92rem;
+            color: var(--bde-charcoal);
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--bde-gold);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(200, 164, 93, 0.15);
+        }
+
+        .form-group textarea {
+            height: 140px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .btn-submit-inquiry {
+            width: 100%;
+            padding: 1.1rem 1.8rem;
+            background: var(--bde-forest);
+            color: #FAF8F3;
+            border: 1px solid var(--bde-forest);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 6px 20px rgba(6, 45, 36, 0.15);
+        }
+
+        .btn-submit-inquiry:hover {
+            background: #0A1C16;
+            border-color: var(--bde-gold);
+            color: var(--bde-gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(6, 45, 36, 0.22);
+        }
+
+        .btn-submit-inquiry:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* SUCCESS MESSAGE OVERLAY */
+        .form-success-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #FFFFFF;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2.5rem;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .form-success-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .success-icon-badge {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(200, 164, 93, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            color: var(--bde-gold);
+        }
+
+        .form-success-overlay h4 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 2.4rem;
+            color: var(--bde-forest);
+            margin: 0 0 0.75rem;
+            font-weight: 600;
+        }
+
+        .form-success-overlay p {
+            font-size: 1rem;
+            color: var(--bde-taupe);
+            line-height: 1.6;
+            max-width: 440px;
+            margin: 0 0 2rem;
+        }
+
+        .btn-reset-form {
+            background: transparent;
+            color: var(--bde-forest);
+            border: 1px solid var(--bde-forest);
+            padding: 0.65rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-reset-form:hover {
+            background: var(--bde-forest);
+            color: #fff;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 992px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .contact-hero {
+                padding: calc(4.5rem + var(--safe-top)) 1.25rem 2.5rem;
+            }
+            .contact-hero .hero-eyebrow {
+                font-size: 0.68rem;
+                letter-spacing: 0.16em;
+                line-height: 1.45;
+                margin-bottom: 0.85rem;
+            }
+            .contact-hero h1 {
+                font-size: clamp(2.2rem, 9vw, 2.75rem);
+                letter-spacing: 0.04em;
+                line-height: 1.1;
+                margin-bottom: 1rem;
+            }
+            .contact-hero p.hero-subtitle {
+                font-size: 0.95rem;
+                line-height: 1.55;
+                margin-bottom: 2rem;
+            }
+            .quick-cta-bar {
+                flex-direction: column;
+                width: 100%;
+                max-width: 320px;
+                margin: 0 auto;
+                gap: 0.75rem;
+            }
+            .cta-pill-btn {
+                width: 100%;
+                min-height: 48px;
+                justify-content: center;
+                box-sizing: border-box;
+                font-size: 0.8rem;
+            }
+            .contact-content-section {
+                padding: 2.5rem 1.25rem 4rem;
+            }
+            .contact-intro-block h2 {
+                font-size: clamp(1.75rem, 6.8vw, 2.2rem);
+                line-height: 1.18;
+            }
+            .contact-intro-block p {
+                font-size: 0.92rem;
+                line-height: 1.6;
+            }
+            .contact-card {
+                padding: 1.4rem 1.25rem;
+            }
+            .contact-form-container {
+                padding: 1.75rem 1.25rem;
+            }
         }
     </style>
 </head>
-<body>
+<body class="contact-page">
 
-    <!-- NAVIGATION -->
-    <nav class="site-nav">
-        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+    <!-- 1. NAVIGATION -->
+    <nav class="site-nav" id="siteNav">
+        <a href="index.html" class="logo" aria-label="Big Daddy Events Home">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/big-daddy-events-logo-white.png">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img">
+            </picture>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
@@ -76,8 +571,8 @@
             <a href="contact.html" class="active">CONTACT</a>
         </div>
         <div class="nav-right">
-            <a href="contact.html" class="nav-cta">PLAN YOUR WEDDING</a>
-            <div class="hamburger">
+            <a href="https://wa.me/917034252988?text=Hello%20Big%20Daddy%20Events%2C%20I%20would%20like%20to%20inquire%20about%20event%20planning%20in%20Munnar" target="_blank" rel="noopener noreferrer" class="nav-cta">WHATSAPP DESK</a>
+            <div class="hamburger" aria-label="Toggle navigation menu">
                 <span></span><span></span><span></span>
             </div>
         </div>
@@ -94,72 +589,149 @@
         </div>
     </div>
 
-    <header class="page-hero">
-        <span class="eyebrow gsap-reveal">INQUIRIES</span>
-        <h1 class="gsap-reveal">LET'S CONNECT</h1>
-        <p class="gsap-reveal">Reach out to begin planning your bespoke celebration.</p>
+    <!-- 2. CONTACT HERO -->
+    <header class="contact-hero">
+        <div class="contact-hero-inner">
+            <span class="hero-eyebrow">CONCIERGE &amp; CLIENT SERVICES • MUNNAR HIGHLANDS</span>
+            <h1>LET'S CONNECT</h1>
+            <p class="hero-subtitle">Begin planning your bespoke highland celebration, luxury destination wedding, or monumental event production with our dedicated client coordination desk.</p>
+            
+            <!-- Quick Action CTAs -->
+            <div class="quick-cta-bar">
+                <a href="tel:+917034252988" class="cta-pill-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span>CALL US</span>
+                </a>
+                <a href="https://wa.me/917034252988?text=Hello%20Big%20Daddy%20Events%2C%20I%20would%20like%20to%20inquire%20about%20event%20planning%20in%20Munnar" target="_blank" rel="noopener noreferrer" class="cta-pill-btn cta-pill-gold">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <span>WHATSAPP</span>
+                </a>
+                <a href="mailto:bigdaddyevents01@gmail.com" class="cta-pill-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>EMAIL US</span>
+                </a>
+            </div>
+        </div>
     </header>
 
-    <section class="contact-grid">
-        <div class="contact-info gsap-reveal">
-            <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--light" style="max-width: 160px; margin-bottom: 1.5rem;">
-            <h3>WE WOULD LOVE TO<br>HEAR FROM YOU.</h3>
+    <!-- 3. MAIN CONTACT SECTION -->
+    <main class="contact-content-section">
+        <div class="contact-grid">
             
-            <div class="info-block">
-                <span>Direct Line</span>
-                <a href="tel:+917034252988">+91 70342 52988</a>
-            </div>
-            
-            <div class="info-block">
-                <span>WhatsApp</span>
-                <a href="https://wa.me/917034252988" target="_blank" rel="noopener noreferrer">+91 70342 52988</a>
-            </div>
-            
-            <div class="info-block">
-                <span>Email</span>
-                <a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a>
-            </div>
-            
-            <div class="info-block">
-                <span>Studio</span>
-                <p>Munnar, Kerala, India</p>
-            </div>
-        </div>
-        
-        <div class="contact-form gsap-reveal" style="transition-delay: 0.2s;">
-            <div class="form-success-msg" id="successMsg">
-                <h4>THANK YOU</h4>
-                <p>Your inquiry has been received. Our team will reach out to you shortly to begin planning your experience.</p>
-            </div>
-            <form id="inquiryForm" onsubmit="handleFormSubmit(event)">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="fname" placeholder="Enter your name" required>
+            <!-- LEFT COLUMN: CONTACT INFORMATION CARDS -->
+            <div class="contact-left-col">
+                <div class="contact-intro-block">
+                    <h2>We Would Love to Hear From You</h2>
+                    <p>Whether you envision an intimate tea-estate wedding, a grand architectural stage production, or a corporate destination summit in Munnar, our production directors are ready to assist.</p>
                 </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="femail" placeholder="hello@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="fphone" placeholder="+91" required pattern="[\+0-9\s\-\(\)]+">
-                </div>
-                <div class="form-group">
-                    <label>Event Details / Message</label>
-                    <textarea id="fmsg" placeholder="Tell us about your celebration..." required minlength="10"></textarea>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">SEND INQUIRY</button>
-            </form>
-        </div>
-    </section>
 
-    <!-- FOOTER -->
+                <!-- CARD 1: OFFICIAL EMAIL -->
+                <div class="contact-card">
+                    <div class="contact-card-header">
+                        <div class="contact-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <span class="card-eyebrow">OFFICIAL EMAIL</span>
+                    </div>
+                    <div class="card-title">Big Daddy Events</div>
+                    <a href="mailto:bigdaddyevents01@gmail.com" class="card-value-link">bigdaddyevents01@gmail.com</a>
+                    <p class="card-note">Monitored directly by our client coordination team. Typical response within 4 hours.</p>
+                    <a href="mailto:bigdaddyevents01@gmail.com" class="card-action-link">
+                        <span>Send an email</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+
+                <!-- CARD 2: DIRECT PHONE & WHATSAPP -->
+                <div class="contact-card">
+                    <div class="contact-card-header">
+                        <div class="contact-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        </div>
+                        <span class="card-eyebrow">TELEPHONE &amp; WHATSAPP</span>
+                    </div>
+                    <div class="card-title">+91 70342 52988</div>
+                    <a href="tel:+917034252988" class="card-value-link">Direct Line: +91 70342 52988</a>
+                    <p class="card-note">Client coordination desk active Monday through Sunday, 9:00 AM – 8:00 PM IST.</p>
+                    <a href="https://wa.me/917034252988?text=Hello%20Big%20Daddy%20Events%2C%20I%20would%20like%20to%20inquire%20about%20event%20planning%20in%20Munnar" target="_blank" rel="noopener noreferrer" class="card-action-link">
+                        <span>Chat on WhatsApp</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+
+                <!-- CARD 3: STUDIO & LOGISTICS -->
+                <div class="contact-card">
+                    <div class="contact-card-header">
+                        <div class="contact-card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </div>
+                        <span class="card-eyebrow">PRODUCTION WORKSHOP &amp; LOGISTICS</span>
+                    </div>
+                    <div class="card-title">Munnar, Kerala, India</div>
+                    <p class="card-note" style="margin-top: 0.25rem;">Scenic staging workshops, audiovisual inventory, and operations spanning Munnar, Idukki, Kochi, and the Central Kerala highlands.</p>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: CONTACT FORM -->
+            <div class="contact-right-col">
+                <div class="contact-form-container">
+                    
+                    <div class="form-header">
+                        <span class="form-eyebrow">DIRECT INQUIRY</span>
+                        <h3>Reserve Your Dates</h3>
+                        <p>Provide your celebration details below and our lead director will prepare tailored concepts and date availability.</p>
+                    </div>
+
+                    <!-- SUCCESS STATE OVERLAY -->
+                    <div class="form-success-overlay" id="successMsg">
+                        <div class="success-icon-badge">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h4>INQUIRY RECEIVED</h4>
+                        <p>Thank you for reaching out. Your celebration brief has been sent to our client coordination desk. We will connect with you promptly.</p>
+                        <button type="button" class="btn-reset-form" onclick="resetContactForm()">Submit Another Inquiry</button>
+                    </div>
+
+                    <form id="inquiryForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fname">Full Name *</label>
+                                <input type="text" id="fname" placeholder="e.g. Anand Menon" required autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="fphone">Phone Number *</label>
+                                <input type="tel" id="fphone" placeholder="+91 98765 43210" required pattern="[\+0-9\s\-\(\)]+" autocomplete="tel">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="femail">Email Address *</label>
+                            <input type="email" id="femail" placeholder="name@example.com" required autocomplete="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fmsg">Celebration Details / Venue / Questions *</label>
+                            <textarea id="fmsg" placeholder="Tell us about your celebration, estimated guest count, preferred dates, and venue location in Munnar or Kerala..." required minlength="10"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit-inquiry" id="submitBtn">
+                            <span>SEND INQUIRY</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 4. SITE FOOTER -->
     <footer class="site-footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
-                    <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
+                    <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" class="footer-logo-img">
+                    <p>Ultra-luxury destination celebrations, wedding scenography, and monumental event productions in Munnar, Kerala.</p>
                 </div>
                 <div class="footer-col">
                     <h4>EXPLORE</h4>
@@ -175,13 +747,13 @@
                     <h4>CONTACT</h4>
                     <ul>
                         <li><p>Munnar, Kerala, India</p></li>
-                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="mailto:bigdaddyevents01@gmail.com">bigdaddyevents01@gmail.com</a></li>
                         <li><a href="tel:+917034252988">+91 70342 52988</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <span>© 2026 Big Daddy Events. All Rights Reserved.</span>
+                <span>&copy; 2026 Big Daddy Events. All Rights Reserved.</span>
                 <span>Designed for Luxury.</span>
             </div>
         </div>
@@ -192,40 +764,49 @@
         async function handleFormSubmit(e) {
             e.preventDefault();
             const form = document.getElementById('inquiryForm');
-            if (form.checkValidity()) {
-                const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.disabled = true;
-                submitBtn.textContent = "SENDING...";
-
-                try {
-                    const payload = {
-                        name: document.getElementById('fname').value,
-                        email: document.getElementById('femail').value,
-                        phone: document.getElementById('fphone').value,
-                        message: document.getElementById('fmsg').value
-                    };
-
-                    const response = await fetch('/api/enquiries', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        document.getElementById('successMsg').classList.add('show');
-                        form.reset();
-                    } else {
-                        alert("Failed to submit inquiry. Please try again.");
-                    }
-                } catch (error) {
-                    console.error("Error submitting inquiry:", error);
-                    alert("An error occurred. Please try again later.");
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = originalText;
-                }
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
             }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>SENDING...</span>';
+
+            try {
+                const payload = {
+                    name: document.getElementById('fname').value.trim(),
+                    email: document.getElementById('femail').value.trim(),
+                    phone: document.getElementById('fphone').value.trim(),
+                    message: document.getElementById('fmsg').value.trim()
+                };
+
+                const response = await fetch('/api/enquiries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    document.getElementById('successMsg').classList.add('show');
+                    form.reset();
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    alert(data.error || "Failed to submit inquiry. Please try again or connect via WhatsApp.");
+                }
+            } catch (error) {
+                console.error("Error submitting inquiry:", error);
+                alert("A network error occurred. Please try again or contact us directly on WhatsApp (+91 70342 52988).");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalHtml;
+            }
+        }
+
+        function resetContactForm() {
+            document.getElementById('successMsg').classList.remove('show');
+            document.getElementById('fname').focus();
         }
     </script>
 </body>

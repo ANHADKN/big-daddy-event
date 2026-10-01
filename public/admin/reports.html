@@ -105,7 +105,7 @@
             <a href="index.html" class="nav-item">Dashboard</a>
             <a href="bookings.html" class="nav-item">Bookings</a>
             <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="gallery.html" class="nav-item">Gallery</a>
             <a href="events.html" class="nav-item">Upcoming Events</a>
             <a href="packages.html" class="nav-item">Packages</a>
             <a href="reports.html" class="nav-item active">Reports</a>
@@ -117,9 +117,12 @@
 
     <main class="main-content">
         <header class="admin-header">
-            <h1 class="page-title">Reports & Analytics</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary);">&#9776;</button>
+                <h1 class="page-title">Reports &amp; Analytics</h1>
+            </div>
             <div class="header-actions">
-                <span id="adminProfile">Admin</span>
+                <span class="admin-badge">Admin Portal</span>
             </div>
         </header>
 
@@ -142,19 +145,16 @@
                 <button onclick="fetchReports()">Apply Filter</button>
             </div>
 
-            <!-- Summary Cards -->
+            <!-- Summary Cards (Payment Metrics Removed) -->
             <div class="reports-grid">
                 <div class="stat-card"><h4>Total Bookings</h4><div class="value" id="r-total-bookings">0</div></div>
-                <div class="stat-card"><h4>Confirmed</h4><div class="value" id="r-confirmed">0</div></div>
+                <div class="stat-card"><h4>Confirmed</h4><div class="value highlight" id="r-confirmed">0</div></div>
                 <div class="stat-card"><h4>Pending</h4><div class="value" id="r-pending">0</div></div>
                 <div class="stat-card"><h4>Cancelled</h4><div class="value" id="r-cancelled">0</div></div>
                 <div class="stat-card"><h4>Total Enquiries</h4><div class="value" id="r-enquiries">0</div></div>
-                <div class="stat-card"><h4>Total Revenue</h4><div class="value" id="r-revenue">₹0</div></div>
-                <div class="stat-card"><h4>Amount Paid</h4><div class="value" id="r-paid">₹0</div></div>
-                <div class="stat-card"><h4>Amount Pending</h4><div class="value" id="r-balance">₹0</div></div>
             </div>
 
-            <!-- Charts -->
+            <!-- Charts (Payment Status Chart Removed) -->
             <div class="charts-grid">
                 <div class="chart-container">
                     <h3>By Event Type</h3>
@@ -172,13 +172,9 @@
                     <h3>Booking Status</h3>
                     <canvas id="statusChart"></canvas>
                 </div>
-                <div class="chart-container">
-                    <h3>Payment Status</h3>
-                    <canvas id="paymentStatusChart"></canvas>
-                </div>
             </div>
 
-            <!-- Data Table -->
+            <!-- Data Table (Payment Columns Removed) -->
             <div class="table-container">
                 <h3>Bookings Report</h3>
                 <table>
@@ -189,15 +185,12 @@
                             <th>Event Date</th>
                             <th>Event Type</th>
                             <th>Package</th>
-                            <th>Amount</th>
-                            <th>Paid</th>
-                            <th>Balance</th>
-                            <th>Payment</th>
+                            <th>Investment</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="reportTableBody">
-                        <tr><td colspan="10" style="text-align: center;">Loading...</td></tr>
+                        <tr><td colspan="7" style="text-align: center;">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -260,20 +253,19 @@
         }
 
         function updateSummary(summary) {
-            document.getElementById('r-total-bookings').textContent = summary.totalBookings;
-            document.getElementById('r-confirmed').textContent = summary.confirmedBookings;
-            document.getElementById('r-pending').textContent = summary.pendingBookings;
-            document.getElementById('r-cancelled').textContent = summary.cancelledBookings;
-            document.getElementById('r-enquiries').textContent = summary.totalEnquiries;
-            document.getElementById('r-revenue').textContent = formatCurrency(summary.totalRevenue);
-            document.getElementById('r-paid').textContent = formatCurrency(summary.amountPaid);
-            document.getElementById('r-balance').textContent = formatCurrency(summary.balanceAmount);
+            document.getElementById('r-total-bookings').textContent = summary.totalBookings || 0;
+            document.getElementById('r-confirmed').textContent = summary.confirmedBookings || 0;
+            document.getElementById('r-pending').textContent = summary.pendingBookings || 0;
+            document.getElementById('r-cancelled').textContent = summary.cancelledBookings || 0;
+            document.getElementById('r-enquiries').textContent = summary.totalEnquiries || 0;
         }
 
         function createOrUpdateChart(id, type, dataArray, labelKey, dataKey, colors) {
-            const ctx = document.getElementById(id).getContext('2d');
-            const labels = dataArray.map(d => d[labelKey] || 'Unknown');
-            const data = dataArray.map(d => d[dataKey] || 0);
+            const el = document.getElementById(id);
+            if (!el) return;
+            const ctx = el.getContext('2d');
+            const labels = (dataArray || []).map(d => d[labelKey] || 'Unknown');
+            const data = (dataArray || []).map(d => d[dataKey] || 0);
 
             if (charts[id]) {
                 charts[id].data.labels = labels;
@@ -301,34 +293,38 @@
         }
 
         function updateCharts(data) {
-            const pColors = ['#1a3c34', '#c5b79f', '#2C3E2D', '#D4AF37', '#8B9A8B'];
+            const pColors = ['#062D24', '#C8A45D', '#0B3D31', '#D8BE82', '#8B9A8B'];
             createOrUpdateChart('typeChart', 'pie', data.byType, 'event_type', 'count', pColors);
             createOrUpdateChart('packageChart', 'doughnut', data.byPackage, 'package_name', 'count', pColors);
             createOrUpdateChart('districtChart', 'bar', data.byDistrict, 'district', 'count', pColors);
             createOrUpdateChart('statusChart', 'pie', data.byStatus, 'status', 'count', ['#f39c12', '#2ecc71', '#e74c3c']);
-            createOrUpdateChart('paymentStatusChart', 'doughnut', data.byPaymentStatus, 'payment_status', 'count', ['#f39c12', '#2ecc71', '#e74c3c']);
         }
 
         function updateTable(rows) {
             const tbody = document.getElementById('reportTableBody');
-            if (rows.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No bookings found for this period.</td></tr>';
+            if (!rows || rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No bookings found for this period.</td></tr>';
                 return;
             }
-            tbody.innerHTML = rows.map(r => `
+            tbody.innerHTML = rows.map(r => {
+                const statusClass = (r.status || '').toLowerCase().includes('confirm') ? 'confirmed' : 'pending';
+                return `
                 <tr>
-                    <td>${r.booking_id}</td>
-                    <td>${r.customer_name}</td>
-                    <td>${r.event_date || '-'}</td>
-                    <td>${r.event_type}</td>
-                    <td>${r.package_name}</td>
+                    <td><strong>${escapeHtml(r.booking_id)}</strong></td>
+                    <td>${escapeHtml(r.customer_name)}</td>
+                    <td>${formatDate(r.event_date)}</td>
+                    <td>${escapeHtml(r.event_type || '')}</td>
+                    <td>${escapeHtml(r.package_name || '')}</td>
                     <td>${formatCurrency(r.package_amount)}</td>
-                    <td>${formatCurrency(r.amount_paid)}</td>
-                    <td>${formatCurrency(r.balance_amount)}</td>
-                    <td><span class="badge badge-${(r.payment_status||'').toLowerCase()}">${r.payment_status||'PENDING'}</span></td>
-                    <td><span class="badge badge-${(r.status||'').toLowerCase()}">${r.status||'PENDING'}</span></td>
+                    <td><span class="badge ${statusClass}">${escapeHtml(r.status || 'PENDING')}</span></td>
                 </tr>
-            `).join('');
+            `}).join('');
+        }
+
+        function escapeHtml(str = '') {
+            return String(str).replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            }[m]));
         }
 
         document.addEventListener('DOMContentLoaded', () => {

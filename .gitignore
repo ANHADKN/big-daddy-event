@@ -1,8 +1,15 @@
 .env
 bookings.db
 *.db
+*.db.backup*
+bookings.db.backup*
+*.backup*
+*.db-journal
+*.rar
 node_modules/
 *.log
 .DS_Store
 .vscode/
 .idea/
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep

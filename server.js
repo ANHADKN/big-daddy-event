@@ -1,7 +1,4 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
 const path = require('path');
 const dotenv = require('dotenv');
 const { v4: uuidv4 } = require('uuid');
@@ -17,10 +14,29 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-    console.error("WARNING: JWT_SECRET environment variable is missing.");
+    if (process.env.NODE_ENV === 'production') {
+        throw new Error("FATAL CONFIGURATION ERROR: JWT_SECRET environment variable is missing in production.");
+    } else {
+        console.warn("WARNING: JWT_SECRET environment variable is missing.");
+    }
 }
 
-// Multer config for image upload
+// Security: Disable X-Powered-By header
+app.disable('x-powered-by');
+
+// Security: Basic Security Headers Middleware
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+});
+
+// Multer config for secure image upload (dual MIME & extension validation)
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp'];
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const dir = path.join(__dirname, 'public', 'assets', 'uploads');
@@ -31,47 +47,72 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname).toLowerCase();
-        cb(null, 'pkg-' + uniqueSuffix + ext);
+        const ext = path.extname(file.originalname || '').toLowerCase();
+        const safeExt = ALLOWED_EXTENSIONS.includes(ext) ? ext : '.jpg';
+        cb(null, 'pkg-' + uniqueSuffix + safeExt);
     }
 });
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit per image
     fileFilter: (req, file, cb) => {
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-        if (allowedTypes.includes(file.mimetype)) {
+        const ext = path.extname(file.originalname || '').toLowerCase();
+        const mime = (file.mimetype || '').toLowerCase();
+        if (ALLOWED_MIME_TYPES.includes(mime) && ALLOWED_EXTENSIONS.includes(ext)) {
             cb(null, true);
         } else {
-            cb(new Error('Invalid file type. Only JPEG, PNG and WEBP are allowed.'));
+            const err = new Error('Invalid file type. Only JPEG, PNG and WEBP images are allowed.');
+            err.statusCode = 400;
+            cb(err);
         }
     }
 });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+// Environment-aware CORS configuration
+const corsConfig = process.env.CORS_ORIGIN || process.env.ALLOWED_ORIGINS;
+const allowedOrigins = corsConfig 
+    ? corsConfig.split(',').map(o => o.trim()) 
+    : null;
+
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (!allowedOrigins || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+            return callback(null, true);
+        }
+        return callback(new Error('CORS policy: Not allowed by CORS'), false);
+    },
+    credentials: true
+}));
+
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+// Differentiated caching strategy for static assets
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1d',
+    etag: true,
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        } else if (filePath.includes(path.join('assets', 'uploads'))) {
+            res.setHeader('Cache-Control', 'public, max-age=600, must-revalidate');
+        } else if (/\.(webp|jpg|jpeg|png|gif|svg|woff2?|ttf|eot|css|js)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+        }
+    }
+}));
+
+// API Cache Control: Ensure all dynamic API responses are never cached by browsers/proxies
+app.use('/api', (req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    next();
+});
 
 // Health Check Endpoint
 app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
-
-// Initialize Razorpay
-console.log("Razorpay Key ID configured:", !!process.env.RAZORPAY_KEY_ID);
-console.log("Razorpay Secret configured:", !!process.env.RAZORPAY_KEY_SECRET);
-
-let razorpay = null;
-if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-    razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID,
-        key_secret: process.env.RAZORPAY_KEY_SECRET,
-    });
-} else {
-    console.log("Razorpay credentials are not configured");
-}
 
 const db = require('./db.js');
 
@@ -123,13 +164,26 @@ db.serialize(() => {
                 )
             `);
             
-            // Seed default admin if none exists
+            // Seed initial admin if none exists
             db.get(`SELECT COUNT(*) as count FROM admins`, [], (err, row) => {
                 if (!err && row.count === 0) {
+                    const isProd = process.env.NODE_ENV === 'production';
+                    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+                    const adminPassword = process.env.ADMIN_PASSWORD || (isProd ? null : 'admin123');
+
+                    if (!adminPassword) {
+                        console.warn('[SECURITY WARNING] No admin account exists and ADMIN_PASSWORD is not set. Admin account seeding skipped for production security.');
+                        return;
+                    }
+
                     const salt = bcrypt.genSaltSync(10);
-                    const hash = bcrypt.hashSync('admin123', salt);
-                    db.run(`INSERT INTO admins (username, password_hash) VALUES ('admin', ?)`, [hash]);
-                    console.log('Seeded default admin (admin / admin123)');
+                    const hash = bcrypt.hashSync(adminPassword, salt);
+                    db.run(`INSERT INTO admins (username, password_hash) VALUES (?, ?)`, [adminUsername, hash]);
+                    if (isProd) {
+                        console.log(`[SECURITY] Initial admin account '${adminUsername}' created from environment configuration.`);
+                    } else {
+                        console.log(`[SECURITY] Initial admin account '${adminUsername}' seeded for local development.`);
+                    }
                 }
             });
 
@@ -191,10 +245,10 @@ db.serialize(() => {
                     // 2. Seed Packages
                     const seedPackages = [
                         ['bronze', 'STAGE BRONZE', 2, 'The Essential Celebration', 'Complete Bronze services', 15000, 30000, 'assets/images/event-private-celebration.jpg', 'theme-bronze', 1],
-                        ['silver', 'STAGE SILVER', 2, 'More atmosphere. More celebration.', 'Complete Silver services', 30000, 60000, 'assets/images/munnar-intimate-wedding.jpg', 'theme-silver', 2],
-                        ['gold', 'STAGE GOLD', 1, 'A richer celebration with entertainment.', 'Complete Gold services', 60000, 100000, 'assets/images/hindu-destination-wedding.jpg', 'theme-gold', 3],
+                        ['silver', 'STAGE SILVER', 2, 'More atmosphere. More celebration.', 'Complete Silver services', 30000, 60000, 'assets/images/sound-lighting.jpg', 'theme-silver', 2],
+                        ['gold', 'STAGE GOLD', 1, 'A richer celebration with entertainment.', 'Complete Gold services', 60000, 100000, 'assets/images/stage-decoration.jpg', 'theme-gold', 3],
                         ['premium', 'PREMIUM STAGE', 1, 'A complete destination experience.', 'Complete Premium Stage services', 100000, 160000, 'assets/images/event-destination-outdoor.jpg', 'theme-premium', 4],
-                        ['premium-plus', 'PREMIUM PLUS', 1, 'The ultimate Big Daddy Events experience.', 'Complete Premium Plus package services', 160000, 160000, 'assets/images/event-corporate-gala.jpg', 'theme-plus', 5]
+                        ['premium-plus', 'PREMIUM PLUS', 1, 'The ultimate Big Daddy Events experience.', 'Complete Premium Plus package services', 160000, 160000, 'assets/images/stage-production.jpg', 'theme-plus', 5]
                     ];
                     
                     const stmtPkg = db.prepare(`INSERT INTO packages_new (id, name, category_id, short_description, description, price_from, price_to, image_url, theme, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
@@ -303,10 +357,59 @@ db.serialize(() => {
                     const stmtSrv = db.prepare(`INSERT INTO package_services (package_id, category_group, service_name, display_order) VALUES (?, ?, ?, ?)`);
                     seedServices.forEach(s => stmtSrv.run(s));
                     stmtSrv.finalize();
-                    
-                    console.log("Migration complete.");
+                    console.log("Package migration complete.");
                 }
             });
+
+            // GALLERY TABLE
+            db.run(`
+                CREATE TABLE IF NOT EXISTS gallery (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT,
+                    category TEXT,
+                    image_url TEXT,
+                    description TEXT,
+                    display_order INTEGER DEFAULT 0,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            `);
+
+            // Seed initial gallery if empty
+            db.get(`SELECT COUNT(*) as count FROM gallery`, [], (err, row) => {
+                if (!err && (!row || row.count === 0)) {
+                    console.log("Seeding initial gallery collections...");
+                    const initialGallery = [
+                        ['Traditional Hindu Mandap & Sacred Vows', 'Hindu Wedding', 'assets/images/hindu-destination-wedding.jpg', 'Authentic traditional mandap with floral artistry amidst misty hills.', 1],
+                        ['Highland Hindu Wedding Ceremony', 'Hindu Wedding', 'assets/images/hindu-wedding.jpg', 'Vibrant ceremonial rituals and bespoke wedding stage.', 2],
+                        ['Church Altar & Mountain Backdrop', 'Christian Wedding', 'assets/images/christian-destination-wedding.jpg', 'Graceful white and pastel floral sanctuary with grand walkway.', 3],
+                        ['Cathedral Elegance & Evening Blessing', 'Christian Wedding', 'assets/images/christian-wedding.jpg', 'Atmospheric church celebration and luxury choir arrangement.', 4],
+                        ['Regal Nikah Pavilion & Stage', 'Muslim Wedding', 'assets/images/muslim-destination-wedding.jpg', 'Grand royal floral arch and majestic stage backdrop.', 5],
+                        ['Bespoke Malabar Wedding Scenography', 'Muslim Wedding', 'assets/images/muslim-wedding.jpg', 'Opulent wedding celebration with traditional hospitality aesthetic.', 6],
+                        ['Highland Betrothal & Floral Ring Stage', 'Engagement', 'assets/images/betrothal.jpg', 'Bespoke ring ceremony stage with cascading florals and fairy lights.', 7],
+                        ['Intimate Ring Exchange Pavilion', 'Engagement', 'assets/images/celebration-showcase.jpg', 'Elegant evening engagement setup for close family and friends.', 8],
+                        ['Grand Gala Reception Scenography', 'Reception', 'assets/images/event-corporate-gala.jpg', 'State-of-the-art ballroom reception with custom stage lighting.', 9],
+                        ['Indoor Luxury Banquet Reception', 'Reception', 'assets/images/indoor-wedding.jpg', 'Sophisticated table styling and warm ambient crystal chandeliers.', 10],
+                        ['Tea Estate Open Air Reception', 'Reception', 'assets/images/outdoor-wedding.jpg', 'Evening garden celebration under the starlit Munnar skies.', 11],
+                        ['Munnar Misty Highland Wedding', 'Destination Wedding', 'assets/images/munnar-main-destination-wedding.png', 'Iconic tea plantation amphitheatre vows with rolling cloud views.', 12],
+                        ['Tea Estate Valley Panorama Wedding', 'Destination Wedding', 'assets/images/munnar-valley-wedding.png', 'Breathtaking mountain valley backdrop and natural botanical styling.', 13],
+                        ['Intimate Mountain Slope Pavilion', 'Destination Wedding', 'assets/images/munnar-intimate-wedding.png', 'Exclusive hillside wedding gazebo overlooking endless green slopes.', 14],
+                        ['Sunset Amphitheatre Gathering', 'Destination Wedding', 'assets/images/event-destination-outdoor.jpg', 'Sunset celebration with custom perimeter illumination.', 15],
+                        ['Monolithic Concert & Truss Stage', 'Stage & Production', 'assets/images/stage-production.jpg', 'Heavy-duty aluminium trussing and moving head lighting fixtures.', 16],
+                        ['Floral Ramp & Ambient Illumination', 'Stage & Production', 'assets/images/stage-decoration.jpg', 'Bespoke runway and illuminated focal backdrop.', 17],
+                        ['High-End Acoustic & Line Array Production', 'Stage & Production', 'assets/images/sound-lighting.jpg', 'Tour-grade audio systems, stage monitors, and digital sound control.', 18],
+                        ['Live Concert & Strobe Effects', 'Stage & Production', 'assets/images/event-live-concert.jpg', 'Dynamic lighting and concert production for high-energy celebrations.', 19],
+                        ['Celebration Fireworks Finalé', 'Stage & Production', 'assets/images/fireworks-show.jpg', 'Spectacular cold pyro and fireworks display to close the night.', 20]
+                    ];
+                    const stmtGal = db.prepare(`INSERT INTO gallery (title, category, image_url, description, display_order) VALUES (?, ?, ?, ?, ?)`);
+                    initialGallery.forEach(g => stmtGal.run(g));
+                    stmtGal.finalize();
+                }
+            });
+
+            // Ensure package imagery is stage-focused rather than cultural wedding photos
+            db.run(`UPDATE packages_new SET image_url = 'assets/images/stage-decoration.jpg' WHERE id = 'gold' AND image_url LIKE '%hindu%'`);
+            db.run(`UPDATE packages_new SET image_url = 'assets/images/sound-lighting.jpg' WHERE id = 'silver' AND image_url LIKE '%munnar%'`);
+            db.run(`UPDATE packages_new SET image_url = 'assets/images/stage-production.jpg' WHERE id = 'premium-plus' AND image_url LIKE '%corporate%'`);
 });
 
 const ADVANCE_PERCENTAGE = 0.25;
@@ -360,108 +463,124 @@ app.get('/api/public/packages', (req, res) => {
     });
 });
 
+// Get Gallery Images for public frontend
+app.get('/api/public/gallery', (req, res) => {
+    const category = req.query.category;
+    if (category && category !== 'all' && category !== 'ALL') {
+        db.all(`SELECT * FROM gallery WHERE LOWER(category) = LOWER(?) ORDER BY display_order ASC, created_at DESC`, [category], (err, rows) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json(rows);
+        });
+    } else {
+        db.all(`SELECT * FROM gallery ORDER BY display_order ASC, created_at DESC`, [], (err, rows) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json(rows);
+        });
+    }
+});
+
 app.post('/api/enquiries', (req, res) => {
-    const { name, email, phone, message } = req.body;
+    const { name, email, phone, message } = req.body || {};
+    
+    // Validate name
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 100) {
+        return res.status(400).json({ error: 'Please provide a valid name between 2 and 100 characters.' });
+    }
+
+    // Validate phone
+    const trimmedPhone = typeof phone === 'string' ? phone.trim() : '';
+    const digitsOnly = trimmedPhone.replace(/\D/g, '');
+    if (!trimmedPhone || digitsOnly.length < 7 || digitsOnly.length > 15) {
+        return res.status(400).json({ error: 'Please provide a valid contact telephone number.' });
+    }
+
+    // Validate email if provided
+    const trimmedEmail = typeof email === 'string' ? email.trim() : '';
+    if (trimmedEmail) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 120) {
+            return res.status(400).json({ error: 'Please provide a valid email address.' });
+        }
+    }
+
+    // Sanitize message
+    const trimmedMessage = typeof message === 'string' ? message.trim().slice(0, 2000) : '';
+
     db.run(
         `INSERT INTO enquiries (name, email, phone, message) VALUES (?, ?, ?, ?)`,
-        [name, email, phone, message],
+        [trimmedName, trimmedEmail, trimmedPhone, trimmedMessage],
         function(err) {
-            if (err) return res.status(500).json({ error: 'Database error' });
-            res.json({ success: true });
+            if (err) return res.status(500).json({ error: 'Failed to submit enquiry. Please try again later.' });
+            res.json({ success: true, id: this.lastID });
         }
     );
 });
 
-// Create Razorpay Order
-app.post('/api/create-order', async (req, res) => {
-    try {
-        const data = req.body;
-        
-        db.get(`SELECT * FROM packages_new WHERE id = ? AND status = 'ACTIVE'`, [data.package_id], async (err, pkg) => {
-            if (err) return res.status(500).json({ error: 'Database error' });
-            if (!pkg) return res.status(400).json({ error: 'Invalid package selected' });
-
-            const package_amount = pkg.price_from; // Booking uses base price for calculation
-            const advance_amount = package_amount * ADVANCE_PERCENTAGE;
-            const balance_amount = package_amount - advance_amount;
-
-            const options = {
-                amount: Math.round(advance_amount * 100), 
-                currency: 'INR',
-                receipt: `rcpt_${uuidv4().substring(0, 8)}`,
-            };
-
-            let order;
-            try {
-                if (!razorpay) {
-                    return res.status(503).json({ error: 'Payment service is temporarily unavailable' });
-                }
-                order = await razorpay.orders.create(options);
-            } catch (rzpErr) {
-                return res.status(500).json({ error: 'Failed to create payment order with Razorpay.' });
-            }
-
-            const booking_id = `BDE-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
-
-            const stmt = db.prepare(`
-                INSERT INTO bookings (
-                    booking_id, customer_name, email, phone, whatsapp, event_type, guest_count,
-                    event_date, start_time, end_time, venue_name, venue_address, location, district, state,
-                    package_id, package_name, package_amount, advance_amount, balance_amount,
-                    additional_requirements, notes, razorpay_order_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `);
-            
-            stmt.run(
-                booking_id, data.customer_name, data.email, data.phone, data.whatsapp, data.event_type, data.guest_count,
-                data.event_date, data.start_time, data.end_time, data.venue_name, data.venue_address, data.location, data.district, data.state,
-                data.package_id, pkg.name, package_amount, advance_amount, balance_amount,
-                data.additional_requirements, data.notes, order.id,
-                function(err) {
-                    if (err) return res.status(500).json({ error: 'Database error while saving booking.' });
-                    res.json({ success: true, order_id: order.id, amount: options.amount, key_id: process.env.RAZORPAY_KEY_ID, booking_id: booking_id, customer: { name: data.customer_name, email: data.email, contact: data.phone } });
-                }
-            );
-            stmt.finalize();
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-app.post('/api/verify-payment', (req, res) => {
-    try {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, booking_id } = req.body;
-        const secret = process.env.RAZORPAY_KEY_SECRET;
-        
-        if (!secret) {
-            return res.status(503).json({ error: 'Payment service is temporarily unavailable' });
-        }
-        
-        const hmac = crypto.createHmac('sha256', secret);
-        hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
-        const generated_signature = hmac.digest('hex');
-
-        if (generated_signature === razorpay_signature) {
-            db.run(`UPDATE bookings SET status = 'CONFIRMED', payment_status = 'PAID', razorpay_payment_id = ?, razorpay_signature = ?, amount_paid = advance_amount WHERE razorpay_order_id = ? AND booking_id = ?`, 
-                [razorpay_payment_id, razorpay_signature, razorpay_order_id, booking_id], function(err) {
-                if (err) return res.status(500).json({ success: false, message: 'DB Error' });
-                res.json({ success: true, message: 'Payment verified and booking confirmed.' });
-            });
-        } else {
-            db.run(`UPDATE bookings SET status = 'PAYMENT FAILED', payment_status = 'FAILED' WHERE razorpay_order_id = ?`, [razorpay_order_id]);
-            res.status(400).json({ success: false, message: 'Invalid payment signature.' });
-        }
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-});
-
+// Secure Booking Lookup (Admin authenticated or verified customer status lookup only)
 app.get('/api/booking/:booking_id', (req, res) => {
-    db.get(`SELECT * FROM bookings WHERE booking_id = ?`, [req.params.booking_id], (err, row) => {
+    const bookingId = (req.params.booking_id || '').trim();
+    if (!bookingId || bookingId.length > 100) {
+        return res.status(400).json({ error: 'Invalid booking ID format.' });
+    }
+
+    // Check for Admin Bearer token authorization
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    let isAdmin = false;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, JWT_SECRET);
+            if (decoded && decoded.id) {
+                isAdmin = true;
+            }
+        } catch (e) {
+            // Invalid or expired token - do not treat as admin
+        }
+    }
+
+    // Customer verification: requires phone number matching the booking record
+    const verificationPhone = (req.query.phone || req.headers['x-booking-phone'] || '').toString().trim().replace(/[\s\-\+\(\)]/g, '');
+
+    // Unauthorized if neither admin nor verification phone provided
+    if (!isAdmin && !verificationPhone) {
+        return res.status(401).json({ error: 'Unauthorized: Admin authentication or phone verification required to view booking details.' });
+    }
+
+    db.get(`SELECT * FROM bookings WHERE booking_id = ?`, [bookingId], (err, row) => {
         if (err) return res.status(500).json({ error: 'Database error' });
         if (!row) return res.status(404).json({ error: 'Booking not found' });
-        res.json(row);
+
+        if (isAdmin) {
+            // Authorized admin gets full booking record
+            return res.json(row);
+        }
+
+        // Verify phone for customer access
+        const bookingPhoneClean = (row.phone || '').toString().trim().replace(/[\s\-\+\(\)]/g, '');
+        const bookingWaClean = (row.whatsapp || '').toString().trim().replace(/[\s\-\+\(\)]/g, '');
+
+        const phoneMatches = verificationPhone && (
+            (bookingPhoneClean && bookingPhoneClean.endsWith(verificationPhone.slice(-10))) ||
+            (bookingWaClean && bookingWaClean.endsWith(verificationPhone.slice(-10)))
+        );
+
+        if (!phoneMatches) {
+            return res.status(403).json({ error: 'Forbidden: Verification credentials do not match this booking.' });
+        }
+
+        // Return sanitized status info without sensitive PII
+        res.json({
+            booking_id: row.booking_id,
+            event_type: row.event_type,
+            event_date: row.event_date,
+            package_name: row.package_name,
+            status: row.status,
+            payment_status: row.payment_status,
+            guest_count: row.guest_count,
+            created_at: row.created_at
+        });
     });
 });
 
@@ -471,7 +590,7 @@ app.get('/api/booking/:booking_id', (req, res) => {
 // ==========================================
 
 app.post('/api/admin/login', (req, res) => {
-    const { username, password } = req.body;
+    const { username, password } = req.body || {};
     db.get(`SELECT * FROM admins WHERE username = ?`, [username], (err, user) => {
         if (err) return res.status(500).json({ error: 'Database error' });
         if (!user) return res.status(401).json({ error: 'Invalid credentials' });
@@ -495,13 +614,26 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Image Upload
+// Image Upload (Single)
 app.post('/api/admin/upload-image', authenticateToken, upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'Please upload an image file' });
     }
     const relativePath = 'assets/uploads/' + req.file.filename;
     res.json({ success: true, imageUrl: relativePath });
+});
+
+// Image Upload (Multiple files - up to 30 images at once)
+app.post('/api/admin/upload-multiple', authenticateToken, upload.array('images', 30), (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'Please select at least one image file to upload.' });
+    }
+    const uploadedFiles = req.files.map(file => ({
+        imageUrl: 'assets/uploads/' + file.filename,
+        originalName: file.originalname,
+        size: file.size
+    }));
+    res.json({ success: true, files: uploadedFiles });
 });
 
 // Categories CRUD
@@ -513,7 +645,7 @@ app.get('/api/admin/categories', authenticateToken, (req, res) => {
 });
 
 app.post('/api/admin/categories', authenticateToken, (req, res) => {
-    const { name, display_order, status } = req.body;
+    const { name, display_order, status } = req.body || {};
     db.run(`INSERT INTO categories (name, display_order, status) VALUES (?, ?, ?)`, [name, display_order || 0, status || 'ACTIVE'], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
         res.json({ success: true, id: this.lastID });
@@ -521,7 +653,7 @@ app.post('/api/admin/categories', authenticateToken, (req, res) => {
 });
 
 app.put('/api/admin/categories/:id', authenticateToken, (req, res) => {
-    const { name, display_order, status } = req.body;
+    const { name, display_order, status } = req.body || {};
     db.run(`UPDATE categories SET name = ?, display_order = ?, status = ? WHERE id = ?`, [name, display_order, status, req.params.id], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
         res.json({ success: true });
@@ -545,7 +677,7 @@ app.get('/api/admin/packages/:id', authenticateToken, (req, res) => {
 });
 
 app.post('/api/admin/packages', authenticateToken, (req, res) => {
-    const { id, name, category_id, theme, short_description, description, price_from, price_to, image_url, status, display_order, services } = req.body;
+    const { id, name, category_id, theme, short_description, description, price_from, price_to, image_url, status, display_order, services } = req.body || {};
     
     // Generate UUID if no ID provided
     const pkgId = id || uuidv4();
@@ -567,7 +699,7 @@ app.post('/api/admin/packages', authenticateToken, (req, res) => {
 });
 
 app.put('/api/admin/packages/:id', authenticateToken, (req, res) => {
-    const { name, category_id, theme, short_description, description, price_from, price_to, image_url, status, display_order, services } = req.body;
+    const { name, category_id, theme, short_description, description, price_from, price_to, image_url, status, display_order, services } = req.body || {};
     db.run(`UPDATE packages_new SET name = ?, category_id = ?, theme = ?, short_description = ?, description = ?, price_from = ?, price_to = ?, image_url = ?, status = ?, display_order = ? WHERE id = ?`,
         [name, category_id, theme || 'theme-bronze', short_description, description, price_from, price_to, image_url, status, display_order, req.params.id], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
@@ -591,7 +723,7 @@ app.put('/api/admin/packages/:id', authenticateToken, (req, res) => {
 });
 
 app.patch('/api/admin/packages/:id/status', authenticateToken, (req, res) => {
-    const { status } = req.body;
+    const { status } = req.body || {};
     if (!status) return res.status(400).json({ error: 'Status is required' });
     db.run(`UPDATE packages_new SET status = ? WHERE id = ?`, [status, req.params.id], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
@@ -653,7 +785,7 @@ app.get('/api/admin/packages/:id/services', authenticateToken, (req, res) => {
 });
 
 app.post('/api/admin/packages/:id/services', authenticateToken, (req, res) => {
-    const { category_group, service_name, display_order } = req.body;
+    const { category_group, service_name, display_order } = req.body || {};
     db.run(`INSERT INTO package_services (package_id, category_group, service_name, display_order) VALUES (?, ?, ?, ?)`, 
         [req.params.id, category_group, service_name, display_order || 0], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
@@ -668,19 +800,156 @@ app.delete('/api/admin/services/:id', authenticateToken, (req, res) => {
     });
 });
 
-// Other APIs (Dashboard, Bookings, Enquiries, Notes, Payments, Events) ...
+// Admin Dashboard API
 app.get('/api/admin/dashboard', authenticateToken, (req, res) => {
-    const stats = {};
+    const stats = {
+        totalBookings: 0,
+        pendingBookings: 0,
+        confirmedBookings: 0,
+        totalEnquiries: 0,
+        totalPackages: 0,
+        totalGallery: 0,
+        upcomingEvents: 0,
+        totalValue: 0,
+        totalAdvance: 0,
+        balanceDue: 0
+    };
     db.serialize(() => {
-        db.get(`SELECT COUNT(*) as total FROM bookings`, [], (err, row) => stats.totalBookings = row.total);
-        db.get(`SELECT COUNT(*) as pending FROM bookings WHERE status = 'PENDING PAYMENT'`, [], (err, row) => stats.pendingBookings = row.pending);
-        db.get(`SELECT COUNT(*) as confirmed FROM bookings WHERE status = 'CONFIRMED'`, [], (err, row) => stats.confirmedBookings = row.confirmed);
-        db.get(`SELECT SUM(package_amount) as val FROM bookings WHERE status != 'CANCELLED' AND status != 'PAYMENT FAILED'`, [], (err, row) => stats.totalValue = row.val || 0);
-        db.get(`SELECT SUM(amount_paid) as val FROM bookings`, [], (err, row) => stats.totalAdvance = row.val || 0);
-        db.get(`SELECT SUM(balance_amount) as val FROM bookings WHERE status != 'CANCELLED' AND status != 'PAYMENT FAILED'`, [], (err, row) => stats.balanceDue = row.val || 0);
-        db.get(`SELECT COUNT(*) as total FROM enquiries`, [], (err, row) => {
-            stats.totalEnquiries = row.total;
+        db.get(`SELECT COUNT(*) as total FROM bookings`, [], (err, row) => { if (row) stats.totalBookings = row.total || 0; });
+        db.get(`SELECT COUNT(*) as pending FROM bookings WHERE status LIKE '%PENDING%'`, [], (err, row) => { if (row) stats.pendingBookings = row.pending || 0; });
+        db.get(`SELECT COUNT(*) as confirmed FROM bookings WHERE status = 'CONFIRMED'`, [], (err, row) => { if (row) stats.confirmedBookings = row.confirmed || 0; });
+        db.get(`SELECT SUM(package_amount) as val FROM bookings WHERE status != 'CANCELLED' AND status != 'PAYMENT FAILED'`, [], (err, row) => { if (row) stats.totalValue = row.val || 0; });
+        db.get(`SELECT SUM(amount_paid) as val FROM bookings`, [], (err, row) => { if (row) stats.totalAdvance = row.val || 0; });
+        db.get(`SELECT SUM(balance_amount) as val FROM bookings WHERE status != 'CANCELLED' AND status != 'PAYMENT FAILED'`, [], (err, row) => { if (row) stats.balanceDue = row.val || 0; });
+        db.get(`SELECT COUNT(*) as total FROM enquiries`, [], (err, row) => { if (row) stats.totalEnquiries = row.total || 0; });
+        db.get(`SELECT COUNT(*) as total FROM packages_new WHERE status = 'ACTIVE'`, [], (err, row) => { if (row) stats.totalPackages = row.total || 0; });
+        db.get(`SELECT COUNT(*) as total FROM gallery`, [], (err, row) => { if (row) stats.totalGallery = row.total || 0; });
+        const todayStr = new Date().toISOString().split('T')[0];
+        db.get(`SELECT COUNT(*) as total FROM bookings WHERE event_date >= ?`, [todayStr], (err, row) => {
+            if (row) stats.upcomingEvents = row.total || 0;
             res.json(stats);
+        });
+    });
+});
+
+// Admin Gallery APIs
+app.get('/api/admin/gallery', authenticateToken, (req, res) => {
+    const category = req.query.category;
+    if (category && category !== 'all' && category !== 'ALL') {
+        db.all(`SELECT * FROM gallery WHERE LOWER(category) = LOWER(?) ORDER BY display_order ASC, created_at DESC, id DESC`, [category], (err, rows) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json(rows || []);
+        });
+    } else {
+        db.all(`SELECT * FROM gallery ORDER BY display_order ASC, created_at DESC, id DESC`, [], (err, rows) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json(rows || []);
+        });
+    }
+});
+
+// Single Photo Add
+app.post('/api/admin/gallery', authenticateToken, (req, res) => {
+    const { title, category, image_url, description, display_order } = req.body || {};
+    if (!title || !category || !image_url) {
+        return res.status(400).json({ error: 'Title, category, and image URL are required' });
+    }
+    db.run(
+        `INSERT INTO gallery (title, category, image_url, description, display_order) VALUES (?, ?, ?, ?, ?)`,
+        [title, category, image_url, description || '', parseInt(display_order, 10) || 0],
+        function(err) {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json({ success: true, id: this.lastID });
+        }
+    );
+});
+
+// Batch Add Multiple Photos to a Category
+app.post('/api/admin/gallery/batch', authenticateToken, (req, res) => {
+    const { category, items } = req.body || {};
+    if (!category || !Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: 'Category and a non-empty items array are required.' });
+    }
+
+    const stmt = db.prepare(`
+        INSERT INTO gallery (title, category, image_url, description, display_order)
+        VALUES (?, ?, ?, ?, ?)
+    `);
+
+    let count = 0;
+    db.serialize(() => {
+        items.forEach((item, idx) => {
+            const title = item.title && item.title.trim() ? item.title.trim() : `${category} Setup #${idx + 1}`;
+            const desc = item.description || '';
+            const order = parseInt(item.display_order, 10) || 0;
+            if (item.image_url) {
+                stmt.run(title, category, item.image_url, desc, order);
+                count++;
+            }
+        });
+
+        stmt.finalize((err) => {
+            if (err) return res.status(500).json({ error: 'Database error saving batch gallery images' });
+            res.json({ success: true, count });
+        });
+    });
+});
+
+// Reorder Gallery Images (Optional priority batch update)
+app.put('/api/admin/gallery/reorder', authenticateToken, (req, res) => {
+    const { items } = req.body || {};
+    if (!Array.isArray(items)) {
+        return res.status(400).json({ error: 'Items array required' });
+    }
+
+    const stmt = db.prepare(`UPDATE gallery SET display_order = ? WHERE id = ?`);
+    db.serialize(() => {
+        items.forEach(it => {
+            stmt.run(parseInt(it.display_order, 10) || 0, it.id);
+        });
+        stmt.finalize((err) => {
+            if (err) return res.status(500).json({ error: 'Database error updating display order' });
+            res.json({ success: true });
+        });
+    });
+});
+
+app.put('/api/admin/gallery/:id', authenticateToken, (req, res) => {
+    const { title, category, image_url, description, display_order } = req.body || {};
+    db.run(
+        `UPDATE gallery SET title = ?, category = ?, image_url = ?, description = ?, display_order = ? WHERE id = ?`,
+        [title, category, image_url, description || '', parseInt(display_order, 10) || 0, req.params.id],
+        function(err) {
+            if (err) return res.status(500).json({ error: 'Database error' });
+            res.json({ success: true });
+        }
+    );
+});
+
+app.delete('/api/admin/gallery/:id', authenticateToken, (req, res) => {
+    db.get(`SELECT image_url FROM gallery WHERE id = ?`, [req.params.id], (err, row) => {
+        if (err) return res.status(500).json({ error: 'Database error' });
+        if (!row) return res.status(404).json({ error: 'Gallery photo not found' });
+
+        const imageUrl = row.image_url;
+
+        db.run(`DELETE FROM gallery WHERE id = ?`, [req.params.id], function(delErr) {
+            if (delErr) return res.status(500).json({ error: 'Database error' });
+
+            // Filesystem Safety: Strictly ensure file is confined within public/assets/uploads
+            if (imageUrl && typeof imageUrl === 'string') {
+                const uploadsDir = path.resolve(__dirname, 'public', 'assets', 'uploads');
+                const resolvedTarget = path.resolve(__dirname, 'public', imageUrl);
+                if (resolvedTarget.startsWith(uploadsDir + path.sep)) {
+                    fs.unlink(resolvedTarget, (unlinkErr) => {
+                        if (unlinkErr && unlinkErr.code !== 'ENOENT') {
+                            console.error('Failed to unlink gallery file:', unlinkErr.message);
+                        }
+                    });
+                }
+            }
+
+            res.json({ success: true });
         });
     });
 });
@@ -693,7 +962,7 @@ app.get('/api/admin/bookings', authenticateToken, (req, res) => {
 });
 
 app.put('/api/admin/bookings/:id', authenticateToken, (req, res) => {
-    const { status, payment_status } = req.body;
+    const { status, payment_status } = req.body || {};
     db.run(`UPDATE bookings SET status = ?, payment_status = ? WHERE booking_id = ?`, 
         [status, payment_status, req.params.id], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
@@ -709,7 +978,7 @@ app.get('/api/admin/enquiries', authenticateToken, (req, res) => {
 });
 
 app.put('/api/admin/enquiries/:id', authenticateToken, (req, res) => {
-    const { status } = req.body;
+    const { status } = req.body || {};
     db.run(`UPDATE enquiries SET status = ? WHERE id = ?`, [status, req.params.id], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
         res.json({ success: true });
@@ -717,7 +986,7 @@ app.put('/api/admin/enquiries/:id', authenticateToken, (req, res) => {
 });
 
 app.post('/api/admin/notes', authenticateToken, (req, res) => {
-    const { entity_type, entity_id, note } = req.body;
+    const { entity_type, entity_id, note } = req.body || {};
     db.run(`INSERT INTO admin_notes (entity_type, entity_id, note) VALUES (?, ?, ?)`,
         [entity_type, entity_id, note], function(err) {
         if (err) return res.status(500).json({ error: 'Database error' });
@@ -754,14 +1023,14 @@ app.get('/api/admin/reports', authenticateToken, async (req, res) => {
         let params = [];
         
         if (startDate && endDate) {
-            dateFilter = "WHERE date(created_at) >= ? AND date(created_at) <= ?";
-            params = [startDate, endDate];
+            dateFilter = "WHERE created_at >= ? AND created_at <= ?";
+            params = [`${startDate} 00:00:00`, `${endDate} 23:59:59`];
         } else if (startDate) {
-            dateFilter = "WHERE date(created_at) >= ?";
-            params = [startDate];
+            dateFilter = "WHERE created_at >= ?";
+            params = [`${startDate} 00:00:00`];
         } else if (endDate) {
-            dateFilter = "WHERE date(created_at) <= ?";
-            params = [endDate];
+            dateFilter = "WHERE created_at <= ?";
+            params = [`${endDate} 23:59:59`];
         }
 
         const queryAsync = (sql, p = []) => new Promise((resolve, reject) => {
@@ -842,6 +1111,29 @@ app.get('/api/admin/reports', authenticateToken, async (req, res) => {
         console.error("Reports API error:", err);
         res.status(500).json({ error: 'Failed to generate report' });
     }
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('[UNHANDLED ERROR]', err.message);
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    // Graceful handling of Multer file upload errors
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'File too large. Maximum file size allowed is 10MB.' });
+        }
+        return res.status(400).json({ error: `Upload error: ${err.message}` });
+    }
+
+    const status = err.status || err.statusCode || 500;
+    res.status(status).json({
+        error: process.env.NODE_ENV === 'production' && status === 500
+            ? 'An internal server error occurred.' 
+            : err.message
+    });
 });
 
 app.listen(PORT, () => {

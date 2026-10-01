@@ -39,15 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 1. STICKY NAVIGATION
-    const nav = document.querySelector('.site-nav');
-    
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-    });
+    const nav = document.querySelector('.site-nav, .navbar');
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    }
 
     // 2. MOBILE MENU TOGGLE & ACCESSIBILITY
     const menuToggle = document.querySelector('.hamburger');

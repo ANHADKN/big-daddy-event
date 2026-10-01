@@ -2,7 +2,7 @@
   "name": "big-daddy",
   "version": "1.0.0",
   "description": "",
-  "main": "add_header_footer.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,8 +19,11 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",
     "pg": "^8.23.0",
-    "razorpay": "^2.9.8",
     "sqlite3": "^6.0.1",
     "uuid": "^14.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "sharp": "^0.35.5"
   }
 }

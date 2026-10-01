@@ -2,108 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Payments - Big Daddy Events Admin</title>
-    <link rel="stylesheet" href="admin.css">
-</head>
-<body class="admin-layout">
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <img src="../assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events">
-            <h3>ADMIN PORTAL</h3>
-        </div>
-        <nav class="sidebar-nav">
-            <a href="index.html" class="nav-item">Dashboard</a>
-            <a href="bookings.html" class="nav-item">Bookings</a>
-            <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item active">Payments</a>
-            <a href="events.html" class="nav-item">Upcoming Events</a>
-            <a href="packages.html" class="nav-item">Packages</a>`n            <a href="reports.html" class="nav-item">Reports</a>
-        </nav>
-        <div class="sidebar-bottom">
-            <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <header class="admin-header">
-            <h1 class="page-title">Payments Overview</h1>
-        </header>
-
-        <div class="content-body">
-            <div class="dashboard-grid">
-                <div class="stat-card">
-                    <h4>Total Advance Received</h4>
-                    <div class="value highlight" id="stat-advance">...</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Total Balance Due</h4>
-                    <div class="value" id="stat-balance">...</div>
-                </div>
-            </div>
-
-            <div class="table-container">
-                <div class="table-header-actions">
-                    <h3 style="font-family: var(--font-display); color: var(--color-primary);">Payment History (Razorpay)</h3>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Booking ID</th>
-                            <th>Customer</th>
-                            <th>Total Amount</th>
-                            <th>Paid (Advance)</th>
-                            <th>Status</th>
-                            <th>Payment ID</th>
-                        </tr>
-                    </thead>
-                    <tbody id="paymentsTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <script src="admin.js"></script>
+    <title>Redirecting - Big Daddy Events Admin</title>
+    <meta http-equiv="refresh" content="0; url=bookings.html">
     <script>
-        async function loadPayments() {
-            try {
-                const [payRes, dashRes] = await Promise.all([
-                    fetchWithAuth('/api/admin/payments'),
-                    fetchWithAuth('/api/admin/dashboard')
-                ]);
-                
-                const payments = await payRes.json();
-                const stats = await dashRes.json();
-                
-                document.getElementById('stat-advance').textContent = formatCurrency(stats.totalAdvance);
-                document.getElementById('stat-balance').textContent = formatCurrency(stats.balanceDue);
-
-                const tbody = document.getElementById('paymentsTableBody');
-                tbody.innerHTML = '';
-
-                payments.forEach(p => {
-                    const tr = document.createElement('tr');
-                    let badgeClass = p.payment_status === 'PAID' ? 'paid' : (p.payment_status === 'FAILED' ? 'unpaid' : 'pending');
-                    
-                    tr.innerHTML = `
-                        <td>${formatDate(p.created_at)}</td>
-                        <td><strong>${p.booking_id}</strong></td>
-                        <td>${p.customer_name}</td>
-                        <td>${formatCurrency(p.package_amount)}</td>
-                        <td>${formatCurrency(p.amount_paid)}</td>
-                        <td><span class="badge ${badgeClass}">${p.payment_status}</span></td>
-                        <td style="font-size: 0.8rem; font-family: monospace;">${p.razorpay_payment_id || '-'}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', loadPayments);
+        window.location.replace("bookings.html");
     </script>
+</head>
+<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #fbfbf9; color: #2C3E2D;">
+    <div style="text-align: center;">
+        <h2 style="font-family: Georgia, serif; margin-bottom: 0.5rem;">Online Payments Deactivated</h2>
+        <p style="color: #666;">Redirecting to Bookings...</p>
+        <p><a href="bookings.html" style="color: #2C3E2D; font-weight: bold;">Click here if not redirected</a></p>
+    </div>
 </body>
 </html>
 

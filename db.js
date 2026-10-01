@@ -1,12 +1,22 @@
 const path = require('path');
 
 function createDbConnection() {
-    if (process.env.DATABASE_URL) {
-        console.log('Connecting to PostgreSQL database (Production Mode)...');
+    // Database Selection Architecture:
+    // Defaults to 'sqlite' for local development.
+    // Set DB_CLIENT=postgres (or NODE_ENV=production with DATABASE_URL) for PostgreSQL.
+    const dbClient = (process.env.DB_CLIENT || (process.env.NODE_ENV === 'production' && process.env.DATABASE_URL ? 'postgres' : 'sqlite')).toLowerCase();
+    const usePostgres = dbClient === 'postgres' && Boolean(process.env.DATABASE_URL);
+
+    if (dbClient === 'postgres' && !process.env.DATABASE_URL) {
+        console.error('[DATABASE CONFIG ERROR] DB_CLIENT is set to "postgres" but DATABASE_URL is not set. Falling back to SQLite.');
+    }
+
+    if (usePostgres) {
+        console.log('Connecting to PostgreSQL database (Production / PostgreSQL Mode)...');
         const { Pool } = require('pg');
         const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
-            ssl: { rejectUnauthorized: false }
+            ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false }
         });
 
         // Translate sqlite ? params to postgres $1, $2 params
@@ -14,9 +24,6 @@ function createDbConnection() {
             let i = 1;
             return sql.replace(/\?/g, () => `$${i++}`);
         };
-
-        // Queue for serialize execution
-        let serializeQueue = Promise.resolve();
 
         const db = {
             run: function(sql, params, callback) {
@@ -34,11 +41,32 @@ function createDbConnection() {
                     pgSql = pgSql.replace(/REAL/gi, 'NUMERIC');
                 }
 
+                // Check for INSERT query to emulate SQLite's this.lastID via RETURNING id
+                const isInsert = /^\s*INSERT\s+INTO\s+/i.test(pgSql);
+                const hasReturning = /\bRETURNING\b/i.test(pgSql);
+                if (isInsert && !hasReturning) {
+                    pgSql = pgSql.trim().replace(/;?\s*$/, '') + ' RETURNING id;';
+                }
+
                 pool.query(pgSql, params || [])
                     .then(res => {
-                        if (callback) callback.call({ changes: res.rowCount }, null);
+                        const lastID = (res.rows && res.rows[0] && res.rows[0].id) ? res.rows[0].id : null;
+                        if (callback) callback.call({ changes: res.rowCount, lastID: lastID }, null);
                     })
                     .catch(err => {
+                        // If RETURNING id failed because table has no id column, retry with original query
+                        if (isInsert && !hasReturning && err.message && err.message.includes('column "id" does not exist')) {
+                            const fallbackSql = translateQuery(sql);
+                            pool.query(fallbackSql, params || [])
+                                .then(res => {
+                                    if (callback) callback.call({ changes: res.rowCount }, null);
+                                })
+                                .catch(fallbackErr => {
+                                    if (callback) callback(fallbackErr);
+                                    else console.error("Database run error:", fallbackErr.message);
+                                });
+                            return;
+                        }
                         if (callback) {
                             callback(err);
                         } else {
@@ -78,8 +106,6 @@ function createDbConnection() {
                 return this;
             },
             serialize: function(callback) {
-                // For PostgreSQL, serialize just executes normally since standard queries are fast enough,
-                // but schema creation could technically race. Since we use IF NOT EXISTS, it's generally safe.
                 callback();
                 return this;
             },
@@ -91,6 +117,9 @@ function createDbConnection() {
                         let params = args;
                         if (args.length > 0 && typeof args[args.length - 1] === 'function') {
                             callback = args.pop();
+                        }
+                        if (params.length === 1 && Array.isArray(params[0])) {
+                            params = params[0];
                         }
                         pool.query(pgSql, params)
                             .then(res => { if(callback) callback(null); })

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css?v=20260912">
+    <link rel="preload" as="image" href="assets/images/hero/home-page.webp" type="image/webp" fetchpriority="high">
 </head>
 <body>
 
@@ -17,7 +18,10 @@
     <div class="cinematic-entrance-overlay" id="cinematicEntranceOverlay" role="dialog" aria-modal="true" aria-label="Big Daddy Events Entrance">
         <div class="entrance-container">
             <div class="entrance-logo-frame">
-                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="entrance-logo-img">
+                <picture>
+                    <source srcset="assets/images/big_daddy_events_logo_1200x628.webp" type="image/webp">
+                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="entrance-logo-img" width="1200" height="628">
+                </picture>
             </div>
             <div class="entrance-gold-line" aria-hidden="true"></div>
             <div class="entrance-brand-tag" aria-hidden="true">LUXURY WEDDINGS &amp; EVENTS &bull; MUNNAR</div>
@@ -51,7 +55,12 @@
 
     <!-- NAVIGATION -->
     <nav class="site-nav">
-        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <a href="index.html" class="logo">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/big-daddy-events-logo-white.png">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img">
+            </picture>
+        </a>
         <div class="nav-links">
             <a href="index.html" class="active">HOME</a>
             <a href="packages.html">PACKAGES</a>
@@ -79,13 +88,34 @@
     </div>
 
     <!-- HERO -->
-    <section class="hero" style="position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.6) 100%); z-index: 0;"></div>
-        <img src="assets/images/hero/home-page.png" alt="Big Daddy Events luxury destination event in Munnar Kerala" class="hero-image" loading="eager" decoding="async" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;">
+    <section class="hero">
+        <picture class="hero-media-wrap">
+            <source srcset="assets/images/hero/home-page.webp" type="image/webp">
+            <img src="assets/images/hero/home-page.png" alt="Big Daddy Events luxury destination event in Munnar Kerala" class="hero-image" width="1536" height="1024" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+        <div class="hero-desktop-overlay"></div>
+        <div class="hero-mobile-vignette"></div>
+        <div class="hero-mobile-dissolve-scrim"></div>
         
-        <div class="hero-hotspots" style="z-index: 1;">
+        <!-- Desktop Hotspots (preserved exactly for desktop screens) -->
+        <div class="hero-hotspots">
             <a href="contact.html" aria-label="Plan Your Wedding" class="hotspot-btn btn-plan"></a>
             <a href="packages.html" aria-label="Explore Packages" class="hotspot-btn btn-explore"></a>
+        </div>
+
+        <!-- Deliberate Mobile Luxury Hero Composition -->
+        <div class="hero-content-mobile">
+            <div class="mobile-hero-badge">
+                <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" width="220" height="115" loading="eager" decoding="async">
+            </div>
+            <span class="mobile-hero-location">MUNNAR &bull; KERALA &bull; INDIA</span>
+            <h1 class="mobile-hero-title">BIG DADDY<br>EVENTS</h1>
+            <div class="mobile-hero-divider"><span>♦</span></div>
+            <p class="mobile-hero-tagline">LUXURY WEDDINGS &amp; EVENTS</p>
+            <div class="mobile-hero-ctas">
+                <a href="contact.html" class="mobile-btn-primary">PLAN YOUR WEDDING &rarr;</a>
+                <a href="packages.html" class="mobile-btn-secondary">EXPLORE PACKAGES</a>
+            </div>
         </div>
     </section>
 
@@ -135,13 +165,22 @@
             
             <div class="destination-visual">
                 <div class="destination-main-image clip-reveal">
-                    <img src="assets/images/munnar-main-destination-wedding.png" alt="Main destination wedding in Munnar">
+                    <picture>
+                        <source srcset="assets/images/munnar-main-destination-wedding.webp" type="image/webp">
+                        <img src="assets/images/munnar-main-destination-wedding.png" alt="Main destination wedding in Munnar" width="1024" height="1024" loading="lazy" decoding="async">
+                    </picture>
                 </div>
                 <div class="destination-secondary-image clip-reveal" style="transition-delay: 0.2s;">
-                    <img src="assets/images/munnar-intimate-wedding.png" alt="Intimate wedding atmosphere">
+                    <picture>
+                        <source srcset="assets/images/munnar-intimate-wedding.webp" type="image/webp">
+                        <img src="assets/images/munnar-intimate-wedding.png" alt="Intimate wedding atmosphere" width="1024" height="1024" loading="lazy" decoding="async">
+                    </picture>
                 </div>
                 <div class="destination-wedding-image clip-reveal" style="transition-delay: 0.4s;">
-                    <img src="assets/images/munnar-valley-wedding.png" alt="Munnar valley landscape">
+                    <picture>
+                        <source srcset="assets/images/munnar-valley-wedding.webp" type="image/webp">
+                        <img src="assets/images/munnar-valley-wedding.png" alt="Munnar valley landscape" width="1024" height="1024" loading="lazy" decoding="async">
+                    </picture>
                 </div>
             </div>
         </div>
@@ -188,17 +227,26 @@
             <div class="wwd-editorial-gallery">
                 <div class="wwd-editorial-main">
                     <div class="img-wrapper">
-                        <img src="assets/images/hindu-destination-wedding.jpg" alt="Luxury Hindu destination wedding in Munnar">
+                        <picture>
+                            <source srcset="assets/images/hindu-destination-wedding.webp" type="image/webp">
+                            <img src="assets/images/hindu-destination-wedding.jpg" alt="Luxury Hindu destination wedding in Munnar" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="wwd-editorial-left">
                     <div class="img-wrapper">
-                        <img src="assets/images/christian-destination-wedding.jpg" alt="Luxury Christian destination wedding in Munnar">
+                        <picture>
+                            <source srcset="assets/images/christian-destination-wedding.webp" type="image/webp">
+                            <img src="assets/images/christian-destination-wedding.jpg" alt="Luxury Christian destination wedding in Munnar" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="wwd-editorial-right">
                     <div class="img-wrapper">
-                        <img src="assets/images/muslim-destination-wedding.jpg" alt="Luxury Muslim destination wedding in Munnar">
+                        <picture>
+                            <source srcset="assets/images/muslim-destination-wedding.webp" type="image/webp">
+                            <img src="assets/images/muslim-destination-wedding.jpg" alt="Luxury Muslim destination wedding in Munnar" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
             </div>
@@ -253,27 +301,42 @@
             <div class="exp-grid">
                 <div class="exp-item exp-tall clip-reveal">
                     <div class="image-slot dark-slot img-scale">
-                        <img src="assets/images/event-live-concert.jpg" alt="Luxury live concert and stage production by Big Daddy Events">
+                        <picture>
+                            <source srcset="assets/images/event-live-concert.webp" type="image/webp">
+                            <img src="assets/images/event-live-concert.jpg" alt="Luxury live concert and stage production by Big Daddy Events" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="exp-item exp-wide clip-reveal" style="transition-delay: 0.1s;">
                     <div class="image-slot img-scale">
-                        <img src="assets/images/event-corporate-gala.jpg" alt="Luxury corporate gala event by Big Daddy Events">
+                        <picture>
+                            <source srcset="assets/images/event-corporate-gala.webp" type="image/webp">
+                            <img src="assets/images/event-corporate-gala.jpg" alt="Luxury corporate gala event by Big Daddy Events" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="exp-item exp-square clip-reveal" style="transition-delay: 0.2s;">
                     <div class="image-slot dark-slot img-scale">
-                        <img src="assets/images/event-private-celebration.jpg" alt="Luxury private celebration event by Big Daddy Events">
+                        <picture>
+                            <source srcset="assets/images/event-private-celebration.webp" type="image/webp">
+                            <img src="assets/images/event-private-celebration.jpg" alt="Luxury private celebration event by Big Daddy Events" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="exp-item exp-square clip-reveal" style="transition-delay: 0.3s;">
                     <div class="image-slot img-scale">
-                        <img src="assets/images/event-entertainment.jpg" alt="Luxury cultural entertainment event by Big Daddy Events">
+                        <picture>
+                            <source srcset="assets/images/event-entertainment.webp" type="image/webp">
+                            <img src="assets/images/event-entertainment.jpg" alt="Luxury cultural entertainment event by Big Daddy Events" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
                 <div class="exp-item exp-wide clip-reveal" style="transition-delay: 0.4s;">
                     <div class="image-slot dark-slot img-scale">
-                        <img src="assets/images/event-destination-outdoor.jpg" alt="Luxury outdoor destination event in Munnar by Big Daddy Events">
+                        <picture>
+                            <source srcset="assets/images/event-destination-outdoor.webp" type="image/webp">
+                            <img src="assets/images/event-destination-outdoor.jpg" alt="Luxury outdoor destination event in Munnar by Big Daddy Events" width="1024" height="1024" loading="lazy" decoding="async">
+                        </picture>
                     </div>
                 </div>
             </div>
@@ -301,7 +364,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
+                    <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" class="footer-logo-img">
                     <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
                 </div>
                 <div class="footer-col">
@@ -318,7 +381,7 @@
                     <h4>CONTACT</h4>
                     <ul>
                         <li><p>Munnar, Kerala, India</p></li>
-                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="mailto:bigdaddyevents01@gmail.com">bigdaddyevents01@gmail.com</a></li>
                         <li><a href="tel:+917034252988">+91 70342 52988</a></li>
                     </ul>
                 </div>

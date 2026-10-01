@@ -15,9 +15,10 @@
             <a href="index.html" class="nav-item">Dashboard</a>
             <a href="bookings.html" class="nav-item">Bookings</a>
             <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="gallery.html" class="nav-item">Gallery</a>
             <a href="events.html" class="nav-item active">Upcoming Events</a>
-            <a href="packages.html" class="nav-item">Packages</a>`n            <a href="reports.html" class="nav-item">Reports</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="reports.html" class="nav-item">Reports</a>
         </nav>
         <div class="sidebar-bottom">
             <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
@@ -26,7 +27,13 @@
 
     <main class="main-content">
         <header class="admin-header">
-            <h1 class="page-title">Upcoming Events Schedule</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary);">&#9776;</button>
+                <h1 class="page-title">Upcoming Events Schedule</h1>
+            </div>
+            <div class="header-actions">
+                <span class="admin-badge">Admin Portal</span>
+            </div>
         </header>
 
         <div class="content-body">

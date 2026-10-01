@@ -29,9 +29,10 @@
             <a href="index.html" class="nav-item">Dashboard</a>
             <a href="bookings.html" class="nav-item active">Bookings</a>
             <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="gallery.html" class="nav-item">Gallery</a>
             <a href="events.html" class="nav-item">Upcoming Events</a>
-            <a href="packages.html" class="nav-item">Packages</a>`n            <a href="reports.html" class="nav-item">Reports</a>
+            <a href="packages.html" class="nav-item">Packages</a>
+            <a href="reports.html" class="nav-item">Reports</a>
         </nav>
         <div class="sidebar-bottom">
             <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
@@ -41,7 +42,13 @@
     <!-- MAIN CONTENT -->
     <main class="main-content">
         <header class="admin-header">
-            <h1 class="page-title">Bookings Management</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary);">&#9776;</button>
+                <h1 class="page-title">Bookings Management</h1>
+            </div>
+            <div class="header-actions">
+                <span class="admin-badge">Admin Portal</span>
+            </div>
         </header>
 
         <div class="content-body">
@@ -100,30 +107,21 @@
                     <div class="detail-row"><span>Venue:</span> <span id="md-venue"></span></div>
                 </div>
                 <div class="detail-section">
-                    <h4>PACKAGE & PAYMENT</h4>
+                    <h4>PACKAGE DETAILS</h4>
                     <div class="detail-row"><span>Package:</span> <span id="md-pkg"></span></div>
-                    <div class="detail-row"><span>Total:</span> <span id="md-total"></span></div>
-                    <div class="detail-row"><span>Advance Paid:</span> <span id="md-advance"></span></div>
-                    <div class="detail-row"><span>Balance:</span> <span id="md-balance"></span></div>
+                    <div class="detail-row"><span>Investment:</span> <span id="md-total"></span></div>
                 </div>
                 <div class="detail-section">
                     <h4>STATUS & ADMIN</h4>
                     <div class="detail-row"><span>Booking Status:</span> 
                         <select id="updateStatusSel">
-                            <option value="PENDING PAYMENT">PENDING PAYMENT</option>
+                            <option value="PENDING">PENDING</option>
                             <option value="CONFIRMED">CONFIRMED</option>
                             <option value="CANCELLED">CANCELLED</option>
                         </select>
                     </div>
-                    <div class="detail-row"><span>Payment Status:</span> 
-                        <select id="updatePaymentSel">
-                            <option value="UNPAID">UNPAID</option>
-                            <option value="PAID">PAID</option>
-                            <option value="FAILED">FAILED</option>
-                        </select>
-                    </div>
-                    <button class="btn-primary" style="padding: 0.5rem; margin-top: 1rem; width: 100%;" onclick="updateBooking()">UPDATE STATUS</button>
-                    <button class="btn-primary" style="padding: 0.5rem; margin-top: 0.5rem; width: 100%; background: transparent; color: var(--color-primary);" onclick="printReceipt()">PRINT RECEIPT</button>
+                    <button class="btn-primary" style="padding: 0.75rem; margin-top: 1rem; width: 100%;" onclick="updateBooking()">UPDATE STATUS</button>
+                    <button class="btn-primary" style="padding: 0.75rem; margin-top: 0.5rem; width: 100%; background: transparent; color: var(--color-primary); border-color: rgba(6, 45, 36, 0.2);" onclick="printReceipt()">PRINT DETAILS</button>
                 </div>
             </div>
             
@@ -205,11 +203,8 @@
             
             document.getElementById('md-pkg').textContent = b.package_name;
             document.getElementById('md-total').textContent = formatCurrency(b.package_amount);
-            document.getElementById('md-advance').textContent = formatCurrency(b.amount_paid);
-            document.getElementById('md-balance').textContent = formatCurrency(b.balance_amount);
 
-            document.getElementById('updateStatusSel').value = b.status;
-            document.getElementById('updatePaymentSel').value = b.payment_status;
+            document.getElementById('updateStatusSel').value = b.status || 'PENDING';
 
             loadNotes();
             openModal('bookingModal');
@@ -217,11 +212,10 @@
 
         async function updateBooking() {
             const status = document.getElementById('updateStatusSel').value;
-            const pStatus = document.getElementById('updatePaymentSel').value;
             try {
                 const res = await fetchWithAuth(`/api/admin/bookings/${currentBookingId}`, {
                     method: 'PUT',
-                    body: JSON.stringify({ status, payment_status: pStatus })
+                    body: JSON.stringify({ status })
                 });
                 if (res.ok) {
                     alert('Booking updated successfully.');
@@ -280,7 +274,7 @@
                     <div style="text-align:center; border-bottom: 2px solid #C8A45D; padding-bottom: 20px; margin-bottom: 30px;">
                         <h1 style="margin:0; font-size:32px;">BIG DADDY EVENTS</h1>
                         <p style="margin:5px 0 0 0; font-family: 'Manrope', sans-serif;">Your Celebration. Our Craft.</p>
-                        <p style="margin:10px 0 0 0; font-family: 'Manrope', sans-serif; font-weight: 600;">BOOKING RECEIPT</p>
+                        <p style="margin:10px 0 0 0; font-family: 'Manrope', sans-serif; font-weight: 600;">EVENT RESERVATION SUMMARY</p>
                     </div>
                     <div style="font-family: 'Manrope', sans-serif; line-height: 1.6;">
                         <p><strong>Booking ID:</strong> ${b.booking_id}</p>
@@ -289,9 +283,8 @@
                         <p><strong>Venue:</strong> ${b.venue_name}</p>
                         <hr style="border:0; border-top: 1px solid #C8A45D; margin:20px 0;">
                         <p><strong>Package:</strong> ${b.package_name}</p>
-                        <p><strong>Total Amount:</strong> ${formatCurrency(b.package_amount)}</p>
-                        <p><strong>Amount Paid:</strong> ${formatCurrency(b.amount_paid)} (${b.payment_status})</p>
-                        <p><strong>Balance Due:</strong> ${formatCurrency(b.balance_amount)}</p>
+                        <p><strong>Estimated Package:</strong> ${formatCurrency(b.package_amount)}</p>
+                        <p><strong>Reservation Status:</strong> ${b.status}</p>
                     </div>
                 </div>
             `;

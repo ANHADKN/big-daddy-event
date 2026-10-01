@@ -144,9 +144,10 @@
             <a href="index.html" class="nav-item">Dashboard</a>
             <a href="bookings.html" class="nav-item">Bookings</a>
             <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item">Payments</a>
+            <a href="gallery.html" class="nav-item">Gallery</a>
             <a href="events.html" class="nav-item">Upcoming Events</a>
-            <a href="packages.html" class="nav-item active">Packages</a>`n            <a href="reports.html" class="nav-item">Reports</a>
+            <a href="packages.html" class="nav-item active">Packages</a>
+            <a href="reports.html" class="nav-item">Reports</a>
         </nav>
         <div class="sidebar-bottom">
             <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
@@ -155,7 +156,13 @@
 
     <main class="main-content">
         <header class="admin-header">
-            <h1 class="page-title">Packages Management</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary);">&#9776;</button>
+                <h1 class="page-title">Packages Management</h1>
+            </div>
+            <div class="header-actions">
+                <span class="admin-badge">Admin Portal</span>
+            </div>
         </header>
 
         <div class="content-body">
@@ -372,7 +379,7 @@
 
             filtered.forEach(p => {
                 const badgeClass = p.status === 'ACTIVE' ? 'confirmed' : 'inactive';
-                const imgSrc = p.image_url ? `../${p.image_url}` : '../assets/images/placeholder.jpg';
+                const imgSrc = p.image_url ? (/^https?:\/\//i.test(p.image_url) ? p.image_url : `../${p.image_url.replace(/^\//, '')}`) : '../assets/images/placeholder.jpg';
                 const priceStr = p.price_from === p.price_to ? formatCurrency(p.price_from) : `${formatCurrency(p.price_from)} - ${formatCurrency(p.price_to)}`;
                 
                 const card = document.createElement('div');
@@ -456,7 +463,8 @@
             
             document.getElementById('pkgImageUrl').value = p.image_url || '';
             if (p.image_url) {
-                document.getElementById('imagePreviewContainer').innerHTML = `<img src="../${p.image_url}">`;
+                const resolved = /^https?:\/\//i.test(p.image_url) ? p.image_url : `../${p.image_url.replace(/^\//, '')}`;
+                document.getElementById('imagePreviewContainer').innerHTML = `<img src="${resolved}">`;
             } else {
                 document.getElementById('imagePreviewContainer').innerHTML = '<span style="color:#888;">No image selected</span>';
             }
@@ -586,7 +594,8 @@
                 
                 if (res.ok) {
                     document.getElementById('pkgImageUrl').value = data.imageUrl;
-                    document.getElementById('imagePreviewContainer').innerHTML = `<img src="../${data.imageUrl}">`;
+                    const resolved = /^https?:\/\//i.test(data.imageUrl) ? data.imageUrl : `../${data.imageUrl.replace(/^\//, '')}`;
+                    document.getElementById('imagePreviewContainer').innerHTML = `<img src="${resolved}">`;
                     status.textContent = "Upload successful!";
                     status.style.color = "green";
                 } else {

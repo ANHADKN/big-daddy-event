@@ -22,7 +22,8 @@
         .hero-cinematic {
             width: 100%; height: 70vh; margin-top: 4rem; overflow: hidden;
         }
-        .hero-cinematic img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-cinematic picture { display: block; width: 100%; height: 100%; }
+        .hero-cinematic img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
         /* WHAT WE DO */
         .about-services {
@@ -146,7 +147,7 @@
         .cta-buttons { display: flex; gap: 1rem; justify-content: center; }
 
         /* RESPONSIVE */
-        @media (max-width: 1199px) {
+        @media (max-width: 1399px) {
             .ecosystem-graphic { height: auto; flex-direction: column; gap: 2rem; }
             .ecosystem-center { width: 100%; max-width: 350px; height: 400px; border-radius: 0; }
             .eco-label { position: static; display: inline-block; margin: 0.5rem; font-size: 1rem; border: 1px solid rgba(200, 164, 93, 0.3); padding: 0.5rem 1rem; border-radius: 2rem; }
@@ -159,7 +160,39 @@
             .experience-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
-            .page-hero { padding: calc(6rem + var(--safe-top)) 4vw 3rem; }
+            .site-nav .logo img,
+            .logo .nav-logo-img,
+            .nav-logo-img {
+                height: 48px !important;
+                max-height: 48px !important;
+                max-width: 190px !important;
+            }
+            .site-nav .logo {
+                height: 48px;
+                max-height: 48px;
+            }
+            .page-hero { padding: calc(5rem + var(--safe-top)) 4vw 2.5rem; }
+            .hero-cinematic {
+                margin-top: 2rem;
+                height: 48vh;
+                min-height: 280px;
+                max-height: 420px;
+                border: none;
+            }
+            .page-hero h1 {
+                font-size: clamp(1.45rem, 6.2vw, 1.95rem);
+                line-height: 1.25;
+                letter-spacing: 0.03em;
+                word-break: normal;
+                overflow-wrap: break-word;
+                max-width: 340px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .page-hero p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
             .about-services, .about-approach, .about-why, .about-experience { padding: 4rem 4vw; }
             .about-ecosystem, .about-cta { padding: 5rem 4vw; }
             .service-grid { grid-template-columns: 1fr; }
@@ -171,7 +204,7 @@
             .cta-buttons .btn-primary, .cta-buttons .btn-secondary { width: 100%; text-align: center; }
         }
         @media (max-width: 374px) {
-            .page-hero h1 { font-size: clamp(2.2rem, 10vw, 3rem); }
+            .page-hero h1 { font-size: clamp(1.65rem, 7.5vw, 1.95rem); }
             .section-header h2 { font-size: 1.85rem; }
             .about-cinematic h2 { font-size: 2.2rem; }
             .about-cta h2 { font-size: 2.2rem; }
@@ -182,7 +215,12 @@
 
     <!-- NAVIGATION -->
     <nav class="site-nav">
-        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <a href="index.html" class="logo">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/big-daddy-events-logo-white.png">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img">
+            </picture>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
@@ -218,7 +256,10 @@
         <p class="gsap-reveal">From intimate celebrations to grand destination weddings, Big Daddy Events brings together design, production, entertainment and hospitality under one vision &mdash; creating celebrations that feel truly unforgettable.</p>
         
         <div class="hero-cinematic gsap-reveal image-slot">
-            <img src="assets/images/event-corporate-gala.jpg" alt="Cinematic Event Experience" class="img-scale">
+            <picture>
+                <source srcset="assets/images/event-corporate-gala.webp" type="image/webp">
+                <img src="assets/images/event-corporate-gala.jpg" alt="Cinematic Event Experience" class="img-scale" width="1024" height="1024" loading="lazy" decoding="async">
+            </picture>
         </div>
     </header>
 
@@ -281,7 +322,10 @@
     <!-- SECTION 04: CINEMATIC EXPERIENCE -->
     <section class="about-cinematic">
         <div class="cinematic-bg">
-            <img src="assets/images/hindu-destination-wedding.jpg" alt="Premium Event Atmosphere" class="img-scale">
+            <picture>
+                <source srcset="assets/images/hindu-destination-wedding.webp" type="image/webp">
+                <img src="assets/images/hindu-destination-wedding.jpg" alt="Premium Event Atmosphere" class="img-scale" width="1024" height="1024" loading="lazy" decoding="async">
+            </picture>
         </div>
         <div class="content gsap-reveal">
             <span class="eyebrow">ONE TEAM. ONE EXPERIENCE.</span>
@@ -340,7 +384,10 @@
             <span class="eco-label eco-12">DESTINATION EXPERIENCE</span>
             
             <div class="ecosystem-center image-slot dark-slot">
-                <img src="assets/images/event-destination-outdoor.jpg" alt="Event Ecosystem" class="img-scale">
+                <picture>
+                    <source srcset="assets/images/event-destination-outdoor.webp" type="image/webp">
+                    <img src="assets/images/event-destination-outdoor.jpg" alt="Event Ecosystem" class="img-scale" width="1024" height="1024" loading="lazy" decoding="async">
+                </picture>
             </div>
         </div>
     </section>
@@ -353,7 +400,10 @@
                 <p>"No two celebrations should feel the same. We design experiences around the people, the place and the moment &mdash; creating an atmosphere that feels personal, intentional and unforgettable."</p>
             </div>
             <div class="experience-image image-slot gsap-reveal clip-reveal">
-                <img src="assets/images/munnar-intimate-wedding.jpg" alt="Intimate Wedding Design" class="img-scale">
+                <picture>
+                    <source srcset="assets/images/munnar-intimate-wedding-about.webp" type="image/webp">
+                    <img src="assets/images/munnar-intimate-wedding.jpg" alt="Intimate Wedding Design" class="img-scale" width="1024" height="1024" loading="lazy" decoding="async">
+                </picture>
             </div>
         </div>
     </section>
@@ -376,7 +426,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
+                    <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" class="footer-logo-img">
                     <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
                 </div>
                 <div class="footer-col">
@@ -393,7 +443,7 @@
                     <h4>CONTACT</h4>
                     <ul>
                         <li><p>Munnar, Kerala, India</p></li>
-                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="mailto:bigdaddyevents01@gmail.com">bigdaddyevents01@gmail.com</a></li>
                         <li><a href="tel:+917034252988">+91 70342 52988</a></li>
                     </ul>
                 </div>

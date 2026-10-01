@@ -1,0 +1,85 @@
+{
+  "screens": [
+    {
+      "page": "home",
+      "viewport": "390x844",
+      "overflow": false,
+      "file": "scratch/final_qa_home_390.png"
+    },
+    {
+      "page": "packages",
+      "viewport": "390x844",
+      "overflow": false,
+      "file": "scratch/final_qa_packages_390.png"
+    },
+    {
+      "page": "gallery",
+      "viewport": "390x844",
+      "overflow": false,
+      "file": "scratch/final_qa_gallery_390.png"
+    },
+    {
+      "page": "about",
+      "viewport": "390x844",
+      "overflow": false,
+      "file": "scratch/final_qa_about_390.png"
+    },
+    {
+      "page": "contact",
+      "viewport": "390x844",
+      "overflow": false,
+      "file": "scratch/final_qa_contact_390.png"
+    },
+    {
+      "page": "home",
+      "viewport": "412x915",
+      "overflow": false,
+      "file": "scratch/final_qa_home_412.png"
+    },
+    {
+      "page": "packages",
+      "viewport": "412x915",
+      "overflow": false,
+      "file": "scratch/final_qa_packages_412.png"
+    },
+    {
+      "page": "home",
+      "viewport": "480x900",
+      "overflow": false,
+      "file": "scratch/final_qa_home_480.png"
+    },
+    {
+      "page": "home",
+      "viewport": "1280x800",
+      "overflow": false,
+      "file": "scratch/desktop_reg_home_1280.png"
+    },
+    {
+      "page": "home",
+      "viewport": "1366x768",
+      "overflow": false,
+      "file": "scratch/desktop_reg_home_1366.png"
+    },
+    {
+      "page": "home",
+      "viewport": "1440x900",
+      "overflow": false,
+      "file": "scratch/desktop_reg_home_1440.png"
+    },
+    {
+      "page": "home",
+      "viewport": "1920x1080",
+      "overflow": false,
+      "file": "scratch/desktop_reg_home_1920.png"
+    }
+  ],
+  "consoleErrors": [
+    {
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ],
+  "overflows": []
+}

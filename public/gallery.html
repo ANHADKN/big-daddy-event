@@ -1,23 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Big Daddy Events' cinematic portfolio — destination weddings, intimate celebrations, bespoke stage production and corporate galas in Munnar, Kerala.">
-    <title>Event Stories &amp; Gallery | Big Daddy Events Munnar</title>
+    <meta name="description"
+        content="Explore Big Daddy Events' luxury destination wedding and event photography portfolio in Munnar, Kerala. Browse multiple curated photographs per wedding category.">
+    <title>Event Photography &amp; Gallery | Big Daddy Events Munnar</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="style.css?v=20260912">
-    <link rel="stylesheet" href="gallery.css?v=20260919_master">
+    <link rel="stylesheet" href="gallery.css?v=20260928_rework">
+    <style>
+        /* Enhanced Dynamic Editorial Masonry */
+        .editorial-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: clamp(1.2rem, 2.5vw, 2.2rem);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 4vw 6rem;
+        }
+
+        .gal-item {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #031B16;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+        }
+
+        .gal-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 45px rgba(6, 45, 36, 0.18);
+        }
+
+        /* Span Variants for Asymmetric Rhythm */
+        .gal-span-12 {
+            grid-column: span 12;
+            height: clamp(380px, 60vh, 640px);
+        }
+
+        .gal-span-7 {
+            grid-column: span 7;
+            height: clamp(340px, 50vh, 520px);
+        }
+
+        .gal-span-5 {
+            grid-column: span 5;
+            height: clamp(340px, 50vh, 520px);
+        }
+
+        .gal-span-6 {
+            grid-column: span 6;
+            height: clamp(320px, 45vh, 480px);
+        }
+
+        .gal-span-4 {
+            grid-column: span 4;
+            height: clamp(300px, 42vh, 440px);
+        }
+
+        .gal-span-8 {
+            grid-column: span 8;
+            height: clamp(340px, 48vh, 500px);
+        }
+
+        .gal-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .gal-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Overlay & Editorial Caption Drawer */
+        .gal-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(3, 27, 22, 0.92) 0%, rgba(3, 27, 22, 0.4) 45%, transparent 70%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: clamp(1.2rem, 3vw, 2.2rem);
+            color: #FAF8F3;
+            transition: opacity 0.35s ease;
+        }
+
+        .gal-badge {
+            align-self: flex-start;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #C8A45D;
+            background: rgba(3, 27, 22, 0.7);
+            border: 1px solid rgba(200, 164, 93, 0.3);
+            padding: 0.3rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 0.6rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .gal-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.3rem, 2.2vw, 2rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 0.4rem;
+            color: #FAF8F3;
+        }
+
+        .gal-desc {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            color: rgba(250, 248, 243, 0.85);
+            line-height: 1.5;
+            max-width: 600px;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow: hidden;
+        }
+
+        .gal-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn-gal-view {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #FAF8F3;
+            border-bottom: 1px solid #C8A45D;
+            padding-bottom: 2px;
+            transition: color 0.25s, border-color 0.25s;
+        }
+
+        .btn-gal-view:hover {
+            color: #C8A45D;
+        }
+
+        .btn-gal-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #031B16;
+            background: #C8A45D;
+            padding: 0.45rem 0.9rem;
+            border-radius: 2px;
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .btn-gal-wa:hover {
+            background: #FAF8F3;
+            transform: translateY(-1px);
+        }
+
+        /* Filter Tabs */
+        .story-tabs-nav {
+            background: #FAF8F3;
+            border-bottom: 1px solid #D8CBB8;
+            padding: 1.5rem 2rem 0;
+            position: sticky;
+            top: 75px;
+            z-index: 40;
+            backdrop-filter: blur(10px);
+        }
+
+        .story-tabs-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 0.75rem;
+            scrollbar-width: thin;
+        }
+
+        .story-tab {
+            background: transparent;
+            border: 1px solid rgba(6, 45, 36, 0.15);
+            padding: 0.6rem 1.25rem;
+            border-radius: 2px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #756D63;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .story-tab:hover {
+            border-color: #062D24;
+            color: #27231F;
+            background: #ECE5D9;
+        }
+
+        .story-tab.active {
+            background: #062D24;
+            color: #FAF8F3;
+            border-color: #062D24;
+            box-shadow: 0 4px 12px rgba(6, 45, 36, 0.18);
+        }
+
+        /* Category Spotlight Header (When filtered) */
+        .category-spotlight-banner {
+            max-width: 1400px;
+            margin: 2.5rem auto 1rem;
+            padding: 2.5rem 4vw;
+            background: #062D24;
+            color: #FAF8F3;
+            border-radius: 4px;
+            box-shadow: 0 12px 35px rgba(6, 45, 36, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-spotlight-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 35%;
+            background: radial-gradient(circle at top right, rgba(200, 164, 93, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .category-spotlight-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .cs-info {
+            max-width: 750px;
+        }
+
+        .cs-eyebrow {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #C8A45D;
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 700;
+        }
+
+        .cs-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2rem, 3.8vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .cs-narrative {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: rgba(250, 248, 243, 0.85);
+            font-weight: 300;
+        }
+
+        .cs-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-spotlight-wa {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #C8A45D;
+            color: #031B16;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.85rem 1.6rem;
+            border-radius: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(200, 164, 93, 0.25);
+        }
+
+        .btn-spotlight-wa:hover {
+            background: #FAF8F3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(250, 248, 243, 0.3);
+        }
+
+        /* Empty State */
+        .gallery-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 2rem;
+            background: #FAF8F3;
+            border: 1px solid #D8CBB8;
+            border-radius: 4px;
+        }
+
+        .gallery-empty h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: #062D24;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-empty p {
+            color: #756D63;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .gal-span-12,
+            .gal-span-7,
+            .gal-span-8,
+            .gal-span-6,
+            .gal-span-5,
+            .gal-span-4 {
+                grid-column: span 6;
+                height: 380px;
+            }
+
+            .gal-span-12 {
+                grid-column: span 12;
+            }
+
+            .category-spotlight-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cs-actions {
+                width: 100%;
+            }
+
+            .btn-spotlight-wa {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .gal-span-12,
+            .gal-span-7,
+            .gal-span-5,
+            .gal-span-8,
+            .gal-span-4,
+            .gal-span-6 {
+                grid-column: span 12 !important;
+                height: 320px !important;
+            }
+        }
+    </style>
 </head>
+
 <body class="gallery-page">
 
-    <!-- NAVIGATION -->
-    <nav class="site-nav">
-        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+    <!-- 1. NAVIGATION -->
+    <nav class="site-nav" id="siteNav">
+        <a href="index.html" class="logo" aria-label="Big Daddy Events Home">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/big-daddy-events-logo-white.png">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img">
+            </picture>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
@@ -26,15 +414,15 @@
             <a href="contact.html">CONTACT</a>
         </div>
         <div class="nav-right">
-            <a href="contact.html" class="nav-cta">PLAN YOUR EVENT &rarr;</a>
-            <div class="hamburger" aria-label="Toggle navigation">
+            <a href="contact.html" class="nav-cta">PLAN YOUR EVENT</a>
+            <button class="hamburger" id="navToggle" aria-label="Toggle navigation menu">
                 <span></span><span></span><span></span>
-            </div>
+            </button>
         </div>
     </nav>
 
     <!-- MOBILE MENU -->
-    <div class="mobile-menu">
+    <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-links">
             <a href="index.html">HOME</a>
             <a href="packages.html">PACKAGES</a>
@@ -44,757 +432,65 @@
         </div>
     </div>
 
-    <!-- 1. CINEMATIC HERO OPENING (85-95vh visual area, slow Ken-Burns, elegant reveals) -->
-    <header class="cinematic-hero">
-        <div class="hero-media-wrapper">
-            <img src="assets/images/gallery-banner.jpg" alt="Big Daddy Events Highland Celebration in Munnar" class="hero-bg-media">
-            <div class="hero-overlay-veil"></div>
-        </div>
-        <div class="hero-editorial-content">
-            <div class="hero-eyebrow-wrap">
-                <span class="hero-eyebrow">BIG DADDY EVENTS &bull; DESTINATION STORIES</span>
-            </div>
-            <h1 class="hero-cinematic-title">
-                <span class="hero-title-line">EVENT</span>
-                <span class="hero-title-line">STORIES</span>
-            </h1>
-            <p class="hero-narrative-statement">Celebrations shaped by place, people and unforgettable moments.</p>
-            <p class="hero-supporting-desc">A curated visual chronicle capturing sacred vows, grand highland receptions, bespoke stage scenography, and atmospheric destination celebrations in the misty hills of Munnar, Kerala.</p>
-            
-            <div class="hero-chapter-pills" aria-label="Featured Story Themes">
-                <span class="chap-pill">01 // WEDDINGS</span>
-                <span class="chap-pill">02 // CELEBRATIONS</span>
-                <span class="chap-pill">03 // RECEPTIONS</span>
-                <span class="chap-pill">04 // PRODUCTION</span>
-                <span class="chap-pill">05 // DESTINATION</span>
-            </div>
-        </div>
-
-        <div class="hero-scroll-indicator">
-            <span class="scroll-txt">SCROLL TO EXPLORE</span>
-            <div class="scroll-line-track">
-                <div class="scroll-line-pulse"></div>
-            </div>
+    <!-- 2. GALLERY HERO -->
+    <header class="gallery-hero">
+        <div class="gallery-hero__bg"></div>
+        <div class="gallery-hero__content">
+            <span class="gallery-eyebrow">BIG DADDY EVENTS &bull; PORTFOLIO</span>
+            <h1 class="gallery-hero-title">OUR WORK</h1>
+            <div class="gallery-gold-divider"></div>
+            <p class="gallery-hero-quote">&ldquo;Moments we&rsquo;ve created. Stories we&rsquo;ve helped bring to life.&rdquo;</p>
+            <p class="gallery-hero-sub">Authentic photographs of our event scenography, traditional vows, and monumental stage productions executed across Munnar, Kerala.</p>
         </div>
     </header>
 
-    <!-- 2. EDITORIAL STORY NAVIGATION (Refined chapter index, not ecommerce pills) -->
-    <nav class="editorial-story-nav" id="storyNav" aria-label="Filter Event Stories">
-        <div class="story-nav-track">
-            <button type="button" class="story-tab active" data-story="all">
-                <span class="tab-index">ALL</span>
-                <span class="tab-label">STORIES</span>
-            </button>
-            <button type="button" class="story-tab" data-story="weddings">
-                <span class="tab-index">01</span>
-                <span class="tab-label">WEDDINGS</span>
-            </button>
-            <button type="button" class="story-tab" data-story="celebrations">
-                <span class="tab-index">02</span>
-                <span class="tab-label">CELEBRATIONS</span>
-            </button>
-            <button type="button" class="story-tab" data-story="receptions">
-                <span class="tab-index">03</span>
-                <span class="tab-label">RECEPTIONS</span>
-            </button>
-            <button type="button" class="story-tab" data-story="stage">
-                <span class="tab-index">04</span>
-                <span class="tab-label">STAGE &amp; PRODUCTION</span>
-            </button>
-            <button type="button" class="story-tab" data-story="corporate">
-                <span class="tab-index">05</span>
-                <span class="tab-label">CORPORATE &amp; DESTINATION</span>
+    <!-- 3. DYNAMIC CATEGORY FILTER TABS -->
+    <section class="gallery-filter-section" id="filterSection">
+        <div class="gallery-filter-container" id="filterContainer">
+            <button class="filter-pill active" data-category="all">
+                <span>ALL WORK</span>
+                <span class="pill-count" id="count-all">...</span>
             </button>
         </div>
-    </nav>
+    </section>
 
-    <!-- 3. MAIN CINEMATIC STORIES CONTAINER -->
-    <main class="cinematic-stories-container" id="galleryContainer">
+    <!-- 4. EDITORIAL PORTFOLIO GRID -->
+    <main class="gallery-showcase-section">
+        <div class="gallery-status-bar">
+            <span class="gallery-status-category" id="currentCategoryTitle">All Work</span>
+            <span id="currentCountLabel">Showing portfolio</span>
+        </div>
 
-        <!-- ============================================================
-             STORY 01: WEDDING ARCHIVES
-             ============================================================ -->
-        <section class="story-chapter" data-chapter="weddings" id="story-weddings">
-            <header class="chapter-prologue">
-                <div class="chapter-meta">
-                    <span class="chapter-num">CHAPTER 01 // WEDDING ARCHIVES</span>
-                    <h2 class="chapter-title">Sacred Traditions &amp; Highland Vows</h2>
-                </div>
-                <div class="chapter-narrative">
-                    <p class="chapter-lead">From traditional Vedic ceremonies and grand Christian nuptials to serene Muslim Nikahs, each wedding celebration is composed with natural elegance against the panoramic Munnar hills.</p>
-                </div>
-                <div class="chapter-badge">DESTINATION WEDDINGS</div>
-            </header>
-
-            <div class="weddings-composition">
-                <!-- 1. Dominant Lead Hero Frame -->
-                <article class="cinematic-card card-span-full" 
-                         data-index="0"
-                         data-src="assets/images/christian-destination-wedding.jpg" 
-                         data-kicker="DESTINATION NUPTIALS &bull; MUNNAR" 
-                         data-title="Highland Christian Destination Wedding" 
-                         data-desc="An open-air mountain ceremony framed with bespoke floral arches and natural mist overlooking the Munnar valleys.">
-                    <div class="card-media-frame">
-                        <img src="assets/images/christian-destination-wedding.jpg" alt="Highland Christian Destination Wedding overlooking Munnar valleys" loading="lazy">
-                        <div class="card-veil"></div>
-                        <span class="card-action-cue">VIEW STORY &nearr;</span>
-                    </div>
-                    <div class="card-caption">
-                        <span class="caption-kicker">DESTINATION NUPTIALS &bull; MUNNAR</span>
-                        <h3 class="caption-title">Highland Christian Destination Wedding</h3>
-                        <p class="caption-sub">Panoramic mountain altar &bull; Bespoke floral architecture</p>
-                    </div>
-                </article>
-
-                <!-- 2. Asymmetric Staggered Diptych (Tall Portrait + Offset Horizontal) -->
-                <div class="asymmetric-diptych">
-                    <article class="cinematic-card card-tall-portrait" 
-                             data-index="1"
-                             data-src="assets/images/hindu-destination-wedding.jpg" 
-                             data-kicker="SACRED RITUALS" 
-                             data-title="Vedic Hindu Destination Mandap" 
-                             data-desc="Traditional Vedic wedding mandap dressed in marigolds and brass lamps, set against the rolling tea plantations.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/hindu-destination-wedding.jpg" alt="Vedic Hindu Destination Mandap in Munnar" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">SACRED RITUALS</span>
-                            <h3 class="caption-title">Vedic Hindu Destination Mandap</h3>
-                            <p class="caption-sub">Handcrafted floral canopy &bull; Heritage brass illumination</p>
-                        </div>
-                    </article>
-
-                    <div class="diptych-offset-col">
-                        <article class="cinematic-card card-medium" 
-                                 data-index="2"
-                                 data-src="assets/images/muslim-destination-wedding.jpg" 
-                                 data-kicker="ROYAL CEREMONIES" 
-                                 data-title="Grand Nikah Destination Pavilion" 
-                                 data-desc="Intricate drapery, ambient crystal chandeliers, and opulent seating for a serene, unforgettable Nikah celebration.">
-                            <div class="card-media-frame">
-                                <img src="assets/images/muslim-destination-wedding.jpg" alt="Grand Nikah Destination Pavilion in Kerala" loading="lazy">
-                                <div class="card-veil"></div>
-                                <span class="card-action-cue">VIEW STORY &nearr;</span>
-                            </div>
-                            <div class="card-caption">
-                                <span class="caption-kicker">ROYAL CEREMONIES</span>
-                                <h3 class="caption-title">Grand Nikah Destination Pavilion</h3>
-                                <p class="caption-sub">Opulent drapery &bull; Crystal chandelier lighting</p>
-                            </div>
-                        </article>
-
-                        <div class="editorial-text-callout">
-                            <span class="callout-kicker">THE WEDDING PHILOSOPHY</span>
-                            <blockquote class="callout-quote">&ldquo;We design ceremonies that honor heritage while letting the mountain wilderness speak.&rdquo;</blockquote>
-                            <span class="callout-byline">&mdash; BIG DADDY ATELIER</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Full-Width Valley Amphitheatre Moment -->
-                <article class="cinematic-card card-cinemascope" 
-                         data-index="3"
-                         data-src="assets/images/outdoor-wedding.jpg" 
-                         data-kicker="VALLEY CELEBRATIONS" 
-                         data-title="Munnar Open Air Amphitheatre" 
-                         data-desc="Panoramic outdoor celebration embracing the natural hillside topography, misty morning breeze, and custom terraced guest seating.">
-                    <div class="card-media-frame">
-                        <img src="assets/images/outdoor-wedding.jpg" alt="Munnar Open Air Amphitheatre Wedding" loading="lazy">
-                        <div class="card-veil"></div>
-                        <span class="card-action-cue">VIEW STORY &nearr;</span>
-                    </div>
-                    <div class="card-caption">
-                        <span class="caption-kicker">VALLEY CELEBRATIONS</span>
-                        <h3 class="caption-title">Munnar Open Air Amphitheatre</h3>
-                        <p class="caption-sub">Terraced seating &bull; Ambient mountain panorama</p>
-                    </div>
-                </article>
-
-                <!-- 4. Editorial Triptych with Staggered Heights -->
-                <div class="editorial-stagger-triptych">
-                    <article class="cinematic-card card-triptych-item" 
-                             data-index="4"
-                             data-src="assets/images/wedding-entry.jpg" 
-                             data-kicker="PROCESSIONAL" 
-                             data-title="Illuminated Floral Entry Aisle" 
-                             data-desc="A royal welcoming pathway lined with artisanal floral pedestals, warm lamps, and botanical arches.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/wedding-entry.jpg" alt="Illuminated Floral Entry Aisle" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">PROCESSIONAL</span>
-                            <h3 class="caption-title">Illuminated Floral Entry Aisle</h3>
-                            <p class="caption-sub">Welcoming archway &bull; Candlelit pathway</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card card-triptych-item item-elevated" 
-                             data-index="5"
-                             data-src="assets/images/indoor-wedding.jpg" 
-                             data-kicker="GRAND BALLROOM" 
-                             data-title="Palatial Indoor Nuptial Ballroom" 
-                             data-desc="Classic banquet atmosphere with custom ceiling drapes, chandeliers, and symmetrical seating arrangements.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/indoor-wedding.jpg" alt="Palatial Indoor Nuptial Ballroom" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">GRAND BALLROOM</span>
-                            <h3 class="caption-title">Palatial Indoor Nuptial Ballroom</h3>
-                            <p class="caption-sub">Symmetrical staging &bull; Warm golden glow</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card card-triptych-item item-lowered" 
-                             data-index="6"
-                             data-src="assets/images/bridal-makeup.jpg" 
-                             data-kicker="ARTISTRY &amp; DETAIL" 
-                             data-title="Bridal Artistry &amp; Moments" 
-                             data-desc="Intimate bridal styling moments captured with editorial photographic sensitivity and refined detail.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/bridal-makeup.jpg" alt="Bridal Artistry & Styling Moments" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">ARTISTRY &amp; DETAIL</span>
-                            <h3 class="caption-title">Bridal Artistry &amp; Moments</h3>
-                            <p class="caption-sub">Couture styling &bull; Intimate portraits</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================
-             INTERSTITIAL 01: CINEMATIC BREATHING MOMENT
-             ============================================================ -->
-        <aside class="cinematic-interstitial-band" aria-label="Editorial Intermission">
-            <div class="interstitial-quote-wrap">
-                <span class="interstitial-kicker">MUNNAR DESTINATION PORTFOLIO</span>
-                <h3 class="interstitial-quote">&ldquo;In the misty heights of Munnar, every celebration becomes part of the landscape.&rdquo;</h3>
-                <span class="interstitial-sub">CURATED CELEBRATIONS &bull; BESPOKE SCENOGRAPHY</span>
-            </div>
-        </aside>
-
-        <!-- ============================================================
-             STORY 02: PRIVATE CELEBRATIONS & ENGAGEMENTS
-             ============================================================ -->
-        <section class="story-chapter" data-chapter="celebrations" id="story-celebrations">
-            <header class="chapter-prologue">
-                <div class="chapter-meta">
-                    <span class="chapter-num">CHAPTER 02 // CELEBRATION ARCHIVES</span>
-                    <h2 class="chapter-title">Intimate Milestones &amp; Personal Joy</h2>
-                </div>
-                <div class="chapter-narrative">
-                    <p class="chapter-lead">From romantic betrothals and milestone birthdays to family jubilees, baby showers, and warm housewarmings, crafted with personalized warmth and refined hospitality.</p>
-                </div>
-                <div class="chapter-badge">PRIVATE EVENTS</div>
-            </header>
-
-            <div class="celebrations-composition">
-                <!-- 1. Split Asymmetric Canvas (Dominant Feature Left + Stacked Duo Right) -->
-                <div class="celebration-asym-split">
-                    <article class="cinematic-card card-split-feature" 
-                             data-index="7"
-                             data-src="assets/images/event-private-celebration.jpg" 
-                             data-kicker="HIGHLAND GATHERINGS" 
-                             data-title="Private Estate Celebration" 
-                             data-desc="An intimate evening celebration at a secluded Munnar tea estate, bathed in fairy lights and acoustic melodies.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/event-private-celebration.jpg" alt="Private Estate Celebration in Munnar" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">HIGHLAND GATHERINGS</span>
-                            <h3 class="caption-title">Private Estate Celebration</h3>
-                            <p class="caption-sub">Intimate estate staging &bull; Ambient hospitality</p>
-                        </div>
-                    </article>
-
-                    <div class="celebration-stacked-column">
-                        <article class="cinematic-card card-stacked-item" 
-                                 data-index="8"
-                                 data-src="assets/images/betrothal.jpg" 
-                                 data-kicker="BETROTHAL ARCHIVE" 
-                                 data-title="Bespoke Engagement Ceremony" 
-                                 data-desc="Romantic ring ceremony setting featuring custom floral backdrops and champagne-toned decor.">
-                            <div class="card-media-frame">
-                                <img src="assets/images/betrothal.jpg" alt="Bespoke Engagement Ceremony in Kerala" loading="lazy">
-                                <div class="card-veil"></div>
-                                <span class="card-action-cue">VIEW STORY &nearr;</span>
-                            </div>
-                            <div class="card-caption">
-                                <span class="caption-kicker">BETROTHAL ARCHIVE</span>
-                                <h3 class="caption-title">Bespoke Engagement Ceremony</h3>
-                                <p class="caption-sub">Subtle champagne palette &bull; Intimate stage</p>
-                            </div>
-                        </article>
-
-                        <article class="cinematic-card card-stacked-item" 
-                                 data-index="9"
-                                 data-src="assets/images/birthday-party.jpg" 
-                                 data-kicker="MILESTONE MOMENTS" 
-                                 data-title="Milestone Birthday Gala" 
-                                 data-desc="Bespoke thematic birthday celebration complete with mood lighting, live dessert counters, and custom decor.">
-                            <div class="card-media-frame">
-                                <img src="assets/images/birthday-party.jpg" alt="Milestone Birthday Gala Celebration" loading="lazy">
-                                <div class="card-veil"></div>
-                                <span class="card-action-cue">VIEW STORY &nearr;</span>
-                            </div>
-                            <div class="card-caption">
-                                <span class="caption-kicker">MILESTONE MOMENTS</span>
-                                <h3 class="caption-title">Milestone Birthday Gala</h3>
-                                <p class="caption-sub">Thematic styling &bull; Dynamic illumination</p>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-
-                <!-- 2. Whitespace Quad (Anniversary, Baptism, Baby Shower, Housewarming) -->
-                <div class="celebration-quad-grid">
-                    <article class="cinematic-card" 
-                             data-index="10"
-                             data-src="assets/images/anniversary.jpg" 
-                             data-kicker="FAMILY LEGACIES" 
-                             data-title="Silver Jubilee &amp; Anniversary Evening" 
-                             data-desc="Honoring decades of togetherness with classical string arrangements, warm candlelight, and bespoke floral urns.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/anniversary.jpg" alt="Silver Jubilee & Anniversary Evening" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">FAMILY LEGACIES</span>
-                            <h3 class="caption-title">Silver Jubilee &amp; Anniversary</h3>
-                            <p class="caption-sub">Warm candlelight &bull; Classical floral styling</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="11"
-                             data-src="assets/images/baptism.jpg" 
-                             data-kicker="SACRED BLESSINGS" 
-                             data-title="Baptism &amp; Family Feast" 
-                             data-desc="A pure white and golden aesthetic celebrating new life with close loved ones in a warm family gathering.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/baptism.jpg" alt="Baptism and Family Celebration Feast" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">SACRED BLESSINGS</span>
-                            <h3 class="caption-title">Baptism &amp; Family Feast</h3>
-                            <p class="caption-sub">Pure ivory aesthetic &bull; Family blessings</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="12"
-                             data-src="assets/images/baby-shower.jpg" 
-                             data-kicker="JOYFUL BEGINNINGS" 
-                             data-title="Pastel Garden Baby Shower" 
-                             data-desc="Playful botanical arches, bespoke signage, and gourmet confections in a sunny resort garden.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/baby-shower.jpg" alt="Pastel Garden Baby Shower" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">JOYFUL BEGINNINGS</span>
-                            <h3 class="caption-title">Pastel Garden Baby Shower</h3>
-                            <p class="caption-sub">Garden styling &bull; Confectionery showcase</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="13"
-                             data-src="assets/images/housewarming.jpg" 
-                             data-kicker="WARM WELCOMES" 
-                             data-title="Traditional Housewarming" 
-                             data-desc="Auspicious decor, fresh floral rangoli, and warm traditional hospitality welcoming family to a new sanctuary.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/housewarming.jpg" alt="Traditional Housewarming in Kerala" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">WARM WELCOMES</span>
-                            <h3 class="caption-title">Traditional Housewarming</h3>
-                            <p class="caption-sub">Fresh floral motifs &bull; Heritage lamps</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================
-             STORY 03: RECEPTIONS & EVENING ATMOSPHERE
-             ============================================================ -->
-        <section class="story-chapter" data-chapter="receptions" id="story-receptions">
-            <header class="chapter-prologue">
-                <div class="chapter-meta">
-                    <span class="chapter-num">CHAPTER 03 // EVENING ARCHIVES</span>
-                    <h2 class="chapter-title">Twilight Ambience &amp; Mountain Galas</h2>
-                </div>
-                <div class="chapter-narrative">
-                    <p class="chapter-lead">When dusk settles over the Western Ghats, celebrations transition into illuminated spectacles with custom pyro displays, live acoustic performances, and twilight mountain dining.</p>
-                </div>
-                <div class="chapter-badge">EVENING ATMOSPHERE</div>
-            </header>
-
-            <div class="receptions-composition">
-                <!-- 1. Full-Bleed Panorama (Fireworks Over Munnar) -->
-                <article class="cinematic-card card-ultra-panorama" 
-                         data-index="14"
-                         data-src="assets/images/fireworks-show.jpg" 
-                         data-kicker="NIGHTFALL FINALE" 
-                         data-title="Grand Fireworks Over Munnar Hills" 
-                         data-desc="A breathless synchronization of choreographed pyrotechnics lighting up the mountain mist and valleys to close an unforgettable celebration.">
-                    <div class="card-media-frame">
-                        <img src="assets/images/fireworks-show.jpg" alt="Grand Fireworks Show Over Munnar Hills" loading="lazy">
-                        <div class="card-veil-dark"></div>
-                        <span class="card-action-cue">VIEW STORY &nearr;</span>
-                    </div>
-                    <div class="card-caption caption-panoramic">
-                        <span class="caption-kicker">NIGHTFALL FINALE</span>
-                        <h3 class="caption-title">Grand Fireworks Over Munnar Hills</h3>
-                        <p class="caption-sub">Choreographed sky display &bull; Unforgettable celebration crescendo</p>
-                    </div>
-                </article>
-
-                <!-- 2. High-Contrast Evening Duo (Dynamic Energy vs Intimate Serenity) -->
-                <div class="evening-staggered-duo">
-                    <article class="cinematic-card card-duo-item" 
-                             data-index="15"
-                             data-src="assets/images/dj-night.jpg" 
-                             data-kicker="NIGHTLIFE &amp; SOUND" 
-                             data-title="Open Air DJ &amp; Sound Arena" 
-                             data-desc="Cutting-edge acoustics, intelligent moving heads, and an electrified dancefloor under the stars.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/dj-night.jpg" alt="Open Air DJ Night & Sound Arena" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">NIGHTLIFE &amp; SOUND</span>
-                            <h3 class="caption-title">Open Air DJ &amp; Sound Arena</h3>
-                            <p class="caption-sub">Dynamic beams &bull; High-fidelity concert sound</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card card-duo-item" 
-                             data-index="16"
-                             data-src="assets/images/munnar-intimate-wedding.jpg" 
-                             data-kicker="TWILIGHT BANQUET" 
-                             data-title="Candlelit Highland Reception Dinner" 
-                             data-desc="Intimate family banquet featuring custom linen, warm amber glassware, and fine local delicacies in an atmospheric evening courtyard.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/munnar-intimate-wedding.jpg" alt="Candlelit Highland Reception Dinner" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">TWILIGHT BANQUET</span>
-                            <h3 class="caption-title">Candlelit Highland Reception Dinner</h3>
-                            <p class="caption-sub">Artisanal table arrangements &bull; Ambient candelabras</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================
-             STORY 04: STAGE DESIGN & PRODUCTION
-             ============================================================ -->
-        <section class="story-chapter" data-chapter="stage" id="story-stage">
-            <header class="chapter-prologue">
-                <div class="chapter-meta">
-                    <span class="chapter-num">CHAPTER 04 // STAGE SCENOGRAPHY</span>
-                    <h2 class="chapter-title">Scenography, Sound &amp; Architectural Rigging</h2>
-                </div>
-                <div class="chapter-narrative">
-                    <p class="chapter-lead">Precision structural trussing, curved high-resolution LED canvases, warm acoustic wash, and bespoke floral architecture crafted for monumental visual impact.</p>
-                </div>
-                <div class="chapter-badge">STAGE &amp; PRODUCTION</div>
-            </header>
-
-            <div class="stage-composition">
-                <!-- 1. Structural Engineering Hero -->
-                <article class="cinematic-card card-stage-lead" 
-                         data-index="17"
-                         data-src="assets/images/stage-production.jpg" 
-                         data-kicker="STRUCTURAL RIGGING" 
-                         data-title="Engineered Stage Architecture" 
-                         data-desc="Heavy-duty aluminium trussing, intelligent moving lights, and stage ramps customized for grand concert and wedding showcases.">
-                    <div class="card-media-frame">
-                        <img src="assets/images/stage-production.jpg" alt="Engineered Stage Architecture and Trussing" loading="lazy">
-                        <div class="card-veil"></div>
-                        <span class="card-action-cue">VIEW STORY &nearr;</span>
-                    </div>
-                    <div class="card-caption">
-                        <span class="caption-kicker">STRUCTURAL RIGGING</span>
-                        <h3 class="caption-title">Engineered Stage Architecture</h3>
-                        <p class="caption-sub">Certified trussing &bull; Intelligent beam arrays</p>
-                    </div>
-                </article>
-
-                <!-- 2. Asymmetric Production Matrix -->
-                <div class="stage-matrix-grid">
-                    <article class="cinematic-card" 
-                             data-index="18"
-                             data-src="assets/images/stage-decoration.jpg" 
-                             data-kicker="FLORAL SCENOGRAPHY" 
-                             data-title="Artisanal Floral Stage Design" 
-                             data-desc="Hand-woven botanical backdrops with exotic orchids, cascading carnations, and soft warm backlighting.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/stage-decoration.jpg" alt="Artisanal Floral Stage Decoration" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">FLORAL SCENOGRAPHY</span>
-                            <h3 class="caption-title">Artisanal Floral Stage Design</h3>
-                            <p class="caption-sub">Exotic botanicals &bull; Architectural symmetry</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="19"
-                             data-src="assets/images/sound-lighting.jpg" 
-                             data-kicker="LIGHTING DESIGN" 
-                             data-title="Intelligent Architectural Illumination" 
-                             data-desc="Warm atmospheric washes, spot highlights, and beam choreography setting the exact tonal mood.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/sound-lighting.jpg" alt="Intelligent Architectural Illumination" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">LIGHTING DESIGN</span>
-                            <h3 class="caption-title">Intelligent Architectural Illumination</h3>
-                            <p class="caption-sub">Tonal mood management &bull; DMX programming</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="20"
-                             data-src="assets/images/production-showcase.jpg" 
-                             data-kicker="ARENA SHOWCASE" 
-                             data-title="Concert Staging &amp; Production" 
-                             data-desc="Full-scale event production handling power generation, line array audio, and safety management.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/production-showcase.jpg" alt="Concert Staging and Production Showcase" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">ARENA SHOWCASE</span>
-                            <h3 class="caption-title">Concert Staging &amp; Production</h3>
-                            <p class="caption-sub">Line arrays &bull; Complete backup power</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="21"
-                             data-src="assets/images/led-wall.jpg" 
-                             data-kicker="DIGITAL SCENOGRAPHY" 
-                             data-title="High-Definition LED Backdrops" 
-                             data-desc="Ultra-fine pixel pitch LED visual displays delivering custom motion graphics, live video feeds, and ambient scenery.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/led-wall.jpg" alt="High-Definition LED Video Wall Backdrop" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">DIGITAL SCENOGRAPHY</span>
-                            <h3 class="caption-title">High-Definition LED Backdrops</h3>
-                            <p class="caption-sub">P2/P3 high resolution &bull; Dynamic media</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================
-             STORY 05: DESTINATION & CORPORATE GALAS
-             ============================================================ -->
-        <section class="story-chapter" data-chapter="corporate" id="story-corporate">
-            <header class="chapter-prologue">
-                <div class="chapter-meta">
-                    <span class="chapter-num">CHAPTER 05 // DESTINATION &amp; CORPORATE</span>
-                    <h2 class="chapter-title">Executive Summits &amp; Landscape Presence</h2>
-                </div>
-                <div class="chapter-narrative">
-                    <p class="chapter-lead">Prestigious business conventions, high-profile corporate galas, and luxury destination retreats organized with absolute logistical precision.</p>
-                </div>
-                <div class="chapter-badge">DESTINATION &amp; CORPORATE</div>
-            </header>
-
-            <div class="corporate-composition">
-                <!-- 1. Executive Hero Frame -->
-                <article class="cinematic-card card-corporate-lead" 
-                         data-index="22"
-                         data-src="assets/images/event-corporate-gala.jpg" 
-                         data-kicker="EXECUTIVE EXCELLENCE" 
-                         data-title="Annual Corporate Honors Gala" 
-                         data-desc="An immaculate corporate ballroom staging with digital lecterns, red carpet arrival, and awards presentation production.">
-                    <div class="card-media-frame">
-                        <img src="assets/images/event-corporate-gala.jpg" alt="Annual Corporate Honors Gala" loading="lazy">
-                        <div class="card-veil"></div>
-                        <span class="card-action-cue">VIEW STORY &nearr;</span>
-                    </div>
-                    <div class="card-caption">
-                        <span class="caption-kicker">EXECUTIVE EXCELLENCE</span>
-                        <h3 class="caption-title">Annual Corporate Honors Gala</h3>
-                        <p class="caption-sub">Awards ceremony staging &bull; VIP protocol management</p>
-                    </div>
-                </article>
-
-                <!-- 2. Asymmetric Summit Matrix -->
-                <div class="corporate-matrix-grid">
-                    <article class="cinematic-card" 
-                             data-index="23"
-                             data-src="assets/images/corporate-summit.jpg" 
-                             data-kicker="LEADERSHIP RETREAT" 
-                             data-title="High-Altitude Business Summit" 
-                             data-desc="Executive summit arrangements in Munnar combining conference staging with luxury hospitality.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/corporate-summit.jpg" alt="High-Altitude Business Summit" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">LEADERSHIP RETREAT</span>
-                            <h3 class="caption-title">High-Altitude Business Summit</h3>
-                            <p class="caption-sub">Executive conference &bull; Board retreat</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="24"
-                             data-src="assets/images/product-launch.jpg" 
-                             data-kicker="BRAND UNVEILINGS" 
-                             data-title="Luxury Brand &amp; Product Launch" 
-                             data-desc="High-impact reveal staging with dramatic silhouette lighting, mist effects, and media backdrop walls.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/product-launch.jpg" alt="Luxury Brand & Product Launch" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">BRAND UNVEILINGS</span>
-                            <h3 class="caption-title">Luxury Brand &amp; Product Launch</h3>
-                            <p class="caption-sub">Dramatic product reveal &bull; Media backdrop</p>
-                        </div>
-                    </article>
-
-                    <article class="cinematic-card" 
-                             data-index="25"
-                             data-src="assets/images/conference-event.jpg" 
-                             data-kicker="MEDIA &amp; DELEGATES" 
-                             data-title="Statewide Conference Staging" 
-                             data-desc="Simultaneous translation setup, delegate seating, and seamless presentation technology.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/conference-event.jpg" alt="Statewide Conference Staging" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">MEDIA &amp; DELEGATES</span>
-                            <h3 class="caption-title">Statewide Conference Staging</h3>
-                            <p class="caption-sub">Full AV integration &bull; Delegate ergonomics</p>
-                        </div>
-                    </article>
-
-                    <!-- 3. Drone Cinematography Finale Frame -->
-                    <article class="cinematic-card" 
-                             data-index="26"
-                             data-src="assets/images/drone-photography.jpg" 
-                             data-kicker="AERIAL PERSPECTIVE" 
-                             data-title="Panoramic Estate Overview" 
-                             data-desc="Licensed 4K drone cinematography capturing the vastness and majesty of Munnar destination venues.">
-                        <div class="card-media-frame">
-                            <img src="assets/images/drone-photography.jpg" alt="Panoramic Munnar Estate Overview Drone Photography" loading="lazy">
-                            <div class="card-veil"></div>
-                            <span class="card-action-cue">VIEW STORY &nearr;</span>
-                        </div>
-                        <div class="card-caption">
-                            <span class="caption-kicker">AERIAL PERSPECTIVE</span>
-                            <h3 class="caption-title">Panoramic Estate Overview</h3>
-                            <p class="caption-sub">Cinematic drone photography &bull; Valley views</p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Dynamic photography cards injected by JS -->
+        </div>
     </main>
 
-    <!-- 4. PROOF BAND (WARM EDITORIAL, NO GREEN) -->
-    <section class="gallery-proof-band">
-        <div class="gallery-proof-inner">
-            <div class="proof-header-col">
-                <span class="proof-eyebrow">THE BIG DADDY STANDARD</span>
-                <h3 class="proof-title">From Concept to Unforgettable Memory</h3>
-                <p class="proof-lead">Every image in our portfolio represents months of careful architectural planning, vendor coordination, and passionate on-ground execution in Munnar and throughout Kerala.</p>
-            </div>
-            <div class="proof-cards-grid">
-                <div class="proof-stat-card">
-                    <span class="proof-stat-num">100%</span>
-                    <h4>Bespoke Scenography</h4>
-                    <p>No cookie-cutter setups. Every stage, mandap, and lighting array is custom-tailored to the couple and occasion.</p>
-                </div>
-                <div class="proof-stat-card">
-                    <span class="proof-stat-num">12+</span>
-                    <h4>Years of Mastery</h4>
-                    <p>Unrivaled familiarity with Munnar micro-climates, altitude logistics, mountain weather, and premier destination estates.</p>
-                </div>
-                <div class="proof-stat-card">
-                    <span class="proof-stat-num">5</span>
-                    <h4>Signature Tiers</h4>
-                    <p>Transparent event collections ranging from Stage Bronze to full-scale Premium Plus destination productions.</p>
-                </div>
-                <div class="proof-stat-card">
-                    <span class="proof-stat-num">360°</span>
-                    <h4>Turnkey Production</h4>
-                    <p>In-house generators, sound reinforcement, truss rigging, catering management, and luxury vehicle convoys.</p>
-                </div>
+    <!-- 5. CLOSING SECTION -->
+    <section class="gallery-cta-section">
+        <div class="gallery-cta-inner">
+            <span class="gallery-cta-eyebrow">BEGIN YOUR STORY</span>
+            <h2 class="gallery-cta-title">Moments, Made Extraordinary.</h2>
+            <p class="gallery-cta-eyebrow" style="color: rgba(200, 164, 93, 0.9); margin-bottom: 0.75rem;">BIG DADDY EVENTS &bull; MUNNAR &bull; IDUKKI &bull; DESTINATION EVENTS</p>
+            <p class="gallery-cta-text">Whether an intimate mountain wedding overlooking mist-covered tea gardens or a monumental stage production, our studio crafts unforgettable experiences tailored to your vision.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+                <a href="https://wa.me/917034252988?text=Hi%20Big%20Daddy%20Events%2C%20I%20was%20browsing%20your%20event%20portfolio%20gallery%20and%20would%20like%20to%20discuss%20an%20upcoming%20event." target="_blank" rel="noopener noreferrer" class="gallery-cta-btn">
+                    <span>&phone;</span> ENQUIRE ON WHATSAPP &rarr;
+                </a>
+                <a href="contact.html" class="gallery-cta-btn" style="background: transparent; border: 1px solid #FAF8F3; color: #FAF8F3;">
+                    PLAN YOUR EVENT &rarr;
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- 5. CINEMATIC CLOSING SECTION -->
-    <section class="gallery-cinematic-closing">
-        <div class="closing-media-wrapper">
-            <img src="assets/images/event-destination-outdoor.jpg" alt="Munnar Destination Celebration Finalé" class="closing-bg-media">
-            <div class="closing-veil"></div>
-        </div>
-        <div class="closing-editorial-content">
-            <span class="closing-eyebrow">BEGIN YOUR STORY</span>
-            <h2 class="closing-title">Moments, Made Extraordinary.</h2>
-            <p class="closing-brand-sub">BIG DADDY EVENTS &bull; MUNNAR &bull; IDUKKI &bull; DESTINATION EVENTS</p>
-            <p class="closing-narrative">Whether an intimate mountain wedding overlooking mist-covered tea gardens or a monumental stage production, our studio crafts unforgettable experiences tailored to your vision.</p>
-            <div class="closing-actions">
-                <a href="packages.html" class="btn-closing-primary">EXPLORE PACKAGES &rarr;</a>
-                <a href="contact.html" class="btn-closing-secondary">PLAN YOUR EVENT &rarr;</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. FOOTER -->
+    <!-- 6. SITE FOOTER -->
     <footer class="site-footer">
-        <div class="container">
+        <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
-                    <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
+                    <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" class="footer-logo-img">
+                    <p>Ultra-luxury destination celebrations, wedding scenography, and monumental event productions amidst the highlands of Munnar, Kerala.</p>
                 </div>
                 <div class="footer-col">
                     <h4>EXPLORE</h4>
@@ -807,11 +503,11 @@
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>CONTACT</h4>
+                    <h4>CONNECT</h4>
                     <ul>
-                        <li><p>Munnar, Kerala, India</p></li>
-                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><p style="color: rgba(250,248,243,0.65);">Munnar, Kerala, India</p></li>
                         <li><a href="tel:+917034252988">+91 70342 52988</a></li>
+                        <li><a href="mailto:bigdaddyevents01@gmail.com">bigdaddyevents01@gmail.com</a></li>
                     </ul>
                 </div>
             </div>
@@ -822,276 +518,402 @@
         </div>
     </footer>
 
-    <!-- 7. CINEMA-GRADE EDITORIAL LIGHTBOX MODAL -->
-    <div class="cinema-lightbox" id="cinemaLightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Event Story Cinema Preview">
-        <div class="lightbox-backdrop"></div>
+    <!-- 7. FULL-SCREEN LIGHTBOX MODAL -->
+    <div class="gallery-lightbox" id="lightboxModal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="lightbox-header">
+            <div class="lightbox-info">
+                <span class="lightbox-category" id="lbCategory">CATEGORY</span>
+                <h3 class="lightbox-title" id="lbTitle">Photo Title</h3>
+            </div>
+            <div class="lightbox-actions">
+                <span class="lightbox-counter" id="lbCounter">01 / 01</span>
+                <button class="lightbox-close-btn" id="lbCloseBtn" aria-label="Close viewer">&times;</button>
+            </div>
+        </div>
+
         <div class="lightbox-stage">
-            <div class="lightbox-topbar">
-                <div class="lightbox-counter-wrap">
-                    <span class="counter-curr" id="lbCurrent">01</span>
-                    <span class="counter-sep">/</span>
-                    <span class="counter-total" id="lbTotal">27</span>
-                </div>
-                <button type="button" class="lightbox-close-btn" id="lbCloseBtn" aria-label="Close Lightbox">
-                    <span class="close-label">CLOSE</span>
-                    <span class="close-symbol">&times;</span>
-                </button>
+            <button class="lightbox-nav-btn lightbox-prev" id="lbPrevBtn" aria-label="Previous image">&#8249;</button>
+            <div class="lightbox-img-wrap">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Gallery Preview" class="lightbox-main-img" id="lbImg">
             </div>
+            <button class="lightbox-nav-btn lightbox-next" id="lbNextBtn" aria-label="Next image">&#8250;</button>
+        </div>
 
-            <div class="lightbox-body">
-                <!-- Navigation Arrows -->
-                <button type="button" class="lightbox-nav-btn btn-prev" id="lbPrevBtn" aria-label="Previous Story">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <button type="button" class="lightbox-nav-btn btn-next" id="lbNextBtn" aria-label="Next Story">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-
-                <!-- Media Viewer -->
-                <div class="lightbox-media-container">
-                    <img src="" alt="" class="lightbox-main-img" id="lbImage">
-                </div>
-
-                <!-- Editorial Metadata Drawer -->
-                <div class="lightbox-info-drawer">
-                    <span class="lb-kicker" id="lbKicker">DESTINATION STORY</span>
-                    <h3 class="lb-title" id="lbTitle">Highland Celebration</h3>
-                    <p class="lb-desc" id="lbDesc">An unforgettable moment captured in the hills of Munnar.</p>
-                    <div class="lb-actions">
-                        <a href="packages.html" class="btn-lb-packages">EXPLORE PACKAGES &rarr;</a>
-                        <button type="button" class="btn-lb-whatsapp" id="lbWhatsAppBtn">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
-                            <span>ENQUIRE ON WHATSAPP &rarr;</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="lightbox-footer">
+            <p class="lightbox-desc" id="lbDesc"></p>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="lightbox-wa-btn" id="lbWaBtn">
+                <span>&phone;</span> ENQUIRE ON WHATSAPP
+            </a>
         </div>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="script.js"></script>
+    <!-- 8. GALLERY JAVASCRIPT LOGIC -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        (function() {
             const WHATSAPP_NUMBER = '917034252988';
 
-            // 1. COLLECT ALL CINEMATIC CARDS FOR LIGHTBOX
-            const cards = Array.from(document.querySelectorAll('.cinematic-card'));
-            const stories = cards.map((card, idx) => ({
-                index: idx,
-                src: card.dataset.src || '',
-                kicker: card.dataset.kicker || 'BIG DADDY EVENTS',
-                title: card.dataset.title || '',
-                desc: card.dataset.desc || '',
-                element: card
-            }));
+            // State
+            let allPhotos = [];
+            let filteredPhotos = [];
+            let currentCategory = 'all';
+            let activeIndex = 0;
 
-            let currentIndex = 0;
+            // DOM Elements
+            const galleryGrid = document.getElementById('galleryGrid');
+            const filterContainer = document.getElementById('filterContainer');
+            const currentCategoryTitle = document.getElementById('currentCategoryTitle');
+            const currentCountLabel = document.getElementById('currentCountLabel');
+            const siteNav = document.getElementById('siteNav');
+            const navToggle = document.getElementById('navToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
 
-            // 2. STORY FILTERING WITH SMOOTH CHAPTER TRANSITION
-            const tabs = document.querySelectorAll('.story-tab');
-            const chapters = document.querySelectorAll('.story-chapter');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const target = tab.dataset.story;
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-
-                    if (target === 'all') {
-                        chapters.forEach(ch => {
-                            ch.classList.remove('chapter-hidden');
-                            ch.style.display = '';
-                        });
-                    } else {
-                        chapters.forEach(ch => {
-                            if (ch.dataset.chapter === target) {
-                                ch.classList.remove('chapter-hidden');
-                                ch.style.display = '';
-                                setTimeout(() => {
-                                    const navBar = document.getElementById('storyNav');
-                                    const navHeight = navBar ? navBar.offsetHeight : 70;
-                                    const rect = ch.getBoundingClientRect();
-                                    window.scrollTo({
-                                        top: Math.max(0, window.pageYOffset + rect.top - navHeight - 30),
-                                        behavior: 'smooth'
-                                    });
-                                }, 60);
-                            } else {
-                                ch.classList.add('chapter-hidden');
-                                ch.style.display = 'none';
-                            }
-                        });
-                    }
-                });
-            });
-
-            // 3. CINEMA-GRADE LIGHTBOX CONTROLLER
-            const lbModal = document.getElementById('cinemaLightbox');
-            const lbImage = document.getElementById('lbImage');
-            const lbCurrent = document.getElementById('lbCurrent');
-            const lbTotal = document.getElementById('lbTotal');
-            const lbKicker = document.getElementById('lbKicker');
+            // Lightbox Elements
+            const lightboxModal = document.getElementById('lightboxModal');
+            const lbImg = document.getElementById('lbImg');
+            const lbCategory = document.getElementById('lbCategory');
             const lbTitle = document.getElementById('lbTitle');
             const lbDesc = document.getElementById('lbDesc');
+            const lbCounter = document.getElementById('lbCounter');
+            const lbWaBtn = document.getElementById('lbWaBtn');
             const lbCloseBtn = document.getElementById('lbCloseBtn');
             const lbPrevBtn = document.getElementById('lbPrevBtn');
             const lbNextBtn = document.getElementById('lbNextBtn');
-            const lbWhatsAppBtn = document.getElementById('lbWhatsAppBtn');
-            const lbBackdrop = document.querySelector('.lightbox-backdrop');
 
-            lbTotal.textContent = String(stories.length).padStart(2, '0');
+            // Nav Scroll & Mobile Menu Toggle
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 40) {
+                    siteNav.classList.add('scrolled');
+                } else {
+                    siteNav.classList.remove('scrolled');
+                }
+            }, { passive: true });
 
-            // Accessible focus tracker
-            let lastFocusedElement = null;
+            if (navToggle && mobileMenu) {
+                navToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('open');
+                });
+            }
 
+            // Fetch Gallery Data from Server API
+            async function fetchGallery() {
+                try {
+                    const res = await fetch('/api/public/gallery');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (Array.isArray(data) && data.length > 0) {
+                            allPhotos = data;
+                            initGallery();
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('API error fetching gallery, checking fallback', err);
+                }
+                // Fallback initial dataset if server is unreachable
+                if (!allPhotos || allPhotos.length === 0) {
+                    allPhotos = getInitialFallbackData();
+                    initGallery();
+                }
+            }
+
+            // Initialize Gallery & Build Filters
+            function initGallery() {
+                buildCategoryFilters();
+                filterGallery('all');
+            }
+
+            // Build Dynamic Category Buttons
+            function buildCategoryFilters() {
+                const preferredOrder = [
+                    'Hindu Wedding',
+                    'Christian Wedding',
+                    'Muslim Wedding',
+                    'Engagement',
+                    'Reception',
+                    'Destination Wedding',
+                    'Stage & Production'
+                ];
+
+                const categoryCounts = {};
+                allPhotos.forEach(p => {
+                    const cat = p.category ? p.category.trim() : 'Other Event';
+                    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+                });
+
+                const countAllEl = document.getElementById('count-all');
+                if (countAllEl) {
+                    countAllEl.textContent = allPhotos.length;
+                }
+
+                const categoriesInOrder = [];
+                preferredOrder.forEach(cat => {
+                    if (categoryCounts[cat] !== undefined) {
+                        categoriesInOrder.push(cat);
+                    }
+                });
+                Object.keys(categoryCounts).forEach(cat => {
+                    if (!categoriesInOrder.includes(cat)) {
+                        categoriesInOrder.push(cat);
+                    }
+                });
+
+                categoriesInOrder.forEach(cat => {
+                    const count = categoryCounts[cat] || 0;
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-pill';
+                    btn.setAttribute('data-category', cat);
+                    btn.innerHTML = `
+                        <span>${escapeHtml(cat)}</span>
+                        <span class="pill-count">${count}</span>
+                    `;
+                    btn.addEventListener('click', () => {
+                        filterGallery(cat);
+                    });
+                    filterContainer.appendChild(btn);
+                });
+
+                const allPill = filterContainer.querySelector('[data-category="all"]');
+                if (allPill) {
+                    allPill.addEventListener('click', () => {
+                        filterGallery('all');
+                    });
+                }
+            }
+
+            // Filter Gallery
+            function filterGallery(category) {
+                currentCategory = category;
+
+                const pills = filterContainer.querySelectorAll('.filter-pill');
+                pills.forEach(pill => {
+                    if (pill.getAttribute('data-category') === category) {
+                        pill.classList.add('active');
+                    } else {
+                        pill.classList.remove('active');
+                    }
+                });
+
+                if (category === 'all') {
+                    filteredPhotos = [...allPhotos];
+                    currentCategoryTitle.textContent = 'All Work';
+                } else {
+                    filteredPhotos = allPhotos.filter(p => (p.category || '').trim() === category);
+                    currentCategoryTitle.textContent = category;
+                }
+
+                currentCountLabel.textContent = `Showing ${filteredPhotos.length} ${filteredPhotos.length === 1 ? 'photograph' : 'photographs'}`;
+
+                renderPhotos();
+            }
+
+            // Render Photos in Editorial Asymmetrical Grid
+            function renderPhotos() {
+                galleryGrid.innerHTML = '';
+
+                if (filteredPhotos.length === 0) {
+                    galleryGrid.innerHTML = `
+                        <div class="gallery-empty">
+                            <h3>No Photographs Found</h3>
+                            <p>No event photographs in this category yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                filteredPhotos.forEach((photo, index) => {
+                    const card = document.createElement('div');
+                    
+                    const mod = index % 7;
+                    let spanClass = 'span-standard';
+                    if (mod === 0) spanClass = 'span-hero';
+                    else if (mod === 2) spanClass = 'span-tall';
+                    else if (mod === 4) spanClass = 'span-wide';
+
+                    card.className = `gallery-card ${spanClass}`;
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.setAttribute('aria-label', `${photo.title || 'Event photo'} - ${photo.category}`);
+
+                    function getWebpUrl(url) {
+                        if (!url) return '';
+                        if (url.endsWith('.webp')) return url;
+                        if (url.startsWith('assets/images/')) {
+                            return url.replace(/\.(jpe?g|png)$/i, '.webp');
+                        }
+                        return url;
+                    }
+
+                    const imgUrl = photo.image_url || 'assets/images/stage-decoration.jpg';
+                    const webpUrl = getWebpUrl(imgUrl);
+                    const category = photo.category || 'Portfolio';
+                    const title = photo.title || 'Big Daddy Events Portfolio';
+
+                    card.innerHTML = `
+                        <div class="gallery-card__inner">
+                            <picture>
+                                <source srcset="${escapeHtml(webpUrl)}" type="image/webp">
+                                <img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(title)}" width="1024" height="1024" loading="lazy" decoding="async">
+                            </picture>
+                            <div class="card-zoom-icon" aria-hidden="true">&#x2922;</div>
+                            <div class="gallery-card__caption">
+                                <span class="card-category-tag">${escapeHtml(category)}</span>
+                                <h3 class="card-title-text">${escapeHtml(title)}</h3>
+                            </div>
+                        </div>
+                    `;
+
+                    card.addEventListener('click', () => {
+                        openLightbox(index);
+                    });
+
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openLightbox(index);
+                        }
+                    });
+
+                    galleryGrid.appendChild(card);
+                });
+            }
+
+            // ==========================================
+            // LIGHTBOX LOGIC
+            // ==========================================
             function openLightbox(index) {
-                if (index < 0 || index >= stories.length) return;
-                lastFocusedElement = document.activeElement;
-                currentIndex = index;
-                renderLightboxStory();
-                lbModal.classList.add('active');
-                lbModal.setAttribute('aria-hidden', 'false');
+                if (index < 0 || index >= filteredPhotos.length) return;
+                activeIndex = index;
+                updateLightboxContent();
+                lightboxModal.classList.add('active');
+                lightboxModal.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    if (lbCloseBtn) lbCloseBtn.focus();
-                }, 100);
             }
 
             function closeLightbox() {
-                lbModal.classList.remove('active');
-                lbModal.setAttribute('aria-hidden', 'true');
+                lightboxModal.classList.remove('active');
+                lightboxModal.setAttribute('aria-hidden', 'true');
                 document.body.style.overflow = '';
-                if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-                    lastFocusedElement.focus();
-                }
             }
 
-            function renderLightboxStory() {
-                const story = stories[currentIndex];
-                if (!story) return;
-
-                lbImage.style.opacity = '0';
-                lbImage.style.transform = 'scale(0.97)';
-
-                setTimeout(() => {
-                    lbImage.src = story.src;
-                    lbImage.alt = story.title;
-                    lbCurrent.textContent = String(currentIndex + 1).padStart(2, '0');
-                    lbKicker.textContent = story.kicker;
-                    lbTitle.textContent = story.title;
-                    lbDesc.textContent = story.desc;
-
-                    lbImage.style.opacity = '1';
-                    lbImage.style.transform = 'scale(1)';
-                }, 120);
+            function nextImage() {
+                if (filteredPhotos.length === 0) return;
+                activeIndex = (activeIndex + 1) % filteredPhotos.length;
+                updateLightboxContent();
             }
 
-            function showPrev() {
-                currentIndex = (currentIndex - 1 + stories.length) % stories.length;
-                renderLightboxStory();
+            function prevImage() {
+                if (filteredPhotos.length === 0) return;
+                activeIndex = (activeIndex - 1 + filteredPhotos.length) % filteredPhotos.length;
+                updateLightboxContent();
             }
 
-            function showNext() {
-                currentIndex = (currentIndex + 1) % stories.length;
-                renderLightboxStory();
-            }
+            function updateLightboxContent() {
+                const photo = filteredPhotos[activeIndex];
+                if (!photo) return;
 
-            // Click and keyboard navigation for each card
-            cards.forEach((card, idx) => {
-                card.setAttribute('tabindex', '0');
-                card.setAttribute('role', 'button');
-                const title = card.dataset.title || 'Event Story';
-                card.setAttribute('aria-label', `View story: ${title}`);
+                const imgUrl = photo.image_url || 'assets/images/stage-decoration.jpg';
+                const category = photo.category || 'Event Portfolio';
+                const title = photo.title || 'Big Daddy Events Creation';
+                const desc = photo.description || '';
 
-                card.addEventListener('click', () => {
-                    openLightbox(idx);
-                });
+                const webpUrl = (imgUrl.startsWith('assets/images/') && !imgUrl.endsWith('.webp')) 
+                    ? imgUrl.replace(/\.(jpe?g|png)$/i, '.webp') 
+                    : imgUrl;
 
-                card.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openLightbox(idx);
+                lbImg.onerror = function() {
+                    if (this.src !== imgUrl) {
+                        this.src = imgUrl;
                     }
-                });
-            });
+                };
+                lbImg.src = webpUrl;
+                lbImg.alt = title;
+                lbCategory.textContent = category.toUpperCase();
+                lbTitle.textContent = title;
+                lbDesc.textContent = desc;
 
-            // Close controls
-            if (lbCloseBtn) lbCloseBtn.addEventListener('click', closeLightbox);
-            if (lbBackdrop) lbBackdrop.addEventListener('click', closeLightbox);
-            if (lbPrevBtn) lbPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
-            if (lbNextBtn) lbNextBtn.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+                const currentFormatted = String(activeIndex + 1).padStart(2, '0');
+                const totalFormatted = String(filteredPhotos.length).padStart(2, '0');
+                lbCounter.textContent = `${currentFormatted} / ${totalFormatted}`;
 
-            // WhatsApp link inside lightbox
-            if (lbWhatsAppBtn) {
-                lbWhatsAppBtn.addEventListener('click', () => {
-                    const story = stories[currentIndex];
-                    const title = story ? story.title : 'one of your featured event setups';
-                    const msg = `Hi Big Daddy Events, I was exploring your Event Stories gallery and was mesmerized by "${title}". Could you please share more details regarding this styling and availability?`;
-                    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
-                });
+                const waMessage = `Hi Big Daddy Events, I saw your ${category} work ("${title}") in your gallery and would like to discuss a similar setup for my event.`;
+                lbWaBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
             }
 
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (!lbModal.classList.contains('active')) return;
-                if (e.key === 'Escape') {
+            if (lbCloseBtn) lbCloseBtn.addEventListener('click', closeLightbox);
+            if (lbPrevBtn) lbPrevBtn.addEventListener('click', prevImage);
+            if (lbNextBtn) lbNextBtn.addEventListener('click', nextImage);
+
+            lightboxModal.addEventListener('click', (e) => {
+                if (e.target === lightboxModal || e.target.classList.contains('lightbox-stage')) {
                     closeLightbox();
-                } else if (e.key === 'ArrowLeft') {
-                    showPrev();
-                } else if (e.key === 'ArrowRight') {
-                    showNext();
                 }
             });
 
-            // Touch Swipe Support for Mobile
+            document.addEventListener('keydown', (e) => {
+                if (!lightboxModal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+            });
+
             let touchStartX = 0;
             let touchEndX = 0;
-
-            lbModal.addEventListener('touchstart', (e) => {
+            lightboxModal.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
             }, { passive: true });
 
-            lbModal.addEventListener('touchend', (e) => {
+            lightboxModal.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
-                handleSwipeGesture();
+                handleSwipe();
             }, { passive: true });
 
-            function handleSwipeGesture() {
-                const swipeDiff = touchEndX - touchStartX;
-                if (Math.abs(swipeDiff) > 50) {
-                    if (swipeDiff > 0) {
-                        showPrev();
-                    } else {
-                        showNext();
-                    }
+            function handleSwipe() {
+                const diff = touchEndX - touchStartX;
+                if (Math.abs(diff) > 45) {
+                    if (diff < 0) nextImage();
+                    else prevImage();
                 }
             }
 
-            // 4. INTERSECTION OBSERVER FOR EDITORIAL SCROLL REVEALS
-            const revealOptions = {
-                root: null,
-                rootMargin: '0px 0px -8% 0px',
-                threshold: 0.08
-            };
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str).replace(/[&<>"']/g, c => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[c]));
+            }
 
-            const revealObserver = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, revealOptions);
+            function getInitialFallbackData() {
+                return [
+                    { id: 1, title: 'Traditional Hindu Mandap & Sacred Vows', category: 'Hindu Wedding', image_url: 'assets/images/hindu-destination-wedding.jpg', description: 'Authentic traditional mandap with floral artistry amidst misty hills.' },
+                    { id: 2, title: 'Highland Hindu Wedding Ceremony', category: 'Hindu Wedding', image_url: 'assets/images/hindu-wedding.jpg', description: 'Vibrant ceremonial rituals and bespoke wedding stage.' },
+                    { id: 3, title: 'Church Altar & Mountain Backdrop', category: 'Christian Wedding', image_url: 'assets/images/christian-destination-wedding.jpg', description: 'Graceful white and pastel floral sanctuary with grand walkway.' },
+                    { id: 4, title: 'Cathedral Elegance & Evening Blessing', category: 'Christian Wedding', image_url: 'assets/images/christian-wedding.jpg', description: 'Atmospheric church celebration and luxury choir arrangement.' },
+                    { id: 5, title: 'Regal Nikah Pavilion & Stage', category: 'Muslim Wedding', image_url: 'assets/images/muslim-destination-wedding.jpg', description: 'Grand royal floral arch and majestic stage backdrop.' },
+                    { id: 6, title: 'Bespoke Malabar Wedding Scenography', category: 'Muslim Wedding', image_url: 'assets/images/muslim-wedding.jpg', description: 'Opulent wedding celebration with traditional hospitality aesthetic.' },
+                    { id: 7, title: 'Highland Betrothal & Floral Ring Stage', category: 'Engagement', image_url: 'assets/images/betrothal.jpg', description: 'Bespoke ring ceremony stage with cascading florals and fairy lights.' },
+                    { id: 8, title: 'Intimate Ring Exchange Pavilion', category: 'Engagement', image_url: 'assets/images/celebration-showcase.jpg', description: 'Elegant evening engagement setup for close family and friends.' },
+                    { id: 9, title: 'Grand Gala Reception Scenography', category: 'Reception', image_url: 'assets/images/event-corporate-gala.jpg', description: 'State-of-the-art ballroom reception with custom stage lighting.' },
+                    { id: 10, title: 'Indoor Luxury Banquet Reception', category: 'Reception', image_url: 'assets/images/indoor-wedding.jpg', description: 'Sophisticated table styling and warm ambient crystal chandeliers.' },
+                    { id: 11, title: 'Tea Estate Open Air Reception', category: 'Reception', image_url: 'assets/images/outdoor-wedding.jpg', description: 'Evening garden celebration under the starlit Munnar skies.' },
+                    { id: 12, title: 'Munnar Misty Highland Wedding', category: 'Destination Wedding', image_url: 'assets/images/munnar-main-destination-wedding.png', description: 'Iconic tea plantation amphitheatre vows with rolling cloud views.' },
+                    { id: 13, title: 'Tea Estate Valley Panorama Wedding', category: 'Destination Wedding', image_url: 'assets/images/munnar-valley-wedding.png', description: 'Breathtaking mountain valley backdrop and natural botanical styling.' },
+                    { id: 14, title: 'Intimate Mountain Slope Pavilion', category: 'Destination Wedding', image_url: 'assets/images/munnar-intimate-wedding.png', description: 'Exclusive hillside wedding gazebo overlooking endless green slopes.' },
+                    { id: 15, title: 'Sunset Amphitheatre Gathering', category: 'Destination Wedding', image_url: 'assets/images/event-destination-outdoor.jpg', description: 'Sunset celebration with custom perimeter illumination.' },
+                    { id: 16, title: 'Monolithic Concert & Truss Stage', category: 'Stage & Production', image_url: 'assets/images/stage-production.jpg', description: 'Heavy-duty aluminium trussing and moving head lighting fixtures.' },
+                    { id: 17, title: 'Floral Ramp & Ambient Illumination', category: 'Stage & Production', image_url: 'assets/images/stage-decoration.jpg', description: 'Bespoke runway and illuminated focal backdrop.' },
+                    { id: 18, title: 'High-End Acoustic & Line Array Production', category: 'Stage & Production', image_url: 'assets/images/sound-lighting.jpg', description: 'Tour-grade audio systems, stage monitors, and digital sound control.' },
+                    { id: 19, title: 'Live Concert & Strobe Effects', category: 'Stage & Production', image_url: 'assets/images/event-live-concert.jpg', description: 'Dynamic lighting and concert production for high-energy celebrations.' },
+                    { id: 20, title: 'Celebration Fireworks Finalé', category: 'Stage & Production', image_url: 'assets/images/fireworks-show.jpg', description: 'Spectacular cold pyro and fireworks display to close the night.' }
+                ];
+            }
 
-            document.querySelectorAll('.cinematic-card, .chapter-prologue, .cinematic-interstitial-band, .proof-stat-card').forEach(el => {
-                revealObserver.observe(el);
-            });
-        });
+            document.addEventListener('DOMContentLoaded', fetchGallery);
+        })();
     </script>
 </body>
+
 </html>

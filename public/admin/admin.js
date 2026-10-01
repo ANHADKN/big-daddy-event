@@ -40,11 +40,29 @@ const formatDate = (dateStr) => {
 
 // Common Modal Logic
 function openModal(id) {
-    document.getElementById(id).classList.add('active');
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
 }
 function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
 }
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.classList.toggle('open');
+}
+
+// Close sidebar on mobile when navigating or clicking outside
+document.addEventListener('click', (e) => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggle = document.querySelector('.mobile-toggle');
+    if (sidebar && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && (!toggle || !toggle.contains(e.target))) {
+            sidebar.classList.remove('open');
+        }
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();

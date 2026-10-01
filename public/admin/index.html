@@ -2,8 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Big Daddy Events Admin</title>
     <link rel="stylesheet" href="admin.css">
+    <style>
+        .quick-actions-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn-quick {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .btn-quick:hover {
+            border-color: var(--color-accent);
+            background: #FAF8F5;
+            transform: translateY(-1px);
+        }
+
+        .dashboard-sections-split {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .dashboard-sections-split {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body class="admin-layout">
     <!-- SIDEBAR -->
@@ -13,12 +54,27 @@
             <h3>ADMIN PORTAL</h3>
         </div>
         <nav class="sidebar-nav">
-            <a href="index.html" class="nav-item active">Dashboard</a>
-            <a href="bookings.html" class="nav-item">Bookings</a>
-            <a href="enquiries.html" class="nav-item">Enquiries</a>
-            <a href="payments.html" class="nav-item">Payments</a>
-            <a href="events.html" class="nav-item">Upcoming Events</a>
-            <a href="packages.html" class="nav-item">Packages</a>`n            <a href="reports.html" class="nav-item">Reports</a>
+            <a href="index.html" class="nav-item active">
+                <span>Dashboard</span>
+            </a>
+            <a href="bookings.html" class="nav-item">
+                <span>Bookings</span>
+            </a>
+            <a href="enquiries.html" class="nav-item">
+                <span>Enquiries</span>
+            </a>
+            <a href="gallery.html" class="nav-item">
+                <span>Gallery</span>
+            </a>
+            <a href="events.html" class="nav-item">
+                <span>Upcoming Events</span>
+            </a>
+            <a href="packages.html" class="nav-item">
+                <span>Packages</span>
+            </a>
+            <a href="reports.html" class="nav-item">
+                <span>Reports</span>
+            </a>
         </nav>
         <div class="sidebar-bottom">
             <a href="#" onclick="logout()" class="nav-item" style="color: var(--color-accent);">Logout</a>
@@ -28,37 +84,101 @@
     <!-- MAIN CONTENT -->
     <main class="main-content">
         <header class="admin-header">
-            <h1 class="page-title">Dashboard</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation" style="display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-primary);">&#9776;</button>
+                <h1 class="page-title">Executive Dashboard</h1>
+            </div>
             <div class="header-actions">
-                <span id="adminProfile">Admin</span>
+                <span class="admin-badge">Admin Portal</span>
             </div>
         </header>
 
         <div class="content-body">
+            <!-- QUICK SHORTCUTS -->
+            <div class="quick-actions-bar">
+                <a href="bookings.html" class="btn-quick">
+                    <span>📅</span> Manage Bookings
+                </a>
+                <a href="enquiries.html" class="btn-quick">
+                    <span>📩</span> View Enquiries
+                </a>
+                <a href="gallery.html" class="btn-quick">
+                    <span>🖼️</span> Manage Gallery
+                </a>
+                <a href="packages.html" class="btn-quick">
+                    <span>📦</span> Event Packages
+                </a>
+            </div>
+
+            <!-- DASHBOARD STAT METRICS (ZERO PAYMENT MENTIONS) -->
             <div class="dashboard-grid">
                 <div class="stat-card">
-                    <h4>Total Bookings</h4>
+                    <h4>Total Event Bookings</h4>
                     <div class="value" id="stat-total-bookings">...</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Pending Bookings</h4>
+                    <h4>Confirmed Celebrations</h4>
+                    <div class="value highlight" id="stat-confirmed-bookings">...</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Pending Enquiries</h4>
                     <div class="value" id="stat-pending-bookings">...</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Total Enquiries</h4>
-                    <div class="value highlight" id="stat-enquiries">...</div>
+                    <h4>Total Client Inquiries</h4>
+                    <div class="value" id="stat-enquiries">...</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Total Booking Value</h4>
-                    <div class="value" id="stat-total-value">...</div>
+                    <h4>Active Packages</h4>
+                    <div class="value" id="stat-packages">...</div>
                 </div>
                 <div class="stat-card">
-                    <h4>Total Advance Received</h4>
-                    <div class="value highlight" id="stat-advance">...</div>
+                    <h4>Gallery Photographs</h4>
+                    <div class="value highlight" id="stat-gallery">...</div>
                 </div>
-                <div class="stat-card">
-                    <h4>Total Balance Due</h4>
-                    <div class="value" id="stat-balance">...</div>
+            </div>
+
+            <!-- RECENT OVERVIEW TABLES -->
+            <div class="dashboard-sections-split">
+                <!-- RECENT BOOKINGS -->
+                <div class="table-container">
+                    <div class="table-header-actions">
+                        <h3 style="font-family: var(--font-display); color: var(--color-primary); font-size: 1.35rem;">Recent Event Bookings</h3>
+                        <a href="bookings.html" style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase;">View All &rarr;</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Client</th>
+                                <th>Event Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBookingsBody">
+                            <tr><td colspan="4" style="text-align: center; color: #888;">Loading bookings...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- RECENT ENQUIRIES -->
+                <div class="table-container">
+                    <div class="table-header-actions">
+                        <h3 style="font-family: var(--font-display); color: var(--color-primary); font-size: 1.35rem;">New Inquiries</h3>
+                        <a href="enquiries.html" style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase;">View All &rarr;</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentEnquiriesBody">
+                            <tr><td colspan="3" style="text-align: center; color: #888;">Loading inquiries...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -72,19 +192,79 @@
                 const stats = await res.json();
                 
                 document.getElementById('stat-total-bookings').textContent = stats.totalBookings || 0;
+                document.getElementById('stat-confirmed-bookings').textContent = stats.confirmedBookings || 0;
                 document.getElementById('stat-pending-bookings').textContent = stats.pendingBookings || 0;
                 document.getElementById('stat-enquiries').textContent = stats.totalEnquiries || 0;
-                
-                document.getElementById('stat-total-value').textContent = formatCurrency(stats.totalValue);
-                document.getElementById('stat-advance').textContent = formatCurrency(stats.totalAdvance);
-                document.getElementById('stat-balance').textContent = formatCurrency(stats.balanceDue);
+                document.getElementById('stat-packages').textContent = stats.totalPackages || 5;
+                document.getElementById('stat-gallery').textContent = stats.totalGallery || 20;
+
+                // Load preview tables
+                loadRecentBookings();
+                loadRecentEnquiries();
             } catch (err) {
-                console.error(err);
+                console.error("Dashboard stats error:", err);
             }
+        }
+
+        async function loadRecentBookings() {
+            try {
+                const res = await fetchWithAuth('/api/admin/bookings');
+                if (!res.ok) return;
+                const bookings = await res.json();
+                const tbody = document.getElementById('recentBookingsBody');
+                if (!bookings || !bookings.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #888;">No bookings recorded yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = '';
+                bookings.slice(0, 5).forEach(b => {
+                    const statusClass = (b.status || '').toLowerCase().includes('confirm') ? 'confirmed' : 'pending';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color: var(--color-primary); font-size: 0.85rem;">${escapeHtml(b.booking_id)}</strong></td>
+                            <td>${escapeHtml(b.customer_name)}<br><small style="color: #888;">${escapeHtml(b.event_type || '')}</small></td>
+                            <td>${formatDate(b.event_date)}</td>
+                            <td><span class="badge ${statusClass}">${escapeHtml(b.status || 'PENDING')}</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadRecentEnquiries() {
+            try {
+                const res = await fetchWithAuth('/api/admin/enquiries');
+                if (!res.ok) return;
+                const enquiries = await res.json();
+                const tbody = document.getElementById('recentEnquiriesBody');
+                if (!enquiries || !enquiries.length) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #888;">No inquiries recorded yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = '';
+                enquiries.slice(0, 5).forEach(e => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${escapeHtml(e.name)}</strong></td>
+                            <td><a href="tel:${escapeHtml(e.phone)}" style="color: var(--color-accent);">${escapeHtml(e.phone)}</a></td>
+                            <td><span class="badge ${e.status === 'NEW' ? 'pending' : 'confirmed'}">${escapeHtml(e.status || 'NEW')}</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function escapeHtml(str = '') {
+            return String(str).replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            }[m]));
         }
         
         document.addEventListener('DOMContentLoaded', loadDashboard);
     </script>
 </body>
 </html>
-

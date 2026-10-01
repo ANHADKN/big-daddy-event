@@ -10,13 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css?v=20260912">
-    <link rel="stylesheet" href="packages.css?v=20260919_warm_editorial">
+    <link rel="stylesheet" href="packages.css?v=20260929_showcase_tabs">
 </head>
 <body>
 
     <!-- NAVIGATION -->
     <nav class="site-nav">
-        <a href="index.html" class="logo"><img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img"></a>
+        <a href="index.html" class="logo">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/big-daddy-events-logo-white.png">
+                <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events Logo" class="brand-logo brand-logo--light nav-logo-img">
+            </picture>
+        </a>
         <div class="nav-links">
             <a href="index.html">HOME</a>
             <a href="packages.html" class="active">PACKAGES</a>
@@ -57,25 +62,39 @@
         </div>
     </header>
 
-    <!-- PACKAGE FILTER -->
-    <nav class="package-filter-wrapper gsap-reveal" aria-label="Filter packages by celebration type">
-        <div class="package-filter">
-            <button class="filter-btn active" data-filter="all">ALL</button>
-            <button class="filter-btn" data-filter="wedding">WEDDINGS</button>
-            <button class="filter-btn" data-filter="destination">DESTINATION</button>
-            <button class="filter-btn" data-filter="corporate">CORPORATE</button>
-            <button class="filter-btn" data-filter="private">PRIVATE EVENTS</button>
+    <!-- PACKAGE TABS -->
+    <nav class="package-tabs-wrapper gsap-reveal" aria-label="Explore packages by tier">
+        <div class="package-tabs" role="tablist">
+            <button type="button" class="pkg-tab-btn active" data-tab="bronze" role="tab" aria-selected="true" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">BRONZE</span>
+            </button>
+            <button type="button" class="pkg-tab-btn" data-tab="silver" role="tab" aria-selected="false" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">SILVER</span>
+            </button>
+            <button type="button" class="pkg-tab-btn" data-tab="gold" role="tab" aria-selected="false" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">GOLD</span>
+            </button>
+            <button type="button" class="pkg-tab-btn" data-tab="premium" role="tab" aria-selected="false" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">PREMIUM</span>
+            </button>
+            <button type="button" class="pkg-tab-btn" data-tab="premium-plus" role="tab" aria-selected="false" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">PREMIUM PLUS</span>
+            </button>
+            <button type="button" class="pkg-tab-btn" data-tab="all" role="tab" aria-selected="false" aria-controls="packages-container">
+                <span class="pkg-tab-dot"></span>
+                <span class="pkg-tab-text">ALL PACKAGES</span>
+            </button>
         </div>
     </nav>
 
     <!-- PACKAGES SHOWCASE CONTAINER -->
     <main class="packages-collection-section">
-        <div class="packages-section-intro text-center gsap-reveal">
-            <span class="editorial-eyebrow">YOUR PACKAGE</span>
-            <h2 class="editorial-sub-heading">Curated experiences for extraordinary celebrations</h2>
-        </div>
-
-        <div class="packages-editorial-container" id="packages-container">
+        <div class="packages-editorial-container" id="packages-container" role="region" aria-live="polite">
             <!-- Injected by JS -->
         </div>
     </main>
@@ -85,7 +104,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="assets/images/big_daddy_events_logo_1200x628.png" alt="Big Daddy Events" class="brand-logo brand-logo--dark footer-logo-img">
+                    <img src="assets/images/big-daddy-events-logo-white.png" alt="Big Daddy Events" class="footer-logo-img">
                     <p>Premium destination weddings and bespoke events in Munnar, Kerala.</p>
                 </div>
                 <div class="footer-col">
@@ -102,7 +121,7 @@
                     <h4>CONTACT</h4>
                     <ul>
                         <li><p>Munnar, Kerala, India</p></li>
-                        <li><a href="mailto:BigDaddyEvents@bigdaddyevent.com">BigDaddyEvents@bigdaddyevent.com</a></li>
+                        <li><a href="mailto:bigdaddyevents01@gmail.com">bigdaddyevents01@gmail.com</a></li>
                         <li><a href="tel:+917034252988">+91 70342 52988</a></li>
                     </ul>
                 </div>
@@ -117,6 +136,41 @@
     <script src="script.js"></script>
     <script>
         const WHATSAPP_NUMBER = '917034252988';
+
+        // Curated Signature Inclusions for the centerpiece package card (4 clean, uncluttered highlights)
+        const signatureInclusionsMap = {
+            'bronze': [
+                'Pathway Decoration & Welcome Board',
+                'Grand Entrance Arch Setup',
+                'Pro Sound System & Genset with Fuel',
+                'Celebration Cake & Wine'
+            ],
+            'silver': [
+                '15-Foot Grand Ramp Setup',
+                'Pathway Decor & Entrance Arch',
+                'Atmospheric Cold Fire Special FX',
+                'Pro Sound with Top, Sub & Feedback'
+            ],
+            'gold': [
+                'Master of Ceremonies (MC) & Hostesses',
+                'Special Floral Stage Setup (SFS)',
+                'Atmospheric Dry Ice Fog & Cold Fire FX',
+                'Pro Audio & Stage Production Suite'
+            ],
+            'premium': [
+                'Bespoke Altar & Church Arch Decor',
+                'Live Music Fusion & Welcome Dance',
+                'Confetti & Bubble Machine Special FX',
+                'Designer Chairs, Family Table & Full Audio'
+            ],
+            'premium-plus': [
+                'Bespoke LED Walls & Architectural Lighting',
+                'Full Stage Dome & Designer Fabric Drapes',
+                'VIP Sofa Lounge, Dining & Royal Setup',
+                'Live Fusion, Welcome Dance & Complete FX'
+            ]
+        };
+
         const fallbackPackages = [
             {
                 id: 'bronze',
@@ -126,7 +180,7 @@
                 price: '₹15,000 - ₹30,000',
                 basePrice: 15000,
                 image: 'assets/images/event-private-celebration.jpg',
-                features: ['Pathway decoration', 'Entrance arch', 'Welcome board', 'Sound system'],
+                features: ['Pathway decoration', 'Entrance arch', 'Welcome board', 'Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback', 'Cake', 'Wine'],
                 categories: {
                     'DECORATION': ['Pathway decoration', 'Entrance arch', 'Welcome board'],
                     'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
@@ -140,8 +194,8 @@
                 desc: 'More atmosphere. More celebration.',
                 price: '₹30,000 - ₹60,000',
                 basePrice: 30000,
-                image: 'assets/images/munnar-intimate-wedding.jpg',
-                features: ['15-foot ramp', 'Pathway decoration', 'Cold fire', 'Sound system'],
+                image: 'assets/images/sound-lighting.jpg',
+                features: ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback', 'Cake', 'Wine', 'Cold fire'],
                 categories: {
                     'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board'],
                     'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
@@ -156,8 +210,8 @@
                 desc: 'A richer celebration with entertainment.',
                 price: '₹60,000 - ₹1,00,000',
                 basePrice: 60000,
-                image: 'assets/images/hindu-destination-wedding.jpg',
-                features: ['MC & Hosting girls', 'SFS', 'Dry ice fog', 'Sound system'],
+                image: 'assets/images/stage-decoration.jpg',
+                features: ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback', 'MC', 'Hosting girls', 'SFS', 'Cake', 'Wine', 'Cold fire', 'Dry ice fog'],
                 categories: {
                     'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board'],
                     'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
@@ -174,7 +228,7 @@
                 price: '₹1,00,000 - ₹1,60,000',
                 basePrice: 100000,
                 image: 'assets/images/event-destination-outdoor.jpg',
-                features: ['Altar decoration', 'Confetti & Bubble machine', 'Live fusion', 'Welcome dance'],
+                features: ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Family table', 'Premium chairs', 'Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback', 'MC', 'Hosting girls', 'SFS', 'Live fusion', 'Welcome dance', 'Cake', 'Wine', 'Cold fire', 'Dry ice fog', 'Confetti', 'Bubble machine'],
                 categories: {
                     'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Family table', 'Premium chairs'],
                     'PRODUCTION': ['Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback'],
@@ -190,8 +244,8 @@
                 desc: 'The ultimate Big Daddy Events experience.',
                 price: '₹1,60,000',
                 basePrice: 160000,
-                image: 'assets/images/event-corporate-gala.jpg',
-                features: ['Custom & Ambiance lighting', 'LED walls', 'VIP sofa & Dining', 'Live fusion & Welcome dance'],
+                image: 'assets/images/stage-production.jpg',
+                features: ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Hall dome / ceiling cloth', 'VIP sofa', 'Premium chairs', 'Dining table', 'Family table', 'Dining arrangements', 'Custom lighting', 'Ambiance lighting', 'Sharpie lights', 'LED strobes', 'LED walls', 'Generator (genset) with fuel', 'Sound system', 'Top, sub & feedback', 'MC', 'Hosting girls', 'SFS', 'Live fusion', 'Welcome dance', 'Cake', 'Wine', 'Cold fire', 'Dry ice fog', 'Confetti', 'Bubble machine'],
                 categories: {
                     'DECORATION': ['15-foot ramp', 'Pathway decoration', 'Entrance arch', 'Welcome board', 'Mala', 'Altar decoration', 'Church arch', 'Hall dome / ceiling cloth', 'VIP sofa', 'Premium chairs', 'Dining table', 'Family table', 'Dining arrangements'],
                     'LIGHTING': ['Custom lighting', 'Ambiance lighting', 'Sharpie lights', 'LED strobes', 'LED walls'],
@@ -202,11 +256,26 @@
                 }
             }
         ];
+
         let packageData = [];
-        let currentFilter = 'all';
+        let currentTab = 'bronze';
 
         document.addEventListener('DOMContentLoaded', async () => {
-            setupFilters();
+            // Check initial hash if present
+            const initialHash = (window.location.hash || '').replace('#', '').toLowerCase();
+            if (['bronze', 'silver', 'gold', 'premium', 'premium-plus', 'all'].includes(initialHash)) {
+                currentTab = initialHash;
+            }
+
+            // Sync initial active state
+            document.querySelectorAll('.pkg-tab-btn').forEach(btn => {
+                const isActive = btn.dataset.tab === currentTab;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            setupTabs();
+
             try {
                 const res = await fetch('/api/public/packages');
                 if (res.ok) {
@@ -219,50 +288,85 @@
                 console.warn('Using fallback package data', err);
                 packageData = fallbackPackages;
             }
+
             renderPackages();
+
+            // Auto-expand details if requested via parameter or hash
+            const urlParams = new URLSearchParams(window.location.search);
+            const detailsParam = urlParams.get('details') || (window.location.hash.endsWith('-details') ? window.location.hash.replace('-details', '').replace('#', '') : null);
+            if (detailsParam) {
+                setTimeout(() => toggleDetails(detailsParam), 80);
+            }
         });
 
-        function setupFilters() {
-            document.querySelectorAll('.filter-btn').forEach(button => {
+        function setupTabs() {
+            document.querySelectorAll('.pkg-tab-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    currentFilter = button.dataset.filter;
-                    closeAllInlineDetails();
-                    renderPackages();
+                    const tabId = button.dataset.tab;
+                    if (tabId === currentTab) return;
+                    switchTab(tabId);
                 });
             });
         }
 
+        function switchTab(tabId, updateHash = true) {
+            currentTab = tabId;
+            document.querySelectorAll('.pkg-tab-btn').forEach(btn => {
+                const isActive = btn.dataset.tab === tabId;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            closeAllInlineDetails();
+
+            if (updateHash) {
+                history.replaceState(null, '', '#' + tabId);
+            }
+
+            renderPackages();
+        }
+
         function renderPackages() {
             const container = document.getElementById('packages-container');
-            const visiblePackages = currentFilter === 'all'
+            const visiblePackages = currentTab === 'all'
                 ? packageData
-                : packageData.filter(pkg => {
-                    if (currentFilter === 'wedding') return pkg.id === 'silver' || pkg.id === 'gold' || pkg.id === 'premium';
-                    if (currentFilter === 'destination') return pkg.id === 'gold' || pkg.id === 'premium';
-                    if (currentFilter === 'corporate') return pkg.id === 'premium-plus';
-                    if (currentFilter === 'private') return pkg.id === 'bronze';
-                    return true;
-                });
+                : packageData.filter(pkg => pkg.id === currentTab);
+
+            const packagesToRender = visiblePackages.length > 0 ? visiblePackages : packageData;
+
+            // Trigger gentle entrance transition
+            container.classList.remove('pkg-fade-active');
+            void container.offsetWidth; // force reflow
+            container.classList.add('pkg-fade-active');
 
             container.innerHTML = '';
 
-            visiblePackages.forEach((pkg, index) => {
-                const isEven = index % 2 === 1;
-                const delay = index * 100;
+            packagesToRender.forEach((pkg, index) => {
+                const isEven = index % 2 === 1 && currentTab === 'all';
+                const delay = currentTab === 'all' ? index * 80 : 0;
                 
-                const featuresList = (pkg.features && pkg.features.length) ? pkg.features : [];
-                const featuresHtml = featuresList.map(feature => `
-                    <li>
-                        <svg class="inclusion-check" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span>${escapeHtml(feature)}</span>
-                    </li>
-                `).join('');
+                // Resolve Image Sources (WebP + original fallback)
+                const media = resolvePackageMedia(pkg.image);
 
-                // Build Complete Inline Categories & Services List (No limits, no slices, complete original data)
+                // Format Price cleanly with en-dash
+                const priceDisplay = (pkg.price || '').replace(/\s*-\s*/g, ' – ');
+
+                // Curated signature inclusions for the card (clean 4-item showcase)
+                const curatedItems = signatureInclusionsMap[pkg.id] || (pkg.features ? pkg.features.slice(0, 4) : []);
+                let highlightsHtml = '';
+                if (curatedItems && curatedItems.length > 0) {
+                    curatedItems.forEach(item => {
+                        highlightsHtml += `
+                        <div class="pkg-highlight-item">
+                            <svg class="pkg-check-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>${escapeHtml(item)}</span>
+                        </div>`;
+                    });
+                }
+
+                // Build Complete Categorized Services List for the expandable View Details view
                 let allFeaturesHTML = '';
                 let totalRendered = 0;
                 if (pkg.categories && Object.keys(pkg.categories).length > 0) {
@@ -305,40 +409,58 @@
                     allFeaturesHTML += `</div></div>`;
                 }
 
+                // Package Order Display
+                const orderIndex = packageData.findIndex(p => p.id === pkg.id);
+                const orderNum = orderIndex >= 0 ? orderIndex + 1 : index + 1;
+                const signatureBadge = pkg.id === 'premium-plus' ? `<span class="pkg-signature-badge">SIGNATURE TIER</span>` : '';
+
                 const itemHtml = `
-                <article class="pkg-editorial-item ${isEven ? 'pkg-item--reverse' : ''} ${pkg.theme || ''} gsap-reveal" style="transition-delay: ${delay}ms;" id="card-${pkg.id}">
+                <article class="pkg-editorial-item ${isEven ? 'pkg-item--reverse' : ''} ${pkg.theme || ''}" style="transition-delay: ${delay}ms;" id="card-${pkg.id}">
                     <div class="pkg-visual-col">
                         <div class="pkg-image-frame image-slot">
-                            <img src="${pkg.image}" alt="${escapeHtml(pkg.name)} Setup" loading="lazy">
+                            <picture>
+                                ${media.webp ? `<source srcset="${escapeHtml(media.webp)}" type="image/webp">` : ''}
+                                <img src="${escapeHtml(media.fallback)}" alt="${escapeHtml(pkg.name)} Event Setup" width="1200" height="800" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';">
+                            </picture>
                             <div class="pkg-image-overlay"></div>
+                            ${pkg.id === 'premium-plus' ? '<span class="pkg-img-signature-tag">SIGNATURE EXPERIENCE</span>' : ''}
                         </div>
                     </div>
                     <div class="pkg-info-col">
                         <div class="pkg-header-meta">
-                            <span class="pkg-subtle-num">PACKAGE 0${index + 1}</span>
+                            <span class="pkg-subtle-num">PACKAGE 0${orderNum} &bull; DESTINATION COLLECTION</span>
+                            ${signatureBadge}
                         </div>
+                        
+                        <!-- 1. PACKAGE NAME -->
                         <h3 class="pkg-title">${escapeHtml(pkg.name)}</h3>
+                        
+                        <!-- 2. SHORT PACKAGE DESCRIPTION -->
                         <p class="pkg-description">${escapeHtml(pkg.desc)}</p>
                         
+                        <!-- 3. MAIN PACKAGE INCLUSIONS / HIGHLIGHTS -->
+                        ${highlightsHtml ? `
+                        <div class="pkg-highlights-block">
+                            <div class="pkg-highlights-grid">
+                                ${highlightsHtml}
+                            </div>
+                        </div>` : ''}
+
+                        <!-- 4. PRICE / PRICE RANGE -->
                         <div class="pkg-pricing-block">
                             <span class="pkg-price-label">INVESTMENT</span>
-                            <div class="pkg-price-value">${escapeHtml(pkg.price)}</div>
+                            <div class="pkg-price-value">${escapeHtml(priceDisplay)}</div>
                         </div>
-
-                        ${featuresList.length ? `
-                        <div class="pkg-inclusions-block">
-                            <span class="pkg-section-label">PACKAGE SERVICES</span>
-                            <ul class="pkg-inclusions-list">${featuresHtml}</ul>
-                        </div>` : ''}
                         
+                        <!-- 5 & 6. VIEW DETAILS & WHATSAPP ENQUIRY -->
                         <div class="pkg-cta-group">
                             <button type="button" class="btn-editorial btn-editorial--details" id="btn-details-${pkg.id}" aria-expanded="false" onclick="toggleDetails('${pkg.id}')">
                                 <span class="btn-text">VIEW DETAILS</span>
                                 <span class="btn-arrow">&rarr;</span>
                             </button>
-                            <button type="button" class="btn-editorial btn-editorial--whatsapp" onclick="enquireWhatsApp('${pkg.id}')" title="Enquire on WhatsApp">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
-                                <span>WHATSAPP</span>
+                            <button type="button" class="btn-editorial btn-editorial--whatsapp" onclick="enquireWhatsApp('${pkg.id}')" title="Enquire on WhatsApp for ${escapeHtml(pkg.name)}">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
+                                <span>WHATSAPP ENQUIRY</span>
                             </button>
                         </div>
                     </div>
@@ -354,7 +476,7 @@
                             <div class="gdp-actions">
                                 <div class="gdp-price-wrap">
                                     <span class="gdp-price-label">INVESTMENT</span>
-                                    <div class="gdp-price">${escapeHtml(pkg.price)}</div>
+                                    <div class="gdp-price">${escapeHtml(priceDisplay)}</div>
                                 </div>
                                 <button type="button" class="btn-close-panel" onclick="closeInlineDetails('${pkg.id}')" aria-label="Close details for ${escapeHtml(pkg.name)}">
                                     <span class="btn-text">CLOSE</span>
@@ -373,7 +495,7 @@
 
                         <div class="gdp-footer">
                             <button type="button" class="btn-whatsapp" onclick="enquireWhatsApp('${pkg.id}')" title="Enquire on WhatsApp">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" class="wa-icon" aria-hidden="true"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.074-2.127-.517-1.748-.724-2.887-2.484-2.975-2.602-.087-.118-.708-.941-.708-1.792s.446-1.272.604-1.446c.159-.175.347-.219.462-.219s.231.006.331.011c.105.005.247-.039.387.297.144.35.491 1.196.534 1.284.043.088.072.19.014.305-.058.115-.087.19-.173.29-.087.101-.183.226-.261.304-.087.087-.177.182-.076.356.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.088.275.073.376-.044.101-.117.433-.505.549-.68.116-.175.231-.146.39-.088.159.058 1.011.477 1.184.564.173.087.289.131.332.204.043.073.043.423-.101.828z"/></svg>
                                 <span>ENQUIRE ON WHATSAPP &rarr;</span>
                             </button>
                             <button type="button" class="btn-close-panel" onclick="closeInlineDetails('${pkg.id}', true)">
@@ -459,14 +581,45 @@
             });
         }
 
-        const closeGlobalPanel = closeAllInlineDetails;
-
         function enquireWhatsApp(id) {
             const pkg = packageData.find(p => p.id === id);
             const packageName = pkg ? pkg.name : 'one of your event packages';
-            const price = pkg ? ` (${pkg.price})` : '';
+            const price = pkg ? ` (${(pkg.price || '').replace(/\s*-\s*/g, ' – ')})` : '';
             const message = `Hi Big Daddy Events, I am interested in ${packageName}${price}. I would like to know more about the package services and availability.`;
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+        }
+
+        function resolvePackageMedia(imageSrc) {
+            if (!imageSrc) {
+                return {
+                    webp: 'assets/images/placeholder.webp',
+                    fallback: 'assets/images/placeholder.jpg'
+                };
+            }
+            const cleanSrc = String(imageSrc).replace(/^\/+/, '');
+            
+            // External absolute URLs
+            if (/^https?:\/\//i.test(cleanSrc)) {
+                return {
+                    webp: null,
+                    fallback: cleanSrc
+                };
+            }
+
+            // Already a WebP file
+            if (cleanSrc.toLowerCase().endsWith('.webp')) {
+                return {
+                    webp: cleanSrc,
+                    fallback: cleanSrc
+                };
+            }
+
+            // Local image: compute candidate WebP sibling
+            const webpCandidate = cleanSrc.replace(/\.(jpe?g|png)$/i, '.webp');
+            return {
+                webp: webpCandidate,
+                fallback: cleanSrc
+            };
         }
 
         function escapeHtml(value = '') {
